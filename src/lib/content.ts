@@ -11,6 +11,8 @@ export const ORG = {
   expansion: 'Special Interest Group on Artificial Intelligence',
   tagline: 'IF YOUR MIND CAN THINK, SO CAN MINE!',
   chapterLine: "DJSCE's Official Student Chapter",
+  /** Lowercase form, for use mid-sentence. */
+  chapterDescriptor: 'official student chapter',
   college: 'Dwarkadas J. Sanghvi College of Engineering',
   collegeFull: "SVKM's Dwarkadas J. Sanghvi College of Engineering",
   department: 'Artificial Intelligence and Machine Learning (AI&ML)',

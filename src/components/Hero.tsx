@@ -93,7 +93,7 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
               }}
             >
               <span style={{ color: PALETTE.cream, fontWeight: 600 }}>{ORG.name}</span> — the{' '}
-              {ORG.expansion}, {ORG.chapterLine.toLowerCase()} at {ORG.college}, affiliated with
+              {ORG.expansion}, and the {ORG.chapterDescriptor} of {ORG.college}, affiliated with
               the {ORG.parentBody}.
             </p>
           </Reveal>
