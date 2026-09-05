@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  html,body{margin:0;padding:0;background:#05060B}
+  a{color:#2B5FFF}a:hover{color:#F5C518}
+  @keyframes tumble{
+    0%   {transform:rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg)}
+    25%  {transform:rotateX(-30deg) rotateY(4deg)   rotateZ(4deg)}
+    50%  {transform:rotateX(-10deg) rotateY(32deg)  rotateZ(-3deg)}
+    75%  {transform:rotateX(-26deg) rotateY(2deg)   rotateZ(5deg)}
+    100% {transform:rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg)}
+  }
+  @keyframes drift{
+    0%{transform:translate3d(0,-10px,0)}50%{transform:translate3d(0,10px,0)}100%{transform:translate3d(0,-10px,0)}
+  }
+</style>
+</helmet>
+<div style="position:relative;width:{{ frameW }}px;height:{{ frameH }}px;max-width:100%;background:#05060B;overflow:hidden;display:flex;align-items:center;justify-content:center">
+  <div style="position:absolute;inset:0;background:{{ dotsBack }};opacity:0.95"></div>
+  <div style="position:relative;width:660px;height:660px;perspective:1800px;animation:drift 14s ease-in-out infinite">
+    <div style="position:absolute;inset:0;transform-style:preserve-3d;animation:tumble {{ tumbleSeconds }}s ease-in-out infinite">
+      <div style="position:absolute;left:330px;top:330px;width:0;height:0;transform-style:preserve-3d">
+        <sc-for list="{{ cubies }}" as="c" hint-placeholder-count="26">
+          <div style="position:absolute;left:-68px;top:-68px;width:136px;height:136px;transform-style:preserve-3d;transform:{{ c.tf }}">
+            <div style="position:absolute;inset:0;transform:rotateX(90deg) translateZ(68px);background:{{ c.up }};border-radius:14px;backface-visibility:hidden"></div>
+            <div style="position:absolute;inset:0;transform:rotateX(-90deg) translateZ(68px);background:{{ c.down }};border-radius:14px;backface-visibility:hidden"></div>
+            <div style="position:absolute;inset:0;transform:translateZ(68px);background:{{ c.front }};border-radius:14px;backface-visibility:hidden"></div>
+            <div style="position:absolute;inset:0;transform:rotateY(180deg) translateZ(68px);background:{{ c.back }};border-radius:14px;backface-visibility:hidden"></div>
+            <div style="position:absolute;inset:0;transform:rotateY(90deg) translateZ(68px);background:{{ c.right }};border-radius:14px;backface-visibility:hidden"></div>
+            <div style="position:absolute;inset:0;transform:rotateY(-90deg) translateZ(68px);background:{{ c.left }};border-radius:14px;backface-visibility:hidden"></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;inset:0;background:{{ dotsFront }};pointer-events:none"></div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1200,&quot;height&quot;:760},&quot;logoSrc&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Logo cubie&quot;},&quot;frameW&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:1200,&quot;min&quot;:400,&quot;max&quot;:2000,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Frame&quot;},&quot;frameH&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:760,&quot;min&quot;:300,&quot;max&quot;:1400,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Frame&quot;},&quot;solving&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;moveMs&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:620,&quot;min&quot;:250,&quot;max&quot;:1400,&quot;step&quot;:10,&quot;unit&quot;:&quot;ms&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;tumbleSeconds&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:34,&quot;min&quot;:10,&quot;max&quot;:60,&quot;step&quot;:1,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;dotColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#191C24&quot;,&quot;options&quot;:[&quot;#191C24&quot;,&quot;#0B0B0F&quot;,&quot;#2B5FFF&quot;,&quot;#EDE6D6&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Particles&quot;}}">
+class Component extends DCLogic {
+  rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+  shade(hex, f) {
+    const n = parseInt(hex.slice(1), 16);
+    const c = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map(v => Math.max(0, Math.min(255, Math.round(v * f))));
+    return '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
+  }
+
+  uri(svg) { return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")'; }
+  rects(list, fill) { return list.map(r => "<rect x='" + r[0] + "' y='" + r[1] + "' width='" + r[2] + "' height='" + r[3] + "' fill='" + fill + "'/>").join(''); }
+
+  // chunky circuit-trace motif: right-angle runs on a 2px module grid + square nodes
+  blocks(rnd) {
+    const out = [];
+    const push = (x, y, w, h) => out.push([Math.max(0, Math.min(8 - w, x)), Math.max(0, Math.min(8 - h, y)), w, h]);
+    const runs = 2 + Math.floor(rnd() * 2);
+    let x = 1 + Math.floor(rnd() * 2) * 2, y = 1 + Math.floor(rnd() * 2) * 2;
+    let horiz = rnd() < 0.5;
+    for (let i = 0; i < runs; i++) {
+      const len = 2 + Math.floor(rnd() * 2) * 2;
+      if (horiz) { push(x, y, len, 1); x += (rnd() < 0.6 ? len - 1 : -1); }
+      else { push(x, y, 1, len); y += (rnd() < 0.6 ? len - 1 : -1); }
+      x = Math.max(0, Math.min(6, x)); y = Math.max(0, Math.min(6, y));
+      horiz = !horiz;
+      if (rnd() < 0.7) push(x, y, 2, 2);
+    }
+    return out;
+  }
+
+  // single clean chunky bolt, no speckle
+  bolt(rnd) {
+    const out = [];
+    let x = 2 + Math.floor(rnd() * 3);
+    for (let y = 0; y < 8; y += 2) {
+      out.push([Math.max(0, Math.min(6, x)), y, 2, 2]);
+      x += (rnd() < 0.5 ? -1 : 1) * 2;
+      x = Math.max(0, Math.min(6, x));
+    }
+    return out;
+  }
+
+  sticker(code, tone, rnd) {
+    const P = { k: '#0B0B0F', b: '#2B5FFF', y: '#F5C518', c: '#EDE6D6' };
+    const base = this.shade(P[code], tone);
+    let inner = '';
+    const glitchy = rnd() < 0.55;
+    if ((code === 'k' || code === 'b') && glitchy) inner = this.rects(this.blocks(rnd), this.shade('#FFFFFF', tone));
+    else if (code === 'y' && glitchy) inner = this.rects(this.bolt(rnd), '#0B0B0F');
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'><defs><clipPath id='r'><rect width='8' height='8' rx='1.1'/></clipPath></defs><g clip-path='url(#r)'><rect width='8' height='8' fill='" + base + "'/>" + inner + "</g></svg>";
+    return this.uri(svg) + ' center/78% 78% no-repeat';
+  }
+
+  logoSticker(tone) {
+    const cream = this.shade('#EDE6D6', tone);
+    const src = (this.props.logoSrc || '').trim();
+    if (src) {
+      const plate = this.uri("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' rx='1.1' fill='" + cream + "'/></svg>") + ' center/78% 78% no-repeat';
+      return 'url("' + src + '") center/56% 56% no-repeat, ' + plate;
+    }
+    const ink = '#0B0B0F';
+    const svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><clipPath id='r'><rect width='100' height='100' rx='14'/></clipPath></defs><g clip-path='url(#r)'><rect width='100' height='100' fill='" + cream + "'/><g stroke='" + ink + "' stroke-width='3' opacity='0.28'>" +
+      [0, 14, 28, 42, 56, 70, 84, 98].map(o => "<line x1='" + (o - 24) + "' y1='124' x2='" + (o + 64) + "' y2='-24'/>").join('') +
+      "</g><text x='50' y='52' font-family='ui-monospace,Menlo,monospace' font-size='14' letter-spacing='1' text-anchor='middle' fill='" + ink + "'>LOGO</text><text x='50' y='68' font-family='ui-monospace,Menlo,monospace' font-size='9' text-anchor='middle' fill='" + ink + "' opacity='0.7'>drop mark</text></g></svg>";
+    return this.uri(svg) + ' center/78% 78% no-repeat';
+  }
+
+  dotLayer(seed, clusters, lone, maxR) {
+    const rnd = this.rng(seed);
+    const col = this.props.dotColor || '#191C24';
+    let s = '';
+    for (let c = 0; c < clusters; c++) {
+      const cx = 40 + rnd() * 1120, cy = 30 + rnd() * 700;
+      const cols = 3 + Math.floor(rnd() * 4), rows = 3 + Math.floor(rnd() * 4), step = 7 + rnd() * 5, r = 1.4 + rnd() * 1.2;
+      for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
+        if (rnd() < 0.25) continue;
+        s += "<circle cx='" + (cx + i * step).toFixed(1) + "' cy='" + (cy + j * step).toFixed(1) + "' r='" + r.toFixed(2) + "' fill='" + col + "'/>";
+      }
+    }
+    for (let i = 0; i < lone; i++) s += "<circle cx='" + (rnd() * 1200).toFixed(1) + "' cy='" + (rnd() * 760).toFixed(1) + "' r='" + (1.5 + rnd() * maxR).toFixed(2) + "' fill='" + col + "'/>";
+    return this.uri("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 760'>" + s + "</svg>") + ' center/100% 100% no-repeat';
+  }
+
+  build() {
+    if (this._built && this._logoKey === (this.props.logoSrc || '')) return this._built;
+    const S = 142;
+    const layouts = {
+      up:    ['c', 'k', 'b', 'k', 'c', 'k', 'b', 'k', 'c'],
+      front: ['b', 'b', 'b', 'b', 'L', 'b', 'b', 'b', 'b'],
+      right: ['y', 'y', 'k', 'y', 'k', 'y', 'k', 'y', 'y'],
+      left:  ['k', 'b', 'k', 'b', 'c', 'b', 'k', 'b', 'k'],
+      back:  ['y', 'k', 'y', 'k', 'y', 'k', 'y', 'k', 'y'],
+      down:  ['k', 'c', 'k', 'c', 'k', 'c', 'k', 'c', 'k']
+    };
+    const tones = { up: 1.0, front: 0.8, right: 0.56, left: 0.5, back: 0.46, down: 0.4 };
+    const seeds = { up: 1337, front: 90210, right: 4242, left: 777, back: 5150, down: 31415 };
+    const rnds = {}; Object.keys(seeds).forEach(k => rnds[k] = this.rng(seeds[k]));
+    const idx = {
+      up: (x, y, z) => (z + 1) * 3 + (x + 1),
+      down: (x, y, z) => (1 - z) * 3 + (x + 1),
+      front: (x, y, z) => (y + 1) * 3 + (x + 1),
+      back: (x, y, z) => (y + 1) * 3 + (1 - x),
+      right: (x, y, z) => (y + 1) * 3 + (1 - z),
+      left: (x, y, z) => (y + 1) * 3 + (z + 1)
+    };
+    const list = [];
+    for (let y = -1; y <= 1; y++) for (let z = 1; z >= -1; z--) for (let x = -1; x <= 1; x++) {
+      if (x === 0 && y === 0 && z === 0) continue;
+      const c = { pos: [x, y, z], base: 'translate3d(' + x * S + 'px,' + y * S + 'px,' + z * S + 'px)' };
+      c.tf = c.base;
+      const outward = { up: y === -1, down: y === 1, front: z === 1, back: z === -1, right: x === 1, left: x === -1 };
+      Object.keys(outward).forEach(dir => {
+        const tone = tones[dir];
+        if (!outward[dir]) { c[dir] = this.shade('#2B5FFF', tone * 0.72); return; }
+        const code = layouts[dir][idx[dir](x, y, z)];
+        const layer = (code === 'L' ? this.logoSticker(tone) : this.sticker(code, tone, rnds[dir])) + ', ' + this.shade('#2B5FFF', tone);
+        c[dir] = layer;
+      });
+      list.push(c);
+    }
+    this._logoKey = this.props.logoSrc || '';
+    this._built = list;
+    return list;
+  }
+
+  rotatePos(p, axis, deg) {
+    const r = deg * Math.PI / 180, s = Math.round(Math.sin(r)), c = Math.round(Math.cos(r));
+    const [x, y, z] = p;
+    if (axis === 'X') return [x, y * c - z * s, y * s + z * c];
+    if (axis === 'Y') return [x * c + z * s, y, -x * s + z * c];
+    return [x * c - y * s, x * s + y * c, z];
+  }
+
+  componentDidMount() {
+    const scramble = [
+      { axis: 'Y', ax: 1, layer: -1, dir: 1 },
+      { axis: 'X', ax: 0, layer: 1, dir: -1 },
+      { axis: 'Z', ax: 2, layer: 1, dir: 1 },
+      { axis: 'Y', ax: 1, layer: 1, dir: -1 },
+      { axis: 'X', ax: 0, layer: -1, dir: 1 },
+      { axis: 'Z', ax: 2, layer: -1, dir: -1 }
+    ];
+    // scramble, then the exact inverse — the cube always returns to solved
+    this.seq = scramble.concat(scramble.slice().reverse().map(m => ({ ...m, dir: -m.dir })));
+    this.i = 0;
+    this.phaseStart = performance.now();
+    this.turning = false;
+    this.holdMs = 900;
+    this.tick = (now) => {
+      this.raf = requestAnimationFrame(this.tick);
+      if (this.props.solving === false) return;
+      const cubies = this.build();
+      const dur = Math.max(180, (this.props.moveMs ?? 620));
+      const t = now - this.phaseStart;
+      if (!this.turning) {
+        const wait = this.i === 0 ? this.holdMs * 2 : (this.i === this.seq.length / 2 ? this.holdMs : 120);
+        if (t >= wait) { this.turning = true; this.phaseStart = now; }
+        return;
+      }
+      const m = this.seq[this.i];
+      const p = Math.min(1, t / dur);
+      const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+      const ang = 90 * m.dir * e;
+      const moving = cubies.filter(c => c.pos[m.ax] === m.layer);
+      moving.forEach(c => { c.tf = 'rotate' + m.axis + '(' + ang.toFixed(2) + 'deg) ' + c.base; });
+      if (p >= 1) {
+        moving.forEach(c => {
+          c.pos = this.rotatePos(c.pos, m.axis, 90 * m.dir);
+          c.base = 'rotate' + m.axis + '(' + (90 * m.dir) + 'deg) ' + c.base;
+          c.tf = c.base;
+        });
+        this.turning = false;
+        this.phaseStart = now;
+        this.i = (this.i + 1) % this.seq.length;
+        if (this.i === 0) cubies.forEach(c => { c.base = c.tf = this._reset(c); });
+      }
+      this.forceUpdate();
+    };
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  _reset(c) {
+    const S = 142, [x, y, z] = c.pos;
+    return 'translate3d(' + x * S + 'px,' + y * S + 'px,' + z * S + 'px)';
+  }
+
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+
+  renderVals() {
+    return {
+      frameW: this.props.frameW ?? 1200,
+      frameH: this.props.frameH ?? 760,
+      tumbleSeconds: this.props.tumbleSeconds ?? 34,
+      cubies: this.build().slice(),
+      dotsBack: this.dotLayer(2024, 5, 26, 3.5),
+      dotsFront: this.dotLayer(8891, 3, 14, 4.5)
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html,body{margin:0;padding:0;background:#05060B}
+  a{color:#EDE6D6;text-decoration:none}
+  a:hover{color:#2B5FFF}
+  @keyframes blink{0%,92%,100%{opacity:1}95%{opacity:0.15}}
+</style>
+</helmet>
+<div style="position:relative;width:100%;min-height:100vh;background:#05060B;font-family:'Space Grotesk',Helvetica,Arial,sans-serif;color:#EDE6D6;overflow-x:hidden">
+
+  <nav style="position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 44px;background:rgba(5,6,11,0.9);backdrop-filter:blur(8px);border-bottom:1px solid #141A2E">
+    <div style="display:flex;align-items:center;gap:13px">
+      <div style="width:38px;height:38px;background:#2B5FFF;border-radius:10px;display:flex;align-items:center;justify-content:center">
+        <div style="width:24px;height:11px;background:#EDE6D6;border-radius:2px;display:flex;align-items:center;justify-content:center;gap:5px">
+          <div style="width:4px;height:4px;background:#2B5FFF"></div>
+          <div style="width:4px;height:4px;background:#2B5FFF"></div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <span style="font-family:'Press Start 2P',monospace;font-size:15px;letter-spacing:0.5px;line-height:1">SIGAI</span>
+        <span style="font-size:9px;font-weight:500;letter-spacing:2.6px;text-transform:uppercase;color:#5F6880;line-height:1">DJS ACM</span>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <a href="#home" style="padding:9px 16px;border-radius:6px;font-size:13px;font-weight:500;letter-spacing:0.4px;color:#EDE6D6;background:#101728" style-hover="background:#16213C;color:#EDE6D6">Home</a>
+      <a href="#team" style="padding:9px 16px;border-radius:6px;font-size:13px;font-weight:500;letter-spacing:0.4px;color:#8B94AD" style-hover="background:#101728;color:#EDE6D6">Team</a>
+      <a href="#events" style="padding:9px 16px;border-radius:6px;font-size:13px;font-weight:500;letter-spacing:0.4px;color:#8B94AD" style-hover="background:#101728;color:#EDE6D6">Events</a>
+      <a href="#contact" style="padding:9px 16px;border-radius:6px;font-size:13px;font-weight:500;letter-spacing:0.4px;color:#8B94AD" style-hover="background:#101728;color:#EDE6D6">Contact</a>
+      <a href="#events" style="margin-left:14px;padding:10px 18px;border:1px solid #2B5FFF;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#2B5FFF" style-hover="background:#2B5FFF;color:#05060B">Join us</a>
+    </div>
+  </nav>
+
+  <section id="home" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));align-items:center;gap:48px;max-width:1360px;margin:0 auto;padding:64px 44px 96px">
+
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:28px">
+      <div style="display:flex;align-items:center;gap:10px;padding:7px 13px;border:1px solid #17224A;border-radius:4px;background:#080B16">
+        <div style="width:6px;height:6px;background:#F5C518;animation:blink 4s steps(1,end) infinite"></div>
+        <span style="font-size:10px;font-weight:600;letter-spacing:2.6px;text-transform:uppercase;color:#8B94AD">Student Chapter &nbsp;·&nbsp; ACM Affiliated</span>
+      </div>
+
+      <h1 style="margin:0;font-family:'Press Start 2P',monospace;font-size:clamp(22px,2.9vw,40px);line-height:1.55;letter-spacing:-0.5px;color:#EDE6D6">
+        IF YOUR MIND<br />CAN THINK,<br /><span style="color:#2B5FFF">SO CAN MINE!</span>
+      </h1>
+
+      <div style="width:56px;height:4px;background:#F5C518"></div>
+
+      <p style="max-width:460px;margin:0;font-size:16px;line-height:1.75;color:#8B94AD;text-wrap:pretty">
+        <span style="color:#EDE6D6;font-weight:600">DJS ACM SIGAI</span> — Special Interest Group on Artificial Intelligence, the student chapter of Dwarkadas J. Sanghvi College of Engineering, affiliated with ACM.
+      </p>
+
+      <a href="#events" style="display:inline-flex;align-items:center;gap:12px;padding:16px 28px;background:#2B5FFF;color:#EDE6D6;font-family:'Press Start 2P',monospace;font-size:12px;letter-spacing:0.5px;border-radius:6px;box-shadow:0 5px 0 0 #12224F" style-hover="background:#EDE6D6;color:#0B0B0F;box-shadow:0 5px 0 0 #F5C518" style-active="box-shadow:0 1px 0 0 #12224F;transform:translateY(4px)">
+        EXPLORE EVENTS
+        <span style="display:flex;gap:3px">
+          <span style="width:5px;height:5px;background:currentColor"></span>
+          <span style="width:5px;height:5px;background:currentColor"></span>
+          <span style="width:5px;height:5px;background:currentColor"></span>
+        </span>
+      </a>
+    </div>
+
+    <div ref="{{ wrapRef }}" style="position:relative;min-width:0;width:100%;max-width:660px;margin:0 auto;height:{{ boxH }}px;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;width:660px;height:660px;transform-origin:top left;transform:scale({{ scale }})">
+        <dc-import name="Glitch Cube Hero" frame-w="660" frame-h="660" hint-size="660px,660px"></dc-import>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  constructor(props) { super(props); this.wrapRef = React.createRef(); this.state = { scale: 1 }; }
+
+  measure = () => {
+    const el = this.wrapRef.current;
+    if (!el) return;
+    const s = Math.min(1, el.clientWidth / 660);
+    if (Math.abs(s - this.state.scale) > 0.002) this.setState({ scale: s });
+  };
+
+  componentDidMount() {
+    this.ro = new ResizeObserver(this.measure);
+    if (this.wrapRef.current) this.ro.observe(this.wrapRef.current);
+    this.measure();
+  }
+
+  componentWillUnmount() { if (this.ro) this.ro.disconnect(); }
+
+  renderVals() {
+    const scale = this.state.scale;
+    return { wrapRef: this.wrapRef, scale, boxH: Math.round(660 * scale) };
+  }
+}
+</script>
+</body>
+</html>
