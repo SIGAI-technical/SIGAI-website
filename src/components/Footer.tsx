@@ -1,27 +1,31 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Icon } from './ui';
 import { CONTACT, NAV_LINKS, ORG, SOCIALS } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
+
+const SOCIAL_ICON = { LinkedIn: 'linkedin', Instagram: 'instagram', X: 'x' } as const;
 
 const LABEL: React.CSSProperties = {
   margin: 0,
   fontSize: 10,
   fontWeight: 600,
-  letterSpacing: '2.4px',
+  letterSpacing: '0.2em',
   textTransform: 'uppercase',
-  color: PALETTE.dim,
+  color: 'var(--dim)',
 };
+
+const LINK: React.CSSProperties = { fontSize: 14, color: 'var(--muted)' };
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: `1px solid ${PALETTE.line}`, background: PALETTE.panelDeep }}>
+    <footer style={{ borderTop: '1px solid var(--line)', background: 'rgba(8,11,22,0.72)' }}>
       <div
         className="shell"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
           gap: 40,
-          paddingBlock: 'clamp(44px, 6vw, 68px)',
+          paddingBlock: 'clamp(48px, 6vw, 76px)',
         }}
       >
         <div>
@@ -40,7 +44,7 @@ export default function Footer() {
                   fontFamily: 'var(--display)',
                   fontSize: 15,
                   lineHeight: 1,
-                  color: PALETTE.cream,
+                  color: 'var(--cream)',
                 }}
               >
                 SIGAI
@@ -55,10 +59,10 @@ export default function Footer() {
               maxWidth: '34ch',
               fontSize: 14,
               lineHeight: 1.7,
-              color: PALETTE.muted,
+              color: 'var(--muted)',
             }}
           >
-            {ORG.expansion} — {ORG.chapterLine.toLowerCase()} at {ORG.college}, affiliated with the{' '}
+            {ORG.expansion} — the {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
             {ORG.parentBody}.
           </p>
         </div>
@@ -66,20 +70,11 @@ export default function Footer() {
         <nav aria-label="Footer">
           <p style={LABEL}>Links</p>
           <ul style={{ listStyle: 'none', margin: '16px 0 0', padding: 0, display: 'grid', gap: 10 }}>
-            <li>
-              <a href="#home" className="link-underline" style={{ fontSize: 14, color: PALETTE.muted }}>
-                Home
-              </a>
-            </li>
             {NAV_LINKS.map((l) => (
               <li key={l.href}>
-                <a
-                  href={l.href}
-                  className="link-underline"
-                  style={{ fontSize: 14, color: PALETTE.muted }}
-                >
+                <Link href={l.href} className="link-underline" style={LINK}>
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -90,11 +85,7 @@ export default function Footer() {
           <ul style={{ listStyle: 'none', margin: '16px 0 0', padding: 0, display: 'grid', gap: 10 }}>
             {CONTACT.phones.map((p) => (
               <li key={p}>
-                <a
-                  href={`tel:${p.replace(/\s+/g, '')}`}
-                  className="link-underline"
-                  style={{ fontSize: 14, color: PALETTE.muted }}
-                >
+                <a href={`tel:${p.replace(/\s+/g, '')}`} className="link-underline" style={LINK}>
                   {p}
                 </a>
               </li>
@@ -103,7 +94,7 @@ export default function Footer() {
               <a
                 href={`mailto:${CONTACT.email}`}
                 className="link-underline"
-                style={{ fontSize: 14, color: PALETTE.muted, wordBreak: 'break-all' }}
+                style={{ ...LINK, wordBreak: 'break-all' }}
               >
                 {CONTACT.email}
               </a>
@@ -123,23 +114,14 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label={`SIGAI on ${s.label}`}
               >
-                <Icon
-                  name={
-                    s.label === 'LinkedIn'
-                      ? 'linkedin'
-                      : s.label === 'Instagram'
-                        ? 'instagram'
-                        : 'x'
-                  }
-                  size={14}
-                />
+                <Icon name={SOCIAL_ICON[s.label]} size={14} />
               </a>
             ))}
           </div>
         </div>
       </div>
 
-      <div style={{ borderTop: `1px solid ${PALETTE.line}` }}>
+      <div style={{ borderTop: '1px solid var(--line)' }}>
         <div
           className="shell"
           style={{
@@ -149,7 +131,7 @@ export default function Footer() {
             justifyContent: 'space-between',
             paddingBlock: 20,
             fontSize: 12.5,
-            color: PALETTE.dim,
+            color: 'var(--dim)',
           }}
         >
           <span>{ORG.copyright}</span>

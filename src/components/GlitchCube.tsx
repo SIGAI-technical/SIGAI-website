@@ -51,6 +51,7 @@ export default function GlitchCube({
   );
 
   const nodes = useRef<(HTMLDivElement | null)[]>([]);
+  const frameRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!solving) return;
@@ -72,6 +73,11 @@ export default function GlitchCube({
     const dur = Math.max(180, moveMs);
 
     const tick = (now: number) => {
+      // Bail without re-arming, so the loop genuinely stops off-screen.
+      if (!visible || document.hidden) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(tick);
       const t = now - phaseStart;
 
@@ -123,12 +129,46 @@ export default function GlitchCube({
       }
     };
 
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    // Only run the solve loop while the cube is actually on screen: it drives
+    // 26 cubies (156 faces) of 3D transforms and is wasted work off-screen,
+    // which matters most on phones.
+    let visible = true;
+    const start = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible && !document.hidden) start();
+        else stop();
+      },
+      { rootMargin: '120px' },
+    );
+    if (frameRef.current) io.observe(frameRef.current);
+
+    // Background tabs shouldn't animate either.
+    const onVisibility = () => {
+      if (!document.hidden && visible) start();
+      else stop();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    start();
+    return () => {
+      stop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
   }, [cubies, moveMs, solving]);
 
   return (
     <div
+      ref={frameRef}
       style={{
         position: 'relative',
         width: size,

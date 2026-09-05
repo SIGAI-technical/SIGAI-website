@@ -1,205 +1,222 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Icon } from './ui';
 import { NAV_LINKS } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
-
-const SECTION_IDS = NAV_LINKS.map((l) => l.href.slice(1));
 
 export default function SiteNav() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState<string>('');
-  const [lifted, setLifted] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Highlight whichever section is currently crossing the upper third.
+  const railRef = useRef<HTMLDivElement>(null);
+  const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+
+  const isActive = useCallback(
+    // "/" must match exactly — every path startsWith("/").
+    (href: string) =>
+      href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`),
+    [pathname],
+  );
+
+  /**
+   * Slide the single indicator under the active link. Driven by CSS vars so the
+   * animation stays on transform, and it simply hides when no link matches.
+   */
+  const moveIndicator = useCallback(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const active = NAV_LINKS.find((l) => isActive(l.href));
+    const el = active ? linkRefs.current[active.href] : null;
+
+    if (!el) {
+      rail.style.setProperty('--o', '0');
+      rail.style.setProperty('--sx', '0');
+      return;
+    }
+
+    rail.style.setProperty('--x', `${el.offsetLeft}px`);
+    rail.style.setProperty('--w', `${el.offsetWidth}px`);
+    rail.style.setProperty('--sx', '1');
+    rail.style.setProperty('--o', '1');
+  }, [isActive]);
+
   useEffect(() => {
-    const targets = SECTION_IDS.map((id) => document.getElementById(id)).filter(
-      (el): el is HTMLElement => el !== null,
-    );
-    if (!targets.length) return;
+    moveIndicator();
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        const hit = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
-        if (hit) setActive(hit.target.id);
-      },
-      { rootMargin: '-88px 0px -62% 0px', threshold: 0 },
-    );
+    const ro = new ResizeObserver(moveIndicator);
+    if (railRef.current) ro.observe(railRef.current);
 
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
-  }, []);
+    // Link widths shift once the display font swaps in, so measure again then.
+    let live = true;
+    document.fonts?.ready.then(() => {
+      if (live) moveIndicator();
+    });
+
+    return () => {
+      live = false;
+      ro.disconnect();
+    };
+  }, [moveIndicator]);
+
+  const progressRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setLifted(window.scrollY > 8);
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      // Coalesce to one write per frame; scroll fires far more often than that.
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const y = window.scrollY;
+        setScrolled(y > 12);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const p = max > 0 ? Math.min(1, y / max) : 0;
+        progressRef.current?.style.setProperty('--p', String(p));
+      });
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
 
-  // Close the mobile sheet once the viewport is wide enough for the full bar.
+  // Close the sheet once the viewport is wide enough for the full bar.
   useEffect(() => {
-    const mq = window.matchMedia('(min-width: 861px)');
+    const mq = window.matchMedia('(min-width: 901px)');
     const sync = () => mq.matches && setOpen(false);
     mq.addEventListener('change', sync);
     return () => mq.removeEventListener('change', sync);
   }, []);
 
+  // A full-screen sheet shouldn't scroll the page behind it.
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   return (
-    <header
-      style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 40,
-        background: 'rgba(5,6,11,0.9)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
-        borderBottom: `1px solid ${lifted ? PALETTE.lineSoft : PALETTE.line}`,
-        transition: 'border-color 220ms ease',
-      }}
-    >
-      <nav
-        className="shell"
-        aria-label="Primary"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 24,
-          paddingBlock: 16,
-        }}
-      >
-        <a
-          href="#home"
-          style={{ display: 'flex', alignItems: 'center', gap: 13 }}
-          aria-label={`${'SIGAI'} — home`}
-        >
-          {/* Pixel-visor mark: a cream bar with two blue "eyes". */}
-          <span
-            aria-hidden
-            style={{
-              width: 38,
-              height: 38,
-              background: PALETTE.blue,
-              borderRadius: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            <span
-              style={{
-                width: 24,
-                height: 11,
-                background: PALETTE.cream,
-                borderRadius: 2,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 5,
-              }}
-            >
-              <span style={{ width: 4, height: 4, background: PALETTE.blue }} />
-              <span style={{ width: 4, height: 4, background: PALETTE.blue }} />
-            </span>
+    <header className="site-header" data-scrolled={scrolled}>
+      <span className="site-header__progress" ref={progressRef} aria-hidden />
+
+      <div className="shell site-header__inner">
+        <Link href="/" className="brand" aria-label="SIGAI — home">
+          <span className="brand__plate" aria-hidden>
+            <Image
+              src="/logo-mark-cream.png"
+              alt=""
+              width={40}
+              height={52}
+              priority
+              style={{ width: 'auto', height: 27, display: 'block' }}
+            />
           </span>
 
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <span style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             <span
               style={{
                 fontFamily: 'var(--display)',
-                fontSize: 15,
+                fontSize: 14,
                 letterSpacing: '0.5px',
                 lineHeight: 1,
-                color: PALETTE.cream,
+                color: 'var(--cream)',
               }}
             >
               SIGAI
             </span>
             <span
               style={{
-                fontSize: 9,
+                fontSize: 8.5,
                 fontWeight: 500,
-                letterSpacing: '2.6px',
+                letterSpacing: '0.24em',
                 textTransform: 'uppercase',
-                color: PALETTE.dim,
+                color: 'var(--dim)',
                 lineHeight: 1,
               }}
             >
               DJS ACM
             </span>
           </span>
-        </a>
+        </Link>
 
-        <div
-          className="nav-desktop"
-          style={{ display: 'flex', alignItems: 'center', gap: 6 }}
-        >
-          {NAV_LINKS.map(({ href, label }) => (
-            <a
-              key={href}
-              href={href}
-              className="nav-link"
-              data-active={active === href.slice(1)}
-              aria-current={active === href.slice(1) ? 'true' : undefined}
-            >
-              {label}
-            </a>
-          ))}
-          <a href="#get-involved" className="nav-cta" style={{ marginLeft: 8 }}>
-            Join us
-          </a>
-        </div>
+        <nav className="nav-desktop" aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+          <div className="nav-rail" ref={railRef}>
+            {NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                ref={(el) => {
+                  linkRefs.current[href] = el;
+                }}
+                className="nav-link"
+                data-active={isActive(href)}
+                aria-current={isActive(href) ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ))}
+            <span className="nav-rail__indicator" aria-hidden />
+          </div>
+
+          <Link href="/contact" className="btn btn--gold">
+            JOIN
+            <span className="btn__icon" aria-hidden>
+              <Icon name="arrow" size={12} />
+            </span>
+          </Link>
+        </nav>
 
         <button
           type="button"
-          className="nav-toggle"
+          className="burger"
           aria-expanded={open}
-          aria-controls="mobile-menu"
+          aria-controls="mobile-sheet"
           aria-label={open ? 'Close menu' : 'Open menu'}
           onClick={() => setOpen((v) => !v)}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-            {open ? <path d="M5 5l14 14M19 5L5 19" /> : <path d="M3 7h18M3 12h18M3 17h18" />}
-          </svg>
+          <span />
+          <span />
+          <span />
         </button>
-      </nav>
+      </div>
 
       {open ? (
-        <div
-          id="mobile-menu"
-          className="shell"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            paddingBottom: 18,
-            borderTop: `1px solid ${PALETTE.line}`,
-            paddingTop: 14,
-          }}
-        >
-          {NAV_LINKS.map(({ href, label }) => (
-            <a
+        <div className="sheet" id="mobile-sheet">
+          {NAV_LINKS.map(({ href, label }, i) => (
+            <Link
               key={href}
               href={href}
-              className="nav-link"
-              data-active={active === href.slice(1)}
+              style={{ ['--i' as string]: `${60 + i * 55}ms` }}
+              aria-current={isActive(href) ? 'page' : undefined}
               onClick={() => setOpen(false)}
             >
               {label}
-            </a>
+            </Link>
           ))}
-          <a
-            href="#get-involved"
-            className="nav-cta"
-            style={{ marginTop: 10, textAlign: 'center' }}
+          <Link
+            href="/contact"
+            style={{ ['--i' as string]: `${60 + NAV_LINKS.length * 55}ms`, color: 'var(--gold)' }}
             onClick={() => setOpen(false)}
           >
-            Join us
-          </a>
+            JOIN US
+          </Link>
         </div>
       ) : null}
     </header>

@@ -1,12 +1,11 @@
 import CubeStage from './CubeStage';
 import Reveal from './Reveal';
-import { Icon } from './ui';
+import { Button } from './ui';
 import { ORG, TICKER } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
 
 export default function Hero({ logoSrc }: { logoSrc: string }) {
   return (
-    <section id="home" className="grid-bg" style={{ position: 'relative' }}>
+    <section id="home" style={{ position: 'relative' }}>
       <div
         className="shell"
         style={{
@@ -15,8 +14,8 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))',
           alignItems: 'center',
           gap: 48,
-          paddingTop: 'clamp(48px, 6vw, 72px)',
-          paddingBottom: 'clamp(56px, 7vw, 88px)',
+          paddingTop: 'clamp(44px, 6vw, 76px)',
+          paddingBottom: 'clamp(56px, 7vw, 92px)',
         }}
       >
         <div
@@ -28,34 +27,19 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
           }}
         >
           <Reveal>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 10,
-                padding: '7px 13px',
-                border: `1px solid ${PALETTE.lineSoft}`,
-                borderRadius: 4,
-                background: PALETTE.panelDeep,
-              }}
-            >
-              <span
+            <span className="eyebrow">
+              <i
                 className="status-dot"
-                aria-hidden
-                style={{ width: 6, height: 6, background: PALETTE.yellow, flexShrink: 0 }}
+                style={{ width: 6, height: 6, borderRadius: 999, background: 'currentColor' }}
               />
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 600,
-                  letterSpacing: '2.6px',
-                  textTransform: 'uppercase',
-                  color: PALETTE.muted,
-                }}
-              >
-                Student Chapter &nbsp;·&nbsp; ACM Affiliated
-              </span>
-            </div>
+              Student Chapter &nbsp;·&nbsp; ACM Affiliated
+            </span>
+          </Reveal>
+
+          <Reveal delay={60}>
+            <p className="hero-welcome">
+              Welcome to <span>DJS ACM SIGAI</span>
+            </p>
           </Reveal>
 
           <Reveal delay={80}>
@@ -66,14 +50,14 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
                 fontSize: 'clamp(21px, 2.9vw, 40px)',
                 lineHeight: 1.55,
                 letterSpacing: '-0.5px',
-                color: PALETTE.cream,
+                color: 'var(--cream)',
               }}
             >
               IF YOUR MIND
               <br />
               CAN THINK,
               <br />
-              <span style={{ color: PALETTE.blue }}>SO CAN MINE!</span>
+              <span className="mark">SO CAN MINE!</span>
             </h1>
           </Reveal>
 
@@ -88,30 +72,24 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
                 margin: 0,
                 fontSize: 16,
                 lineHeight: 1.75,
-                color: PALETTE.muted,
+                color: 'var(--muted)',
                 textWrap: 'pretty',
               }}
             >
-              <span style={{ color: PALETTE.cream, fontWeight: 600 }}>{ORG.name}</span> — the{' '}
-              {ORG.expansion}, and the {ORG.chapterDescriptor} of {ORG.college}, affiliated with
-              the {ORG.parentBody}.
+              <span style={{ color: 'var(--cream)', fontWeight: 600 }}>{ORG.name}</span> — the{' '}
+              {ORG.expansion}, and the {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
+              {ORG.parentBody}.
             </p>
           </Reveal>
 
           <Reveal delay={230}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <a href="#events" className="btn btn--primary">
+              <Button href="/events" variant="primary">
                 EXPLORE SIGAI
-                <span aria-hidden style={{ display: 'flex', gap: 3 }}>
-                  <span style={{ width: 5, height: 5, background: 'currentColor' }} />
-                  <span style={{ width: 5, height: 5, background: 'currentColor' }} />
-                  <span style={{ width: 5, height: 5, background: 'currentColor' }} />
-                </span>
-              </a>
-              <a href="#about" className="btn btn--ghost">
+              </Button>
+              <Button href="/about" variant="ghost">
                 ABOUT US
-                <Icon name="arrow" size={13} />
-              </a>
+              </Button>
             </div>
           </Reveal>
         </div>
@@ -125,10 +103,10 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
       <div
         className="marquee"
         style={{
-          borderTop: `1px solid ${PALETTE.line}`,
-          borderBottom: `1px solid ${PALETTE.line}`,
+          borderTop: '1px solid var(--line)',
+          borderBottom: '1px solid var(--line)',
           paddingBlock: 14,
-          background: PALETTE.panelDeep,
+          background: 'rgba(8,11,22,0.6)',
         }}
         aria-hidden
       >

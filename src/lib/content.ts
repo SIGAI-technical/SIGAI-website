@@ -22,6 +22,9 @@ export const ORG = {
 
 export const ABOUT = {
   heading: 'About Us',
+  /** The same verbatim copy, split so the opening line can lead. */
+  lead: "DJS ACM SIGAI (Special Interest Group on Artificial Intelligence) is a new student chapter founded by Dwarkadas J. Sanghvi College of Engineering students in the Artificial Intelligence and Machine Learning (AI&ML) department.",
+  rest: "SIGAI is affiliated with the Association for Computing Machinery (ACM), a U.S.-based non-profit dedicated to education in the computing field. Our student chapter's mission is to promote and support the development and application of AI principles and techniques throughout the computing industry.",
   body: "DJS ACM SIGAI (Special Interest Group on Artificial Intelligence) is a new student chapter founded by Dwarkadas J. Sanghvi College of Engineering students in the Artificial Intelligence and Machine Learning (AI&ML) department. SIGAI is affiliated with the Association for Computing Machinery (ACM), a U.S.-based non-profit dedicated to education in the computing field. Our student chapter's mission is to promote and support the development and application of AI principles and techniques throughout the computing industry.",
 } as const;
 
@@ -379,10 +382,42 @@ export const SOCIALS = [
 ] as const;
 
 export const NAV_LINKS = [
-  { href: '#about', label: 'About' },
-  { href: '#areas', label: 'AI' },
-  { href: '#vision', label: 'Vision' },
-  { href: '#events', label: 'Events' },
-  { href: '#team', label: 'Team' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/domains', label: 'AI' },
+  { href: '/events', label: 'Events' },
+  { href: '/team', label: 'Team' },
+  { href: '/contact', label: 'Contact' },
 ] as const;
+
+/**
+ * Page-level framing copy. This describes and organises what the source site
+ * says — it does not add facts about the chapter that the source doesn't state.
+ */
+export const PAGES = {
+  about: {
+    eyebrow: 'Founded by DJSCE students',
+    title: 'A student chapter built around AI',
+    lede: 'Who SIGAI is, where it sits inside DJSCE, and what it set out to do.',
+  },
+  domains: {
+    eyebrow: 'AI · ML · Deep Learning',
+    title: 'What we explore',
+    lede: 'The ground the chapter covers, in its own terms — the fields named in its mission and vision, and the concepts its sessions keep returning to.',
+  },
+  events: {
+    eyebrow: 'Three years of events',
+    title: 'What SIGAI has run',
+    lede: 'Seminars, orientations and campus-wide competitions, archived by academic year.',
+  },
+  team: {
+    eyebrow: 'Faculty and student core',
+    title: 'The people behind SIGAI',
+    lede: 'Faculty coordinators and the student core committee, across every year the chapter has published.',
+  },
+  contact: {
+    eyebrow: 'Reach the chapter',
+    title: 'Get in touch',
+    lede: 'Email, phone, socials, and where to find SIGAI on campus.',
+  },
+} as const;

@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# unrelated projects / design handoffs kept alongside this app
+/New folder/
+/rubik-s-cube-glitch-design/
+*.zip
+
+# agent skill packs (installed locally, not part of the app)
+/.agents/
+/.claude/skills/

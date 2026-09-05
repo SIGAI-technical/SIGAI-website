@@ -1,13 +1,13 @@
 import Reveal from './Reveal';
+
 import { VISION } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
 
 /** The threads the vision statement itself names. */
 const THREADS = ['Knowledge', 'Skills', 'Community', 'Seminars', 'Workshops', 'Year-round events'];
 
 export default function Vision() {
   return (
-    <section id="vision" className="section section--hairline">
+    <section id="vision" className="section">
       <div className="shell">
         <div
           style={{
@@ -19,58 +19,37 @@ export default function Vision() {
         >
           <Reveal>
             <div>
-              <span className="eyebrow">03 — Our Vision</span>
+              <span className="eyebrow">
+                What we are working toward
+              </span>
               <blockquote
                 style={{
-                  margin: '24px 0 0',
+                  margin: '26px 0 0',
                   padding: 0,
-                  fontSize: 'clamp(18px, 1.9vw, 25px)',
+                  fontSize: 'clamp(18px, 1.9vw, 26px)',
                   lineHeight: 1.65,
                   fontWeight: 500,
                   letterSpacing: '-0.3px',
-                  color: PALETTE.cream,
+                  color: 'var(--cream)',
                   textWrap: 'pretty',
                 }}
               >
                 {VISION.body}
               </blockquote>
-              <div className="rule" style={{ marginTop: 30 }} aria-hidden />
+              <div className="rule" style={{ marginTop: 32 }} aria-hidden />
             </div>
           </Reveal>
 
+          {/* Plain rows, not cards — the vision statement is the object here. */}
           <Reveal delay={120}>
-            <ul
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
-                gap: 12,
-                listStyle: 'none',
-                margin: 0,
-                padding: 0,
-              }}
-            >
-              {THREADS.map((t) => (
-                <li
-                  key={t}
-                  className="panel"
-                  style={{
-                    padding: '20px 18px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 12,
-                    fontSize: 14,
-                    fontWeight: 500,
-                    color: PALETTE.cream,
-                  }}
-                >
-                  <span
-                    aria-hidden
-                    style={{ width: 6, height: 6, background: PALETTE.yellow, flexShrink: 0 }}
-                  />
-                  {t}
+            <ol className="threads">
+              {THREADS.map((t, i) => (
+                <li key={t}>
+                  <span className="threads__n">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="threads__t">{t}</span>
                 </li>
               ))}
-            </ul>
+            </ol>
           </Reveal>
         </div>
       </div>

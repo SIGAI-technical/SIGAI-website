@@ -1,0 +1,9 @@
+# Nothing here is used by the Next.js build — keep deployments small.
+New folder
+rubik-s-cube-glitch-design
+.agents
+.claude
+*.zip
+1.svg
+2.svg
+README.md

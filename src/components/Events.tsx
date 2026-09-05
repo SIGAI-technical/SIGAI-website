@@ -1,10 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import ArrangingGrid from './ArrangingGrid';
 import Reveal from './Reveal';
-import { Icon, Placeholder, SectionHeading } from './ui';
+import { Bezel, Icon, Placeholder, SectionHeading } from './ui';
 import { EVENTS, EVENT_YEARS } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
 
 type Filter = 'all' | (typeof EVENT_YEARS)[number];
 
@@ -13,7 +14,7 @@ const FILTERS: { id: Filter; label: string }[] = [
   ...EVENT_YEARS.map((y) => ({ id: y as Filter, label: y })),
 ];
 
-export default function Events() {
+export default function Events({ showHeading = true }: { showHeading?: boolean }) {
   const [filter, setFilter] = useState<Filter>('all');
 
   const shown = useMemo(
@@ -22,132 +23,127 @@ export default function Events() {
   );
 
   return (
-    <section id="events" className="section section--hairline grid-bg">
+    <section id="events" className="section">
       <div className="shell">
-        <SectionHeading
-          eyebrow="04 — Events"
-          title={
-            <>
-              WHAT SIGAI
-              <br />
-              HAS <span style={{ color: PALETTE.blue }}>RUN</span>
-            </>
-          }
-          lede={`${EVENTS.length} events across ${EVENT_YEARS.length} academic years — seminars, orientations and campus-wide competitions.`}
-        />
+        {showHeading ? (
+          <SectionHeading
+            eyebrow="Three years of events"
+            title={
+              <>
+                WHAT SIGAI
+                <br />
+                HAS <span className="mark">RUN</span>
+              </>
+            }
+            lede={`${EVENTS.length} events across ${EVENT_YEARS.length} academic years — seminars, orientations and campus-wide competitions.`}
+          />
+        ) : null}
 
         {/* No upcoming events are listed on the source site, so this stays an
             explicit empty slot rather than an invented entry. */}
         <Reveal delay={80}>
-          <div
-            className="panel"
-            style={{
-              marginTop: 44,
-              padding: '22px 24px',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              gap: 16,
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <span
-                className="status-dot"
-                aria-hidden
-                style={{ width: 6, height: 6, background: PALETTE.yellow, flexShrink: 0 }}
-              />
-              <div>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: 10,
-                    fontWeight: 600,
-                    letterSpacing: '2.4px',
-                    textTransform: 'uppercase',
-                    color: PALETTE.dim,
-                  }}
-                >
-                  Upcoming
-                </p>
-                <p style={{ margin: '6px 0 0', fontSize: 15, color: PALETTE.cream }}>
-                  No upcoming events announced yet.
-                </p>
+          <div style={{ marginTop: showHeading ? 48 : 8 }}>
+            <Bezel>
+              <div
+                style={{
+                  padding: '24px 26px',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  gap: 16,
+                  justifyContent: 'space-between',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <span
+                    className="live-dot"
+                    aria-hidden
+                    style={{
+                      width: 7,
+                      height: 7,
+                      borderRadius: 999,
+                      background: 'var(--gold)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 10,
+                        fontWeight: 600,
+                        letterSpacing: '0.2em',
+                        textTransform: 'uppercase',
+                        color: 'var(--dim)',
+                      }}
+                    >
+                      Upcoming
+                    </p>
+                    <p style={{ margin: '6px 0 0', fontSize: 15, color: 'var(--cream)' }}>
+                      No upcoming events announced yet.
+                    </p>
+                  </div>
+                </div>
+                <Link href="/contact" className="link-underline" style={{ fontSize: 14 }}>
+                  Follow SIGAI for announcements
+                </Link>
               </div>
-            </div>
-            <a href="#contact" className="link-underline" style={{ fontSize: 14 }}>
-              Follow SIGAI for announcements
-            </a>
+            </Bezel>
           </div>
         </Reveal>
 
         <Reveal delay={120}>
-          <div
-            role="tablist"
-            aria-label="Filter events by academic year"
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 40 }}
-          >
-            {FILTERS.map((f) => {
-              const on = filter === f.id;
-              return (
+          <div className="events__bar">
+            {/* Toggle buttons, not a tablist: there are no tabpanels to own. */}
+            <div
+              role="group"
+              aria-label="Filter events by academic year"
+              className="events__filters"
+            >
+              {FILTERS.map((f) => (
                 <button
                   key={f.id}
                   type="button"
-                  role="tab"
-                  aria-selected={on}
+                  className="tab"
+                  aria-pressed={filter === f.id}
                   onClick={() => setFilter(f.id)}
-                  style={{
-                    padding: '9px 16px',
-                    borderRadius: 6,
-                    border: `1px solid ${on ? PALETTE.blue : PALETTE.line}`,
-                    background: on ? PALETTE.blue : 'transparent',
-                    color: on ? PALETTE.cream : PALETTE.muted,
-                    fontFamily: 'inherit',
-                    fontSize: 12,
-                    fontWeight: 600,
-                    letterSpacing: '1.2px',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    transition: 'background 160ms ease, color 160ms ease, border-color 160ms ease',
-                  }}
                 >
                   {f.label}
                 </button>
-              );
-            })}
+              ))}
+            </div>
+
+            <p className="events__count" aria-live="polite">
+              {shown.length} {shown.length === 1 ? 'event' : 'events'}
+            </p>
           </div>
         </Reveal>
 
-        <ul
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(310px, 100%), 1fr))',
-            gap: 20,
-            listStyle: 'none',
-            margin: '28px 0 0',
-            padding: 0,
-          }}
-        >
-          {shown.map((e, i) => (
-            <Reveal as="li" key={e.id} delay={Math.min(i, 5) * 70}>
-              <article
-                className="panel panel--sheen"
-                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-              >
+        {/*
+          The cards start gathered in a rotated stack at the centre and arrange
+          themselves into this grid as the section scrolls into view.
+        */}
+        <ArrangingGrid className="events__grid" resetKey={filter}>
+          {shown.map((e) => (
+            <Bezel key={e.id}>
+              <article style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Placeholder label={`${e.title} — image to be added`} ratio="16 / 10" radius={0} />
 
                 <div
                   style={{
-                    padding: '22px 22px 24px',
+                    padding: '24px 24px 26px',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 12,
                     flex: 1,
                   }}
                 >
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    <span className="chip">{e.year}</span>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
+                    <span className="chip chip--gold">{e.year}</span>
                     <span className="chip">{e.series}</span>
+                    <span className="events__n" aria-hidden>
+                      {e.index}
+                    </span>
                   </div>
 
                   <h3
@@ -156,7 +152,7 @@ export default function Events() {
                       fontFamily: 'var(--display)',
                       fontSize: 14,
                       lineHeight: 1.5,
-                      color: PALETTE.cream,
+                      color: 'var(--cream)',
                     }}
                   >
                     {e.title}
@@ -167,7 +163,7 @@ export default function Events() {
                       margin: 0,
                       fontSize: 14.5,
                       lineHeight: 1.7,
-                      color: PALETTE.muted,
+                      color: 'var(--muted)',
                       textWrap: 'pretty',
                       flex: 1,
                     }}
@@ -183,9 +179,9 @@ export default function Events() {
                       marginTop: 4,
                       fontSize: 10,
                       fontWeight: 600,
-                      letterSpacing: '2.2px',
+                      letterSpacing: '0.18em',
                       textTransform: 'uppercase',
-                      color: PALETTE.dim,
+                      color: 'var(--dim)',
                     }}
                   >
                     {/* No dates are published for these events. */}
@@ -194,9 +190,9 @@ export default function Events() {
                   </span>
                 </div>
               </article>
-            </Reveal>
+            </Bezel>
           ))}
-        </ul>
+        </ArrangingGrid>
       </div>
     </section>
   );

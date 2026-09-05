@@ -29,6 +29,13 @@ export default function Reveal({
     const el = ref.current;
     if (!el || shown) return;
 
+    // Content must never be stuck invisible. Without IntersectionObserver
+    // there's nothing to drive the reveal, so show it on the next tick.
+    if (typeof IntersectionObserver === 'undefined') {
+      const t = setTimeout(() => setShown(true), 0);
+      return () => clearTimeout(t);
+    }
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

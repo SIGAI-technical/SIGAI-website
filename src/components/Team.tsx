@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import Reveal from './Reveal';
-import { Icon, SectionHeading } from './ui';
+import { Bezel, Icon, SectionHeading } from './ui';
 import { CORES, type Member } from '@/lib/content';
-import { PALETTE } from '@/lib/cube';
 
 function initials(name: string) {
   return name
@@ -25,147 +24,128 @@ function MemberCard({ member }: { member: Member }) {
   ].filter((l): l is NonNullable<typeof l> => l !== null);
 
   return (
-    <article
-      className="panel panel--sheen"
-      style={{ height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 14 }}
-    >
-      {/* Portrait placeholder — real photography to be dropped in later. */}
-      <div
-        className="ph"
-        aria-hidden
-        style={{ aspectRatio: '1 / 1', borderRadius: 8, fontSize: 22, letterSpacing: '1px' }}
+    <Bezel>
+      <article
+        style={{ height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 15 }}
       >
-        <span style={{ fontFamily: 'var(--display)', fontSize: 15, color: PALETTE.muted }}>
-          {initials(member.name)}
-        </span>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: 1 }}>
-        <h4
-          style={{
-            margin: 0,
-            fontSize: 15.5,
-            fontWeight: 600,
-            lineHeight: 1.35,
-            color: PALETTE.cream,
-          }}
-        >
-          {member.name}
-        </h4>
-        <p
-          style={{
-            margin: 0,
-            fontSize: 9.5,
-            fontWeight: 600,
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color: PALETTE.blue,
-          }}
-        >
-          {member.role}
-        </p>
-      </div>
-
-      {links.length ? (
-        <div style={{ display: 'flex', gap: 8 }}>
-          {links.map((l) => (
-            <a
-              key={l.name}
-              href={l.href}
-              className="icon-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${member.name} on ${l.label}`}
-            >
-              <Icon name={l.name} size={14} />
-            </a>
-          ))}
+        {/* Portrait placeholder — real photography to be dropped in later. */}
+        <div className="ph" aria-hidden style={{ aspectRatio: '1 / 1', borderRadius: 14 }}>
+          <span style={{ fontFamily: 'var(--display)', fontSize: 15, color: 'var(--muted)' }}>
+            {initials(member.name)}
+          </span>
         </div>
-      ) : null}
-    </article>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+          <h4
+            style={{
+              margin: 0,
+              fontSize: 15.5,
+              fontWeight: 600,
+              lineHeight: 1.35,
+              color: 'var(--cream)',
+            }}
+          >
+            {member.name}
+          </h4>
+          <p
+            style={{
+              margin: 0,
+              fontSize: 9.5,
+              fontWeight: 600,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: 'var(--gold)',
+            }}
+          >
+            {member.role}
+          </p>
+        </div>
+
+        {links.length ? (
+          <div style={{ display: 'flex', gap: 8 }}>
+            {links.map((l) => (
+              <a
+                key={l.name}
+                href={l.href}
+                className="icon-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${member.name} on ${l.label}`}
+              >
+                <Icon name={l.name} size={14} />
+              </a>
+            ))}
+          </div>
+        ) : null}
+      </article>
+    </Bezel>
   );
 }
 
-export default function Team() {
+export default function Team({ showHeading = true }: { showHeading?: boolean }) {
   const [year, setYear] = useState(CORES[0].year);
   const core = CORES.find((c) => c.year === year) ?? CORES[0];
 
+  const groupStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(206px, 100%), 1fr))',
+    gap: 16,
+    listStyle: 'none',
+    margin: '18px 0 0',
+    padding: 0,
+  };
+
+  const groupLabel: React.CSSProperties = {
+    fontSize: 10,
+    fontWeight: 600,
+    letterSpacing: '0.2em',
+    textTransform: 'uppercase',
+    color: 'var(--dim)',
+  };
+
   return (
-    <section id="team" className="section section--hairline">
+    <section id="team" className="section">
       <div className="shell">
-        <SectionHeading
-          eyebrow="05 — Team"
-          title={
-            <>
-              THE PEOPLE
-              <br />
-              BEHIND <span style={{ color: PALETTE.blue }}>SIGAI</span>
-            </>
-          }
-          lede="Faculty coordinators and the student core committee, across every year the chapter has published."
-        />
+        {showHeading ? (
+          <SectionHeading
+            eyebrow="Faculty and student core"
+            title={
+              <>
+                THE PEOPLE
+                <br />
+                BEHIND <span className="mark">SIGAI</span>
+              </>
+            }
+            lede="Faculty coordinators and the student core committee, across every year the chapter has published."
+          />
+        ) : null}
 
         <Reveal delay={80}>
+          {/* Toggle buttons, not a tablist: there are no tabpanels to own. */}
           <div
-            role="tablist"
+            role="group"
             aria-label="Select core committee year"
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 40 }}
+            style={{ display: 'flex', flexWrap: 'wrap', gap: 9, marginTop: 44 }}
           >
-            {CORES.map((c) => {
-              const on = c.year === year;
-              return (
-                <button
-                  key={c.year}
-                  type="button"
-                  role="tab"
-                  aria-selected={on}
-                  onClick={() => setYear(c.year)}
-                  style={{
-                    padding: '10px 18px',
-                    borderRadius: 6,
-                    border: `1px solid ${on ? PALETTE.blue : PALETTE.line}`,
-                    background: on ? PALETTE.blue : 'transparent',
-                    color: on ? PALETTE.cream : PALETTE.muted,
-                    fontFamily: 'var(--display)',
-                    fontSize: 11,
-                    letterSpacing: '0.5px',
-                    cursor: 'pointer',
-                    transition: 'background 160ms ease, color 160ms ease, border-color 160ms ease',
-                  }}
-                >
-                  CORE {c.year}
-                </button>
-              );
-            })}
+            {CORES.map((c) => (
+              <button
+                key={c.year}
+                type="button"
+                className="tab"
+                aria-pressed={c.year === year}
+                onClick={() => setYear(c.year)}
+              >
+                Core {c.year}
+              </button>
+            ))}
           </div>
         </Reveal>
 
         <Reveal delay={120}>
-          <h3
-            style={{
-              margin: '44px 0 0',
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '2.6px',
-              textTransform: 'uppercase',
-              color: PALETTE.dim,
-            }}
-          >
-            Faculty Coordinators
-          </h3>
+          <h3 style={{ ...groupLabel, margin: '48px 0 0' }}>Faculty Coordinators</h3>
         </Reveal>
 
-        <ul
-          key={`faculty-${year}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))',
-            gap: 16,
-            listStyle: 'none',
-            margin: '18px 0 0',
-            padding: 0,
-          }}
-        >
+        <ul key={`faculty-${year}`} style={groupStyle}>
           {core.faculty.map((m, i) => (
             <Reveal as="li" key={`${year}-${m.name}`} delay={i * 60}>
               <MemberCard member={m} />
@@ -174,31 +154,12 @@ export default function Team() {
         </ul>
 
         <Reveal>
-          <h3
-            style={{
-              margin: '52px 0 0',
-              fontSize: 10,
-              fontWeight: 600,
-              letterSpacing: '2.6px',
-              textTransform: 'uppercase',
-              color: PALETTE.dim,
-            }}
-          >
+          <h3 style={{ ...groupLabel, margin: '56px 0 0' }}>
             Core Committee · {core.committee.length} members
           </h3>
         </Reveal>
 
-        <ul
-          key={`core-${year}`}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))',
-            gap: 16,
-            listStyle: 'none',
-            margin: '18px 0 0',
-            padding: 0,
-          }}
-        >
+        <ul key={`core-${year}`} style={groupStyle}>
           {core.committee.map((m, i) => (
             <Reveal as="li" key={`${year}-${m.name}`} delay={Math.min(i, 7) * 55}>
               <MemberCard member={m} />
