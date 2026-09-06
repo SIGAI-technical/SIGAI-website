@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Icon } from './ui';
 import { NAV_LINKS } from '@/lib/content';
 
 export default function SiteNav() {
@@ -174,13 +173,6 @@ export default function SiteNav() {
             ))}
             <span className="nav-rail__indicator" aria-hidden />
           </div>
-
-          <Link href="/contact" className="btn btn--gold">
-            JOIN
-            <span className="btn__icon" aria-hidden>
-              <Icon name="arrow" size={12} />
-            </span>
-          </Link>
         </nav>
 
         <button
@@ -210,13 +202,6 @@ export default function SiteNav() {
               {label}
             </Link>
           ))}
-          <Link
-            href="/contact"
-            style={{ ['--i' as string]: `${60 + NAV_LINKS.length * 55}ms`, color: 'var(--gold)' }}
-            onClick={() => setOpen(false)}
-          >
-            JOIN US
-          </Link>
         </div>
       ) : null}
     </header>

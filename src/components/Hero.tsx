@@ -1,7 +1,7 @@
 import CubeStage from './CubeStage';
 import Reveal from './Reveal';
 import { Button } from './ui';
-import { ORG, TICKER } from '@/lib/content';
+import { ORG } from '@/lib/content';
 
 export default function Hero({ logoSrc }: { logoSrc: string }) {
   return (
@@ -27,10 +27,28 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
           }}
         >
           <Reveal>
-            <span className="eyebrow">
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 9,
+                fontSize: 11.5,
+                fontWeight: 600,
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+                color: 'var(--muted)',
+              }}
+            >
               <i
                 className="status-dot"
-                style={{ width: 6, height: 6, borderRadius: 999, background: 'currentColor' }}
+                aria-hidden
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 999,
+                  background: 'var(--gold)',
+                  flexShrink: 0,
+                }}
               />
               Student Chapter &nbsp;·&nbsp; ACM Affiliated
             </span>
@@ -97,30 +115,6 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
         <Reveal delay={120}>
           <CubeStage logoSrc={logoSrc} />
         </Reveal>
-      </div>
-
-      {/* Terminology ticker, carried over from the source site's hero. */}
-      <div
-        className="marquee"
-        style={{
-          borderTop: '1px solid var(--line)',
-          borderBottom: '1px solid var(--line)',
-          paddingBlock: 14,
-          background: 'rgba(8,11,22,0.6)',
-        }}
-        aria-hidden
-      >
-        <div className="marquee__track">
-          {[0, 1].map((copy) => (
-            <div key={copy} style={{ display: 'flex', gap: 44 }}>
-              {TICKER.map((t) => (
-                <span key={`${copy}-${t}`} className="marquee__item">
-                  {t}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

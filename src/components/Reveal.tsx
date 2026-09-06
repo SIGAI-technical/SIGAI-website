@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState, type ElementType, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ElementType,
+  type ReactNode,
+} from 'react';
 
 interface RevealProps {
   children: ReactNode;
@@ -9,6 +16,7 @@ interface RevealProps {
   as?: ElementType;
   className?: string;
   id?: string;
+  style?: CSSProperties;
 }
 
 /**
@@ -21,6 +29,7 @@ export default function Reveal({
   as: Tag = 'div',
   className = '',
   id,
+  style,
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
   const [shown, setShown] = useState(false);
@@ -55,7 +64,7 @@ export default function Reveal({
       ref={ref}
       id={id}
       className={`reveal${shown ? ' is-visible' : ''}${className ? ` ${className}` : ''}`}
-      style={{ ['--reveal-delay' as string]: `${delay}ms` }}
+      style={{ ['--reveal-delay' as string]: `${delay}ms`, ...style }}
     >
       {children}
     </Tag>

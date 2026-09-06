@@ -120,8 +120,8 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
         </Reveal>
 
         {/*
-          The cards start gathered in a rotated stack at the centre and arrange
-          themselves into this grid as the section scrolls into view.
+          The cards start gathered in a fanned stack and arrange themselves
+          into this grid as the section scrolls into view.
         */}
         <ArrangingGrid className="events__grid" resetKey={filter}>
           {shown.map((e) => (
@@ -138,9 +138,23 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
                     flex: 1,
                   }}
                 >
-                  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
-                    <span className="chip chip--gold">{e.year}</span>
-                    <span className="chip">{e.series}</span>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      gap: 10,
+                      fontSize: 10.5,
+                      fontWeight: 600,
+                      letterSpacing: '0.14em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    <span style={{ color: 'var(--cream)' }}>{e.year}</span>
+                    <span style={{ color: 'var(--dim)' }} aria-hidden>
+                      /
+                    </span>
+                    <span style={{ color: 'var(--muted)' }}>{e.series}</span>
                     <span className="events__n" aria-hidden>
                       {e.index}
                     </span>

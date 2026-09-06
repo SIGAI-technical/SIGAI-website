@@ -11,7 +11,7 @@ interface Card {
   title: string;
   body: string;
   icon: IconName;
-  tone: 'gold' | 'blue';
+  tone?: 'gold' | 'blue';
   /** The lead card spans both columns on wide screens. */
   wide?: boolean;
   stat?: string;
@@ -40,7 +40,6 @@ const CARDS: Card[] = [
     title: 'What we explore',
     body: 'AI, machine learning, deep learning — and the mechanics underneath.',
     icon: 'arrow',
-    tone: 'gold',
   },
 ];
 
@@ -61,7 +60,7 @@ export default function QuickNav() {
             <Link href={c.href} style={{ display: 'block', height: '100%' }}>
               <Bezel className="spotlight" onMouseMove={onMove}>
                 <div className={`quicknav__card${c.wide ? ' quicknav__card--wide' : ''}`}>
-                  <span className={`tile${c.tone === 'blue' ? ' tile--blue' : ''}`} aria-hidden>
+                  <span className={`tile${c.tone ? ` tile--${c.tone}` : ''}`} aria-hidden>
                     <Icon name={c.icon} size={22} />
                   </span>
 

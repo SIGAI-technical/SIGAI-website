@@ -76,16 +76,6 @@ export const AREAS: Area[] = [
   },
 ];
 
-/** The glyph ticker the source site runs behind its hero. */
-export const TICKER = [
-  'NEURAL NET',
-  'DEEP LEARNING',
-  '∑ W·X + B',
-  'BACKPROP',
-  'TRANSFORMER',
-  '∂L/∂W',
-] as const;
-
 export interface SigEvent {
   id: string;
   index: string;

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { Icon } from './ui';
 import { CONTACT, NAV_LINKS, ORG, SOCIALS } from '@/lib/content';
@@ -19,53 +18,19 @@ const LINK: React.CSSProperties = { fontSize: 14, color: 'var(--muted)' };
 export default function Footer() {
   return (
     <footer style={{ borderTop: '1px solid var(--line)', background: 'rgba(8,11,22,0.72)' }}>
-      <div
-        className="shell"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
-          gap: 40,
-          paddingBlock: 'clamp(48px, 6vw, 76px)',
-        }}
-      >
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Image
-              src="/logo-mark-cream.png"
-              alt=""
-              width={40}
-              height={52}
-              style={{ width: 'auto', height: 44 }}
-            />
-            <div>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: 'var(--display)',
-                  fontSize: 15,
-                  lineHeight: 1,
-                  color: 'var(--cream)',
-                }}
-              >
-                SIGAI
-              </p>
-              <p style={{ ...LABEL, marginTop: 7 }}>DJS ACM</p>
-            </div>
-          </div>
+      {/* A typographic close, not another card row: the wordmark carries the
+          brand, the tagline sits beside it doing the one job a footer intro
+          needs to do. */}
+      <div className="shell footer__mark">
+        <span aria-hidden>SIGAI</span>
+        <p>{ORG.tagline}</p>
+      </div>
 
-          <p
-            style={{
-              margin: '20px 0 0',
-              maxWidth: '34ch',
-              fontSize: 14,
-              lineHeight: 1.7,
-              color: 'var(--muted)',
-            }}
-          >
-            {ORG.expansion} — the {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
-            {ORG.parentBody}.
-          </p>
-        </div>
+      <div className="shell footer__grid">
+        <p style={{ margin: 0, maxWidth: '38ch', fontSize: 14, lineHeight: 1.75, color: 'var(--muted)' }}>
+          {ORG.expansion}. The {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
+          {ORG.parentBody}.
+        </p>
 
         <nav aria-label="Footer">
           <p style={LABEL}>Links</p>
@@ -103,7 +68,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <p style={LABEL}>Follow Us</p>
+          <p style={LABEL}>Follow</p>
           <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
             {SOCIALS.map((s) => (
               <a

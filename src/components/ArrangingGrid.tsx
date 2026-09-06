@@ -11,8 +11,8 @@ import {
 } from 'motion/react';
 
 /**
- * Cards open as a centred, fanned deck — the `animated-cards-stack` look — and
- * deal themselves out into the real grid as the section scrolls in.
+ * Cards open as a gathered stack — the `animated-cards-stack` look — and deal
+ * themselves out into the real grid as the section scrolls in.
  *
  * The grid is the *resting* layout: plain responsive CSS. The deck is only a
  * transform offset from it, so if JS or measurement never runs the cards just
@@ -53,16 +53,20 @@ function DeckCard({
   // A little spring so cards settle instead of snapping to a stop.
   const s = useSpring(t, { stiffness: 110, damping: 20, mass: 0.7 });
 
-  // Deck geometry: alternating lean, each card set slightly lower and deeper.
-  const lean = (index % 2 === 0 ? -1 : 1) * (2.5 + index * 1.7);
-  const deckY = index * 9;
-  const deckZ = -index * 14;
+  // Deck geometry: a tight, uniform per-card increment radiating from one
+  // anchor point — the same idea as a physical stack of photographs, where
+  // each sheet peeks out from behind the last by a few consistent pixels.
+  // Capped so an 8-card archive still reads as one neat stack, not a spiral.
+  const lean = Math.min(index * 1.4, 7);
+  const deckY = Math.min(index * 4, 22);
+  const deckZ = -Math.min(index * 8, 48);
+  const deckScale = 1 - Math.min(index * 0.01, 0.06);
 
   const x = useTransform(s, (v) => delta.x * (1 - v));
   const y = useTransform(s, (v) => (delta.y + deckY) * (1 - v));
   const z = useTransform(s, (v) => deckZ * (1 - v));
   const rotate = useTransform(s, (v) => lean * (1 - v));
-  const scale = useTransform(s, (v) => 1 - 0.04 * (1 - v));
+  const scale = useTransform(s, (v) => 1 - (1 - deckScale) * (1 - v));
 
   if (disabled) return <div style={{ height: '100%' }}>{children}</div>;
 
@@ -75,13 +79,14 @@ function DeckCard({
         z,
         rotate,
         scale,
+        transformOrigin: 'center bottom',
         transformStyle: 'preserve-3d',
         backfaceVisibility: 'hidden',
         // Front of the deck stays on top while gathered.
         zIndex: count - index,
         willChange: 'transform',
         // Static drop shadow: animating `filter` repaints every frame.
-        boxShadow: '0 18px 40px -22px rgba(0,0,0,0.75)',
+        boxShadow: '0 14px 30px -18px rgba(0,0,0,0.6)',
       }}
     >
       {children}

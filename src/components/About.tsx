@@ -39,7 +39,7 @@ export default function About({ showHeading = true }: { showHeading?: boolean })
 
           <Reveal delay={140}>
             <figure className="about__figure">
-              <Placeholder label="Chapter photo — image to be added" ratio="5 / 4" radius={18} />
+              <Placeholder label="Chapter photo — image to be added" ratio="5 / 4" radius={6} />
               <figcaption className="about__caption">{ORG.collegeFull}</figcaption>
             </figure>
           </Reveal>

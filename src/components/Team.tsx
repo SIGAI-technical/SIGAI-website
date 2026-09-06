@@ -29,7 +29,7 @@ function MemberCard({ member }: { member: Member }) {
         style={{ height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 15 }}
       >
         {/* Portrait placeholder — real photography to be dropped in later. */}
-        <div className="ph" aria-hidden style={{ aspectRatio: '1 / 1', borderRadius: 14 }}>
+        <div className="ph" aria-hidden style={{ aspectRatio: '1 / 1', borderRadius: 6 }}>
           <span style={{ fontFamily: 'var(--display)', fontSize: 15, color: 'var(--muted)' }}>
             {initials(member.name)}
           </span>
@@ -54,7 +54,7 @@ function MemberCard({ member }: { member: Member }) {
               fontWeight: 600,
               letterSpacing: '0.16em',
               textTransform: 'uppercase',
-              color: 'var(--gold)',
+              color: 'var(--muted)',
             }}
           >
             {member.role}
@@ -125,7 +125,13 @@ export default function Team({ showHeading = true }: { showHeading?: boolean }) 
           <div
             role="group"
             aria-label="Select core committee year"
-            style={{ display: 'flex', flexWrap: 'wrap', gap: 9, marginTop: 44 }}
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 26,
+              marginTop: 44,
+              borderBottom: '1px solid var(--line)',
+            }}
           >
             {CORES.map((c) => (
               <button

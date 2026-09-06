@@ -1,5 +1,4 @@
 import Reveal from './Reveal';
-import { Bezel, Placeholder } from './ui';
 import { ORG } from '@/lib/content';
 
 const BODIES = [
@@ -28,60 +27,68 @@ export default function Affiliation() {
           </h2>
         </Reveal>
 
-        <div
+        {/* Two hairline-divided rows, not two card boxes — the facing page
+            already makes this point with cards, this one doesn't need to. */}
+        <dl
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-            gap: 20,
-            marginTop: 44,
+            margin: '44px 0 0',
+            padding: 0,
+            borderTop: '1px solid var(--line)',
           }}
         >
           {BODIES.map((b, i) => (
-            <Reveal key={b.tag} delay={i * 90}>
-              <Bezel>
-                <article
+            <Reveal key={b.tag} delay={i * 90} as="div">
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(140px, 220px) 1fr',
+                  gap: 'clamp(16px, 3vw, 40px)',
+                  padding: 'clamp(22px, 3vw, 30px) 0',
+                  borderBottom: '1px solid var(--line)',
+                }}
+              >
+                <dt style={{ margin: 0 }}>
+                  <span
+                    style={{
+                      display: 'block',
+                      fontSize: 9.5,
+                      fontWeight: 600,
+                      letterSpacing: '0.2em',
+                      textTransform: 'uppercase',
+                      color: 'var(--muted)',
+                    }}
+                  >
+                    {b.tag}
+                  </span>
+                  <span
+                    style={{
+                      display: 'block',
+                      marginTop: 8,
+                      fontSize: 17,
+                      fontWeight: 600,
+                      lineHeight: 1.4,
+                      color: 'var(--cream)',
+                    }}
+                  >
+                    {b.name}
+                  </span>
+                </dt>
+                <dd
                   style={{
-                    height: '100%',
-                    padding: 28,
-                    display: 'flex',
-                    gap: 20,
-                    alignItems: 'flex-start',
-                    flexWrap: 'wrap',
+                    margin: 0,
+                    maxWidth: '60ch',
+                    fontSize: 14.5,
+                    lineHeight: 1.75,
+                    color: 'var(--muted)',
+                    textWrap: 'pretty',
                   }}
                 >
-                  <div style={{ width: 76, flexShrink: 0 }}>
-                    <Placeholder label="Logo" ratio="1 / 1" radius={14} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 180 }}>
-                    <span className="chip chip--gold">{b.tag}</span>
-                    <h3
-                      style={{
-                        margin: '14px 0 0',
-                        fontSize: 17,
-                        fontWeight: 600,
-                        lineHeight: 1.45,
-                        color: 'var(--cream)',
-                      }}
-                    >
-                      {b.name}
-                    </h3>
-                    <p
-                      style={{
-                        margin: '10px 0 0',
-                        fontSize: 14.5,
-                        lineHeight: 1.7,
-                        color: 'var(--muted)',
-                        textWrap: 'pretty',
-                      }}
-                    >
-                      {b.body}
-                    </p>
-                  </div>
-                </article>
-              </Bezel>
+                  {b.body}
+                </dd>
+              </div>
             </Reveal>
           ))}
-        </div>
+        </dl>
       </div>
     </section>
   );

@@ -45,22 +45,23 @@ export default function Contact({ showHeading = true }: { showHeading?: boolean 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
-            gap: 20,
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.1fr)',
+            gap: 'clamp(32px, 5vw, 64px)',
             marginTop: 48,
           }}
+          className="contact__layout"
         >
           <Reveal>
-            <Bezel>
-              <div
-                style={{
-                  height: '100%',
-                  padding: 30,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 28,
-                }}
-              >
+            {/* Plain divided fields, not a card — the map beside it is the
+                only thing here that needs a frame. */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                borderTop: '1px solid var(--line)',
+              }}
+            >
+              <div style={{ padding: '22px 0', borderBottom: '1px solid var(--line)' }}>
                 <Field label="Email">
                   <a
                     href={`mailto:${CONTACT.email}`}
@@ -79,7 +80,9 @@ export default function Contact({ showHeading = true }: { showHeading?: boolean 
                     {CONTACT.email}
                   </a>
                 </Field>
+              </div>
 
+              <div style={{ padding: '22px 0', borderBottom: '1px solid var(--line)' }}>
                 <Field label="Phone">
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 10 }}>
                     {CONTACT.phones.map((p) => (
@@ -101,7 +104,9 @@ export default function Contact({ showHeading = true }: { showHeading?: boolean 
                     ))}
                   </div>
                 </Field>
+              </div>
 
+              <div style={{ padding: '22px 0', borderBottom: '1px solid var(--line)' }}>
                 <Field label="Address">
                   <p
                     style={{
@@ -120,7 +125,9 @@ export default function Contact({ showHeading = true }: { showHeading?: boolean 
                     {CONTACT.location}
                   </p>
                 </Field>
+              </div>
 
+              <div style={{ padding: '22px 0', borderBottom: '1px solid var(--line)' }}>
                 <Field label="Follow">
                   <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
                     {SOCIALS.map((s) => (
@@ -138,7 +145,7 @@ export default function Contact({ showHeading = true }: { showHeading?: boolean 
                   </div>
                 </Field>
               </div>
-            </Bezel>
+            </div>
           </Reveal>
 
           <Reveal delay={100}>

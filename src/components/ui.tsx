@@ -102,7 +102,7 @@ export function Bezel({
 export function Placeholder({
   label,
   height,
-  radius = 14,
+  radius = 6,
   ratio,
 }: {
   label: string;
