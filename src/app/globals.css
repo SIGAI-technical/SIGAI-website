@@ -133,6 +133,34 @@ a {
   }
 }
 
+/* Blinking terminal cursor on eyebrow labels. */
+@keyframes cursor-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Pulsing glow for the active nav indicator. */
+@keyframes nav-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px 1px rgba(43, 95, 255, 0.55), 0 0 8px 2px rgba(245, 197, 24, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 8px 3px rgba(43, 95, 255, 0.8), 0 0 16px 4px rgba(245, 197, 24, 0.35);
+  }
+}
+
+/* Slide-up entrance used by staggered card reveals. */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes tumble {
   0% {
     transform: rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg);
@@ -249,28 +277,42 @@ a {
   padding-block: clamp(88px, 11vw, 160px);
 }
 
-/* Plain text + a short tick, not a pill: the badge chrome was doing no work. */
+/* Terminal-bracket eyebrow: [ LABEL ]_ with blinking cursor. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   padding: 0;
   border-radius: 0;
   border: 0;
   background: none;
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--gold);
+  font-family: var(--font-space-grotesk, ui-monospace, monospace);
 }
 
+/* Opening bracket accent. */
 .eyebrow::before {
-  content: "";
-  width: 18px;
-  height: 1px;
+  content: "[";
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--blue-soft);
   flex-shrink: 0;
-  background: var(--gold);
+  opacity: 0.9;
+}
+
+/* Closing bracket + blinking cursor. */
+.eyebrow::after {
+  content: "]_";
+  font-family: var(--display);
+  font-size: 13px;
+  color: var(--blue-soft);
+  opacity: 0.9;
+  /* Only the underscore blinks — split via letter-spacing trick. */
+  animation: cursor-blink 1.1s step-end infinite;
 }
 
 .section-title {
@@ -295,47 +337,76 @@ a {
   max-width: 62ch;
   margin: 22px 0 0;
   font-size: clamp(15px, 1.2vw, 17px);
-  line-height: 1.8;
+  line-height: 1.85;
   color: var(--muted);
   text-wrap: pretty;
 }
 
+/*
+ * Accent bar: slightly thicker, with a chromatic-aberration ghost offset
+ * behind it in the secondary accent colour for the glitch look.
+ */
 .rule {
+  position: relative;
   width: 56px;
-  height: 4px;
-  border-radius: 999px;
+  height: 5px;
+  border-radius: 2px;
   background: linear-gradient(90deg, var(--gold), rgba(245, 197, 24, 0));
+}
+
+/* Chromatic-aberration duplicate line — blue, offset behind. */
+.rule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue), rgba(43, 95, 255, 0));
+  transform: translate(3px, 3px);
+  opacity: 0.5;
+  z-index: -1;
 }
 
 /* ================================================================ cards */
 
 /*
- * Single sharp-edged tray. Used to double-wall this as an outer bezel plus an
- * inner core with its own border; one wall and one small radius reads as a
- * cut panel instead of a rounded card stacked on another rounded card.
+ * Neobrutalist card tray: thick 2px electric-blue border + hard gold offset
+ * drop shadow (no blur). On hover the card lifts -2px/-2px, shadow grows, and
+ * an electric-blue glow blooms behind it for the cyberpunk layer.
  */
 .bezel {
   padding: 0;
-  border-radius: 6px;
-  border: 1px solid rgba(237, 230, 214, 0.1);
+  border-radius: 4px;
+  border: 2px solid rgba(43, 95, 255, 0.7);
   background: rgba(237, 230, 214, 0.025);
+  box-shadow: 4px 4px 0 rgba(245, 197, 24, 0.65);
   transition:
-    border-color 420ms var(--ease-out-expo),
-    transform 420ms var(--ease-spring);
+    border-color 300ms var(--ease-out-expo),
+    box-shadow 300ms var(--ease-out-expo),
+    transform 300ms var(--ease-spring);
 }
 
 .bezel:hover {
-  border-color: rgba(245, 197, 24, 0.4);
-  transform: translateY(-3px);
+  border-color: rgba(43, 95, 255, 0.9);
+  box-shadow:
+    6px 6px 0 rgba(245, 197, 24, 0.8),
+    0 0 18px 3px rgba(43, 95, 255, 0.18);
+  transform: translate(-2px, -2px);
 }
 
 .bezel__core {
   position: relative;
   height: 100%;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 2px;
   border: 0;
-  background: linear-gradient(150deg, rgba(16, 23, 40, 0.92), rgba(8, 11, 22, 0.96));
+  /*
+   * Subtle diagonal grid texture at low opacity over the dark fill —
+   * avoids a flat pure-black surface.
+   */
+  background:
+    linear-gradient(150deg, rgba(16, 23, 40, 0.94), rgba(8, 11, 22, 0.97)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M0 20L20 0' stroke='rgba(111,147,255,0.06)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: auto, 20px 20px;
 }
 
 /* A light sheen that crosses the card on hover. */
@@ -361,25 +432,31 @@ a {
 
 /* ============================================================== buttons */
 
+/*
+ * Neobrutalist press effect: thick border + hard offset shadow that compresses
+ * down on :active to simulate a physical button being depressed.
+ */
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 13px 13px 13px 26px;
-  border-radius: 8px;
+  border-radius: 4px;
   font-family: var(--display);
   font-size: 11.5px;
   letter-spacing: 0.5px;
   transition:
-    background 420ms var(--ease-out-expo),
-    color 420ms var(--ease-out-expo),
-    box-shadow 420ms var(--ease-out-expo),
-    transform 320ms var(--ease-spring),
-    border-color 420ms var(--ease-out-expo);
+    background 300ms var(--ease-out-expo),
+    color 300ms var(--ease-out-expo),
+    box-shadow 180ms var(--ease-out-expo),
+    transform 180ms var(--ease-spring),
+    border-color 300ms var(--ease-out-expo);
 }
 
+/* Press effect: shift right+down to meet the shadow origin. */
 .btn:active {
-  transform: scale(0.975);
+  transform: translate(3px, 3px) !important;
+  box-shadow: 1px 1px 0 currentColor !important;
 }
 
 /* Trailing icon lives in its own tile, flush with the button's inner edge. */
@@ -388,7 +465,7 @@ a {
   place-items: center;
   width: 30px;
   height: 30px;
-  border-radius: 4px;
+  border-radius: 3px;
   background: rgba(5, 6, 11, 0.18);
   transition:
     transform 420ms var(--ease-spring),
@@ -402,21 +479,29 @@ a {
 .btn--primary {
   background: linear-gradient(96deg, var(--blue), #1c4ae0);
   color: var(--cream);
-  box-shadow: 0 6px 16px -10px rgba(43, 95, 255, 0.6);
+  border: 2px solid rgba(43, 95, 255, 0.9);
+  box-shadow: 4px 4px 0 rgba(245, 197, 24, 0.7);
 }
 
 .btn--primary:hover {
-  box-shadow: 0 8px 18px -9px rgba(43, 95, 255, 0.75);
+  box-shadow:
+    5px 5px 0 rgba(245, 197, 24, 0.85),
+    0 0 14px 3px rgba(43, 95, 255, 0.28);
+  transform: translate(-1px, -1px);
 }
 
 .btn--gold {
   background: linear-gradient(96deg, var(--gold), #e0ac00);
   color: var(--cube-ink);
-  box-shadow: 0 6px 16px -10px rgba(245, 197, 24, 0.55);
+  border: 2px solid rgba(245, 197, 24, 0.9);
+  box-shadow: 4px 4px 0 rgba(43, 95, 255, 0.7);
 }
 
 .btn--gold:hover {
-  box-shadow: 0 8px 18px -9px rgba(245, 197, 24, 0.7);
+  box-shadow:
+    5px 5px 0 rgba(43, 95, 255, 0.85),
+    0 0 14px 3px rgba(245, 197, 24, 0.3);
+  transform: translate(-1px, -1px);
 }
 
 .btn--gold .btn__icon {
@@ -426,12 +511,17 @@ a {
 .btn--ghost {
   background: rgba(237, 230, 214, 0.045);
   color: var(--cream);
-  border: 1px solid rgba(237, 230, 214, 0.14);
+  border: 2px solid rgba(237, 230, 214, 0.25);
+  box-shadow: 4px 4px 0 rgba(43, 95, 255, 0.45);
 }
 
 .btn--ghost:hover {
-  border-color: rgba(245, 197, 24, 0.45);
+  border-color: rgba(245, 197, 24, 0.6);
   color: var(--gold);
+  box-shadow:
+    5px 5px 0 rgba(43, 95, 255, 0.6),
+    0 0 12px 2px rgba(245, 197, 24, 0.15);
+  transform: translate(-1px, -1px);
 }
 
 .btn--ghost .btn__icon {
@@ -454,7 +544,8 @@ a {
   border-bottom: 1px solid var(--line);
   transition:
     background 520ms var(--ease-out-expo),
-    border-color 520ms var(--ease-out-expo);
+    border-color 520ms var(--ease-out-expo),
+    box-shadow 520ms var(--ease-out-expo);
 }
 
 /* Hairline of brand colour riding the very top edge. */
@@ -477,7 +568,9 @@ a {
 
 .site-header[data-scrolled="true"] {
   background: rgba(5, 6, 11, 0.94);
-  border-bottom-color: var(--line-soft);
+  border-bottom-color: rgba(43, 95, 255, 0.35);
+  /* Frosted bottom-glow on scroll — cyberpunk navbar. */
+  box-shadow: 0 1px 32px 0 rgba(43, 95, 255, 0.14), 0 0 0 1px rgba(43, 95, 255, 0.1);
 }
 
 .site-header__inner {
@@ -531,13 +624,14 @@ a {
   position: absolute;
   bottom: -6px;
   left: 0;
-  height: 2px;
-  border-radius: 999px;
+  height: 3px;
+  border-radius: 1px;
   background: linear-gradient(90deg, var(--blue), var(--gold));
   transform: translate3d(var(--x, 0), 0, 0) scaleX(var(--sx, 0));
   transform-origin: left;
   width: var(--w, 0);
   opacity: var(--o, 0);
+  animation: nav-glow 2.2s ease-in-out infinite;
   transition:
     transform 620ms var(--ease-spring),
     width 620ms var(--ease-spring),
@@ -655,23 +749,53 @@ a {
 /* ========================================================= placeholder */
 
 /*
- * Stand-in for imagery that hasn't been supplied yet — deliberately reads as a
- * slot, not as a photo, so nothing looks finished when it isn't. Flat and
- * colourless on purpose: it should read as "empty", not as another graphic.
+ * Designed placeholder — dashed gold border + diagonal hazard-stripe
+ * background so the slot reads as an intentional design decision, not a bug.
  */
 .ph {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(237, 230, 214, 0.03);
-  border: 1px dashed rgba(237, 230, 214, 0.13);
-  color: var(--dim);
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  gap: 10px;
+  /* Diagonal hazard stripes + dark base. */
+  background-color: rgba(8, 11, 22, 0.7);
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(245, 197, 24, 0.04) 0px,
+      rgba(245, 197, 24, 0.04) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+  border: 2px dashed rgba(245, 197, 24, 0.5);
+  color: rgba(245, 197, 24, 0.55);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   text-align: center;
+  overflow: hidden;
+}
+
+/* Camera/image icon SVG via mask. */
+.ph::before {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  opacity: 0.45;
+  background-color: rgba(245, 197, 24, 0.8);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0 8a5 5 0 1 1 0-10A5 5 0 0 1 12 17ZM1 7h3.5l2-2h11l2 2H23a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0 8a5 5 0 1 1 0-10A5 5 0 0 1 12 17ZM1 7h3.5l2-2h11l2 2H23a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 /* ============================================================= utility */
@@ -705,20 +829,22 @@ a {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border-radius: 5px;
-  border: 1px solid rgba(237, 230, 214, 0.13);
+  border-radius: 4px;
+  border: 1px solid rgba(237, 230, 214, 0.18);
   color: var(--muted);
   transition:
-    color 380ms var(--ease-out-expo),
-    border-color 380ms var(--ease-out-expo),
-    background 380ms var(--ease-out-expo),
-    transform 380ms var(--ease-spring);
+    color 320ms var(--ease-out-expo),
+    border-color 320ms var(--ease-out-expo),
+    background 320ms var(--ease-out-expo),
+    box-shadow 320ms var(--ease-out-expo),
+    transform 320ms var(--ease-spring);
 }
 
 .icon-link:hover {
   color: var(--gold);
-  border-color: var(--gold);
-  background: rgba(245, 197, 24, 0.12);
+  border-color: rgba(245, 197, 24, 0.7);
+  background: rgba(245, 197, 24, 0.1);
+  box-shadow: 0 0 10px 2px rgba(245, 197, 24, 0.25), 2px 2px 0 rgba(43, 95, 255, 0.4);
   transform: translateY(-2px);
 }
 
@@ -766,8 +892,9 @@ a {
   letter-spacing: 0.02em;
   cursor: pointer;
   transition:
-    color 380ms var(--ease-out-expo),
-    border-color 380ms var(--ease-out-expo);
+    color 320ms var(--ease-out-expo),
+    border-color 320ms var(--ease-out-expo),
+    text-shadow 320ms var(--ease-out-expo);
 }
 
 .tab:hover {
@@ -777,6 +904,8 @@ a {
 .tab[aria-pressed="true"] {
   border-bottom-color: var(--gold);
   color: var(--cream);
+  /* Subtle electric glow on active tab text. */
+  text-shadow: 0 0 12px rgba(245, 197, 24, 0.45);
 }
 
 @media (max-width: 900px) {
@@ -796,7 +925,9 @@ a {
   .live-dot,
   .cube-drift,
   .cube-tumble,
-  .bezel:hover .sheen::after {
+  .bezel:hover .sheen::after,
+  .nav-rail__indicator,
+  .eyebrow::after {
     animation: none;
   }
   .cube-tumble {
@@ -823,6 +954,13 @@ a {
   .bezel,
   .tab {
     transition: none;
+  }
+  /* Keep hard shadows but suppress motion. */
+  .btn--primary:hover,
+  .btn--gold:hover,
+  .btn--ghost:hover,
+  .bezel:hover {
+    transform: none;
   }
 }
 
@@ -1165,8 +1303,10 @@ html[data-intro="1"] .intro::before {
 
 /* ================================================================ footer */
 
-/* A typographic close: the wordmark runs large, the tagline sits beside it —
-   not another row of small print, one deliberate statement before the grid. */
+/*
+ * A typographic close: the wordmark runs large, the tagline sits beside it.
+ * Top border uses a gradient (blue→gold) for the cyberpunk accent.
+ */
 .footer__mark {
   display: flex;
   flex-wrap: wrap;
@@ -1174,7 +1314,24 @@ html[data-intro="1"] .intro::before {
   justify-content: space-between;
   gap: 14px 32px;
   padding-block: clamp(36px, 6vw, 60px) clamp(24px, 4vw, 36px);
-  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+/* Gradient divider line below the wordmark. */
+.footer__mark::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(43, 95, 255, 0.7) 20%,
+    rgba(245, 197, 24, 0.7) 50%,
+    rgba(43, 95, 255, 0.7) 80%,
+    transparent 100%
+  );
 }
 
 .footer__mark > span {
@@ -1528,6 +1685,35 @@ html[data-intro="1"] .intro::before {
   .story__bar {
     transition: none;
   }
+}
+
+/* ======================================================= scanline texture */
+
+/*
+ * Very faint repeating horizontal scanlines applied to dark section backgrounds
+ * — avoids a pure flat-black surface while remaining near-invisible at rest.
+ */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(111, 147, 255, 0.018) 3px,
+    rgba(111, 147, 255, 0.018) 4px
+  );
+  /* Don't interfere with child content. */
+  mix-blend-mode: screen;
+}
+
+/* All section content must sit above the scanline layer. */
+.section > .shell {
+  position: relative;
+  z-index: 1;
 }
 
 /* ================================================================ about */

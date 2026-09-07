@@ -17,7 +17,19 @@ const LINK: React.CSSProperties = { fontSize: 14, color: 'var(--muted)' };
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid var(--line)', background: 'rgba(8,11,22,0.72)' }}>
+    <footer
+      style={{
+        background: 'rgba(8,11,22,0.72)',
+        /* Gradient top border (blue→gold→blue) via a top padding + bg trick. */
+        borderTop: '0',
+        backgroundImage:
+          'linear-gradient(90deg, transparent 0%, rgba(43,95,255,0.75) 20%, rgba(245,197,24,0.75) 50%, rgba(43,95,255,0.75) 80%, transparent 100%), linear-gradient(rgba(8,11,22,0.72), rgba(8,11,22,0.72))',
+        backgroundSize: '100% 1px, 100% 100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'top, 0 0',
+        paddingTop: 1,
+      }}
+    >
       {/* A typographic close, not another card row: the wordmark carries the
           brand, the tagline sits beside it doing the one job a footer intro
           needs to do. */}
