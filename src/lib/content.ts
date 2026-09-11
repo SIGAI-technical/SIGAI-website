@@ -83,6 +83,8 @@ export interface SigEvent {
   year: string;
   series: string;
   description: string;
+  /** Archive photo, where one survives from the source site. */
+  image?: string;
 }
 
 /**
@@ -98,6 +100,7 @@ export const EVENTS: SigEvent[] = [
     series: 'Clockout',
     description:
       'Shadows of Bhangarh: an immersive, story-driven event combining mystery, teamwork, and problem-solving. Featuring three dynamic rounds — The Initiation, The Investigation, and The Hunt — participants collaborated across years in AI-themed factions to solve puzzles, analyze clues, and compete in a campus-wide treasure hunt.',
+    image: '/events/clockout-3.jpg',
   },
   {
     id: 'genesis-3',
@@ -115,6 +118,7 @@ export const EVENTS: SigEvent[] = [
     year: '2024-25',
     series: 'Clockout',
     description: 'A major event focusing on innovation and technology.',
+    image: '/events/clockout-2.jpg',
   },
   {
     id: 'synergy-2',
@@ -123,6 +127,7 @@ export const EVENTS: SigEvent[] = [
     year: '2024-25',
     series: 'Synergy',
     description: 'An event that brings together diverse minds for collaboration.',
+    image: '/events/synergy-2.jpg',
   },
   {
     id: 'genesis-1',
@@ -131,6 +136,7 @@ export const EVENTS: SigEvent[] = [
     year: '2024-25',
     series: 'Genesis',
     description: 'A seminar featuring industry experts and thought leaders.',
+    image: '/events/genesis-1.jpg',
   },
   {
     id: 'clockout-1',
@@ -139,6 +145,7 @@ export const EVENTS: SigEvent[] = [
     year: '2023-24',
     series: 'Clockout',
     description: 'The inaugural event focusing on emerging technologies.',
+    image: '/events/clockout-1.png',
   },
   {
     id: 'synergy-1',
@@ -147,6 +154,7 @@ export const EVENTS: SigEvent[] = [
     year: '2023-24',
     series: 'Synergy',
     description: 'The first synergy event aimed at fostering collaboration.',
+    image: '/events/synergy-1.png',
   },
   {
     id: 'seminar',
@@ -155,6 +163,7 @@ export const EVENTS: SigEvent[] = [
     year: '2023-24',
     series: 'Seminar',
     description: 'A seminar that discusses the latest trends in the industry.',
+    image: '/events/seminar.png',
   },
 ];
 
