@@ -83,8 +83,12 @@ export interface SigEvent {
   year: string;
   series: string;
   description: string;
-  /** Archive photo, where one survives from the source site. */
+
+  // Main image used by the event card and detail hero
   image?: string;
+
+  // Gallery images
+  gallery?: string[];
 }
 
 /**
@@ -93,79 +97,141 @@ export interface SigEvent {
  */
 export const EVENTS: SigEvent[] = [
   {
-    id: 'clockout-3',
-    index: '01',
-    title: 'Clockout 3.0',
-    year: '2025-26',
-    series: 'Clockout',
-    description:
-      'Shadows of Bhangarh: an immersive, story-driven event combining mystery, teamwork, and problem-solving. Featuring three dynamic rounds — The Initiation, The Investigation, and The Hunt — participants collaborated across years in AI-themed factions to solve puzzles, analyze clues, and compete in a campus-wide treasure hunt.',
-    image: '/events/clockout-3.jpg',
-  },
+  id: 'clockout-3',
+  index: '01',
+  title: 'Clockout 3.0',
+  year: '2025-26',
+  series: 'Clockout',
+  description:
+    'Shadows of Bhangarh: an immersive, story-driven event combining mystery, teamwork, and problem-solving. Featuring three dynamic rounds — The Initiation, The Investigation, and The Hunt — participants collaborated across years in AI-themed factions to solve puzzles, analyze clues, and compete in a campus-wide treasure hunt.',
+  image: '/events/Clockout3.0/clockout3_cover.jpg',
+  gallery: [
+    '/events/Clockout3.0/clockout3_1.jpg',
+    '/events/Clockout3.0/clockout3_2.jpg',
+    '/events/Clockout3.0/clockout3_3.jpg',
+    '/events/Clockout3.0/clockout3_4.jpg',
+    '/events/Clockout3.0/clockout3_5.jpg',
+    '/events/Clockout3.0/clockout3_6.jpg',
+  ],
+},
   {
-    id: 'genesis-3',
-    index: '02',
-    title: 'Genesis 3.0',
-    year: '2025-26',
-    series: 'Genesis',
-    description:
-      'A strategic SIGAI orientation seminar featuring faculty mentors and senior leaders to roadmap AI/ML career success.',
-  },
+  id: 'genesis-3',
+  index: '02',
+  title: 'Genesis 3.0',
+  year: '2025-26',
+  series: 'Genesis',
+  description:
+    'This is a strategic SIGAI orientation seminar featuring faculty mentors and senior leaders to roadmap AI/ML career success.',
+  image: '/events/Genesis3.0/ge_1.png',
+  gallery: [
+    '/events/Genesis3.0/ge_1.png',
+    '/events/Genesis3.0/ge_2.png',
+    '/events/Genesis3.0/ge_3.png',
+    '/events/Genesis3.0/ge_4.png',
+    '/events/Genesis3.0/ge_6.png',
+    '/events/Genesis3.0/ge_2.JPG.jpeg',
+  ],
+},
+
   {
-    id: 'clockout-2',
-    index: '02',
-    title: 'Clockout 2.0',
-    year: '2024-25',
-    series: 'Clockout',
-    description: 'A major event focusing on innovation and technology.',
-    image: '/events/clockout-2.jpg',
-  },
+  id: 'clockout-2',
+  index: '02',
+  title: 'Clockout 2.0',
+  year: '2024-25',
+  series: 'Clockout',
+  description: 'A major event focusing on innovation and technology.',
+  image: '/events/Clockout2.0/co2_1.jpg',
+  gallery: [
+    '/events/Clockout2.0/co2_1.jpg',
+    '/events/Clockout2.0/co2_2.jpg',
+    '/events/Clockout2.0/co2_3.jpg',
+    '/events/Clockout2.0/co2_4.jpg',
+    '/events/Clockout2.0/co2_5.jpg',
+    '/events/Clockout2.0/co2_6.jpg',
+  ],
+},
+
   {
-    id: 'synergy-2',
-    index: '03',
-    title: 'Synergy 2.0',
-    year: '2024-25',
-    series: 'Synergy',
-    description: 'An event that brings together diverse minds for collaboration.',
-    image: '/events/synergy-2.jpg',
-  },
+  id: 'synergy-2',
+  index: '03',
+  title: 'Synergy 2.0',
+  year: '2024-25',
+  series: 'Synergy',
+  description: 'An event that brings together diverse minds for collaboration.',
+  image: '/events/Synergy2.0/synergy2_1.jpg',
+  gallery: [
+    '/events/Synergy2.0/synergy2_1.jpg',
+    '/events/Synergy2.0/synergy2_core.jpg',
+    '/events/Synergy2.0/Synergy_winner.jpg',
+    '/events/Synergy2.0/Synergy.jpg',
+    '/events/Synergy2.0/synergy2_group.jpg',
+    '/events/Synergy2.0/synergy2_inaugration.jpg',
+    '/events/Synergy2.0/synergy2_6.jpg',
+  ],
+},
   {
     id: 'genesis-1',
     index: '04',
     title: 'Genesis 1.0',
     year: '2024-25',
     series: 'Genesis',
-    description: 'A seminar featuring industry experts and thought leaders.',
+    description:
+      'A seminar featuring industry experts and thought leaders.',
     image: '/events/genesis-1.jpg',
+    gallery: [
+      '/events/genesis-1/1.jpg',
+      '/events/genesis-1/2.jpg',
+      '/events/genesis-1/3.jpg',
+      '/events/genesis-1/4.jpg',
+      '/events/genesis-1/5.jpg',
+      '/events/genesis-1/6.jpg',
+    ],
   },
+
   {
     id: 'clockout-1',
     index: '05',
     title: 'Clockout 1.0',
     year: '2023-24',
     series: 'Clockout',
-    description: 'The inaugural event focusing on emerging technologies.',
+    description:
+      'The inaugural event focusing on emerging technologies.',
     image: '/events/clockout-1.png',
+    gallery: [],
   },
+
   {
     id: 'synergy-1',
     index: '06',
     title: 'Synergy 1.0',
     year: '2023-24',
     series: 'Synergy',
-    description: 'The first synergy event aimed at fostering collaboration.',
+    description:
+      'The first synergy event aimed at fostering collaboration.',
     image: '/events/synergy-1.png',
+    gallery: [],
   },
+
   {
     id: 'seminar',
     index: '07',
     title: 'Seminar',
     year: '2023-24',
     series: 'Seminar',
-    description: 'A seminar that discusses the latest trends in the industry.',
+    description:
+      'A seminar that discusses the latest trends in the industry.',
     image: '/events/seminar.png',
+    gallery: [
+    '/events/seminar/1.jpg',
+    '/events/seminar/2.jpg',
+    '/events/seminar/3.jpg',
+    '/events/seminar/4.jpg',
+    '/events/seminar/5.jpg',
+    '/events/seminar/IMG_5281.jpeg',
+  ],
   },
 ];
+
 
 export const EVENT_YEARS = ['2025-26', '2024-25', '2023-24'] as const;
 
