@@ -184,11 +184,10 @@ export default function AboutSection() {
               </div>
 
               <div className="vision-card">
-                <span className="vision-card__num">02 / CRAFT</span>
-                <h3 className="vision-card__title">Year-Round Workshops</h3>
+                <span className="vision-card__num">02 / GUIDANCE</span>
+                <h3 className="vision-card__title">Future Pathways &amp; Seminars</h3>
                 <p className="vision-card__desc">
-                  Interactive, code-first workshops covering PyTorch, Transformer architectures, prompt engineering,
-                  and modern AI tooling to take students from theory to running implementations.
+                  Engaging seminars and expert conversations focused on student futures, including navigating a master's degree abroad, career guidance, and academic progression.
                 </p>
               </div>
 

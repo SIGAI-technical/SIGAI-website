@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Hero from '@/components/Hero';
-import InviteBanner from '@/components/InviteBanner';
 import QuickNav from '@/components/QuickNav';
 import StoryScroller from '@/components/StoryScroller';
 
@@ -13,7 +12,6 @@ export default function Home() {
       <Hero logoSrc={LOGO_SRC} />
       <QuickNav />
       <StoryScroller />
-      <InviteBanner />
     </>
   );
 }

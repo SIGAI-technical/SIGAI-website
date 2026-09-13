@@ -112,6 +112,18 @@
   --surface: var(--h-surface);
   --bg: var(--h-bg);
 
+  /* ---- Missing tokens ---- */
+  /* Card surface: slightly raised above the page ground. */
+  --h-card: var(--h-bg);
+  /* Elevated surface: pure white over light, slightly lifted in dark. */
+  --h-surface-1: var(--h-surface);
+  /* Larger radius for media cards. */
+  --h-radius-lg: 8px;
+  /* Legacy colour aliases used in older CSS blocks. */
+  --gold: var(--h-amber);
+  --cream: var(--h-ink);
+  --line-soft: var(--h-line);
+
   --h-body: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Weighted curves. Never linear, never ease-in-out. */
@@ -256,6 +268,10 @@
     var(--h-amber) 86% 92%,
     transparent 92%);
 
+  /* Card and elevated surface tokens for dark mode */
+  --h-card: var(--h-surface);
+  --h-surface-1: #111111;
+
   color-scheme: dark;
 }
 
@@ -324,6 +340,10 @@
       transparent 0 86%,
       var(--h-amber) 86% 92%,
       transparent 92%);
+
+    /* Card and elevated surface tokens for dark mode */
+    --h-card: var(--h-surface);
+    --h-surface-1: #111111;
 
     color-scheme: dark;
   }
@@ -817,6 +837,15 @@ h1, h2, h3 {
 }
 
 p { margin: 0; text-wrap: pretty; }
+
+/* Page-level h1: the masthead title used on inner routes (Events, About, etc.). */
+.page-title {
+  margin-top: 18px;
+  font-size: clamp(34px, 5vw, 60px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -.035em;
+}
 
 .section-title {
   margin: 18px 0 0;
@@ -2887,14 +2916,14 @@ html[data-event-page] .theme-toggle {
   font-size: 12px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--h-amber);
   flex-shrink: 0;
 }
 
 .events__year-rule {
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, var(--line-soft), transparent);
+  background: linear-gradient(90deg, var(--h-line), transparent);
 }
 
 .events__year-grid {
@@ -2927,7 +2956,7 @@ html[data-event-page] .theme-toggle {
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--h-amber);
   background: rgba(5, 6, 11, 0.6);
   border: 1px solid rgba(245, 197, 24, 0.35);
   border-radius: 3px;
@@ -3241,7 +3270,7 @@ html[data-event-page] .theme-toggle {
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: -0.018em;
-  color: var(--cream);
+  color: var(--h-ink);
   text-wrap: pretty;
 }
 
@@ -3254,7 +3283,7 @@ html[data-event-page] .theme-toggle {
   bottom: 0.42em;
   width: 2px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--gold), rgba(245, 197, 24, 0));
+  background: linear-gradient(180deg, var(--h-amber), rgba(245, 197, 24, 0));
 }
 
 @media (max-width: 620px) {
@@ -3312,7 +3341,7 @@ html[data-event-page] .theme-toggle {
   height: 1px;
   /* Drop onto the first line's optical centre. */
   margin-top: 0.62em;
-  background: var(--gold);
+  background: var(--h-amber);
   flex-shrink: 0;
 }
 
@@ -3360,7 +3389,7 @@ html[data-event-page] .theme-toggle {
   margin: 10px 0 0;
   font-size: 15px;
   line-height: 1.55;
-  color: var(--cream);
+  color: var(--h-ink);
   text-wrap: pretty;
 }
 
@@ -3461,6 +3490,49 @@ html[data-event-page] .theme-toggle {
 }
 
 /* =========================================================
+   BEZEL CONTAINER
+   =========================================================
+   A machined tray that wraps cards. The core carries a subtle
+   top sheen so tilted content gets a light catch without
+   the entire surface being brightened. */
+
+.bezel {
+  height: 100%;
+  border: 1px solid var(--h-line-strong);
+  border-radius: var(--h-radius);
+  background: var(--h-card);
+  overflow: hidden;
+  transition: border-color 320ms var(--ease-out-expo), box-shadow 320ms var(--ease-out-expo);
+}
+
+.events__archive-link:hover .bezel {
+  border-color: var(--h-ink);
+}
+
+.bezel__core {
+  height: 100%;
+  position: relative;
+}
+
+/* Inner sheen — a diagonal highlight that a tilted surface catches. Only
+   renders in dark mode where a faint light catch is actually visible. */
+.sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: linear-gradient(
+    135deg,
+    var(--h-sheen) 0%,
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out-expo);
+  border-radius: inherit;
+}
+
+/* =========================================================
    EVENTS ARCHIVE
    ========================================================= */
 
@@ -3533,7 +3605,7 @@ html[data-event-page] .theme-toggle {
   font-family: var(--display);
   font-size: clamp(17px, 2vw, 25px);
   line-height: 1.45;
-  color: var(--cream);
+  color: var(--h-ink);
 }
 
 .events__archive-description {
@@ -3568,7 +3640,7 @@ html[data-event-page] .theme-toggle {
 }
 
 .events__archive-link:hover .events__explore {
-  color: var(--gold);
+  color: var(--h-amber);
   transform: translateX(4px);
 }
 
