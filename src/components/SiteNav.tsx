@@ -111,6 +111,68 @@ export default function SiteNav() {
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('sigai-theme');
+    const initial =
+      saved === 'dark' || saved === 'light'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+
+    document.documentElement.setAttribute('data-theme', initial);
+    requestAnimationFrame(() => {
+      setTheme(initial);
+    });
+  }, []);
+
+  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('sigai-theme', next);
+
+    const btn = e.currentTarget;
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => { ready?: Promise<void> };
+    };
+
+    if (!doc.startViewTransition) {
+      document.documentElement.setAttribute('data-theme', next);
+      return;
+    }
+
+    const r = btn.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const end = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const vt = doc.startViewTransition(() => {
+      document.documentElement.setAttribute('data-theme', next);
+    });
+    vt.ready
+      ?.then(() => {
+        document.documentElement.animate(
+          {
+            clipPath: [
+              `circle(0px at ${x}px ${y}px)`,
+              `circle(${end}px at ${x}px ${y}px)`,
+            ],
+          },
+          {
+            duration: 620,
+            easing: 'cubic-bezier(.16,1,.3,1)',
+            pseudoElement: '::view-transition-new(root)',
+          }
+        );
+      })
+      .catch(() => {});
+  };
+
   return (
     <header className="site-header" data-scrolled={scrolled}>
       <span className="site-header__progress" ref={progressRef} aria-hidden />
@@ -119,39 +181,28 @@ export default function SiteNav() {
         <Link href="/" className="brand" aria-label="SIGAI — home">
           <span className="brand__plate" aria-hidden>
             <Image
+              src="/logo-mark-navy.png"
+              alt=""
+              width={40}
+              height={52}
+              priority
+              className="brand__logo-light"
+              style={{ width: 'auto', height: 27 }}
+            />
+            <Image
               src="/logo-mark-cream.png"
               alt=""
               width={40}
               height={52}
               priority
-              style={{ width: 'auto', height: 27, display: 'block' }}
+              className="brand__logo-dark"
+              style={{ width: 'auto', height: 27 }}
             />
           </span>
 
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <span
-              style={{
-                fontFamily: 'var(--display)',
-                fontSize: 14,
-                letterSpacing: '0.5px',
-                lineHeight: 1,
-                color: 'var(--cream)',
-              }}
-            >
-              SIGAI
-            </span>
-            <span
-              style={{
-                fontSize: 8.5,
-                fontWeight: 500,
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: 'var(--dim)',
-                lineHeight: 1,
-              }}
-            >
-              DJS ACM
-            </span>
+          <span className="brand__name">
+            <b>SIGAI</b>
+            <span>DJS ACM</span>
           </span>
         </Link>
 
@@ -174,6 +225,21 @@ export default function SiteNav() {
             <span className="nav-rail__indicator" aria-hidden />
           </div>
         </nav>
+
+        <button
+          className="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Switch theme"
+          onClick={toggleTheme}
+        >
+          <svg className="ico-sun" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-13a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1Zm0 20a1 1 0 0 1-1-1v-2a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1ZM4 13H2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2Zm18 0h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2ZM5.64 6.64 4.22 5.22a1 1 0 0 1 1.42-1.42L7.05 5.2A1 1 0 0 1 5.64 6.64Zm12.72 12.72-1.41-1.41a1 1 0 0 1 1.41-1.42l1.42 1.42a1 1 0 0 1-1.42 1.41ZM4.22 18.78a1 1 0 0 1 0-1.42l1.42-1.41A1 1 0 0 1 7.05 17.2l-1.41 1.41a1 1 0 0 1-1.42 0ZM16.95 7.05a1 1 0 0 1 0-1.41l1.41-1.42a1 1 0 1 1 1.42 1.42L18.36 7.05a1 1 0 0 1-1.41 0Z" />
+          </svg>
+          <svg className="ico-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M21.4 14.3A9 9 0 1 1 9.7 2.6a1 1 0 0 1 1.28 1.28 7 7 0 0 0 9.14 9.14 1 1 0 0 1 1.28 1.28Z" />
+          </svg>
+        </button>
 
         <button
           type="button"

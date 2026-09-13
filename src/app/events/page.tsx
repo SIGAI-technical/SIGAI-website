@@ -7,7 +7,7 @@ import { PAGES } from '@/lib/content';
 export const metadata: Metadata = {
   title: 'Events',
   description:
-    'The DJS ACM SIGAI event archive — Clockout, Genesis and Synergy across three academic years.',
+    'The DJS ACM SIGAI event archive — Clockout, Genesis, Synergy, seminars and hackathons across four academic years.',
   alternates: { canonical: '/events' },
 };
 

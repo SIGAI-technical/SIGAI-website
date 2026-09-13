@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import About from '@/components/About';
-import Affiliation from '@/components/Affiliation';
-import Vision from '@/components/Vision';
-import { PageHeader } from '@/components/ui';
-import { PAGES } from '@/lib/content';
+import AboutSection from '@/components/AboutSection';
+
 
 export const metadata: Metadata = {
   title: 'About',
@@ -15,14 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="page-lead">
-      <PageHeader
-        eyebrow={PAGES.about.eyebrow}
-        title={PAGES.about.title}
-        lede={PAGES.about.lede}
-      />
-      <About showHeading={false} />
-      <Vision />
-      <Affiliation />
+      <AboutSection />
     </div>
   );
 }

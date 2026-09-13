@@ -4,11 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import GlitchCube from './GlitchCube';
 import { STAGE } from '@/lib/cube';
 
-/**
- * The cube is authored at a fixed 660px square. Rather than reflow it, we scale
- * the whole stage down to whatever width the column gives us and collapse the
- * wrapper's height to match.
- */
+
 export default function CubeStage({ logoSrc }: { logoSrc: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -39,7 +35,7 @@ export default function CubeStage({ logoSrc }: { logoSrc: string }) {
         maxWidth: STAGE,
         margin: '0 auto',
         height: Math.round(STAGE * scale),
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <div

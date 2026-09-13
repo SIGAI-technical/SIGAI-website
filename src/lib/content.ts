@@ -9,7 +9,7 @@ export const ORG = {
   name: 'DJS ACM SIGAI',
   shortName: 'SIGAI',
   expansion: 'Special Interest Group on Artificial Intelligence',
-  tagline: 'IF YOUR MIND CAN THINK, SO CAN MINE!',
+  tagline: 'INNOVATION BEGINS WITH COLLABORATION',
   chapterLine: "DJSCE's Official Student Chapter",
   /** Lowercase form, for use mid-sentence. */
   chapterDescriptor: 'official student chapter',
@@ -41,37 +41,44 @@ export interface Area {
   term: string;
   notation: string;
   blurb: string;
+  tone?: 'blue' | 'amber' | 'teal';
 }
 
 export const AREAS: Area[] = [
   {
     term: 'Artificial Intelligence',
     notation: 'AI',
+    tone: 'blue',
     blurb: 'The field the chapter exists to promote — AI principles and techniques across the computing industry.',
   },
   {
     term: 'Machine Learning',
     notation: 'ML',
+    tone: 'amber',
     blurb: 'Named in the vision alongside AI and Deep Learning as a core strand of what SIGAI introduces students to.',
   },
   {
     term: 'Deep Learning',
     notation: 'DL',
+    tone: 'teal',
     blurb: 'The third strand of the chapter’s stated focus, explored through seminars and skill-building workshops.',
   },
   {
     term: 'Neural Networks',
     notation: 'NEURAL NET',
+    tone: 'blue',
     blurb: 'The architectures underneath modern AI, and a recurring theme across SIGAI’s technical material.',
   },
   {
     term: 'Transformers',
     notation: 'TRANSFORMER',
+    tone: 'amber',
     blurb: 'The architecture behind current language and vision models, surfaced as a SIGAI area of interest.',
   },
   {
     term: 'Backpropagation',
     notation: '∂L/∂W',
+    tone: 'teal',
     blurb: 'How networks actually learn — the gradient mechanics behind training, from first principles.',
   },
 ];
@@ -96,6 +103,52 @@ export interface SigEvent {
  * calendar dates, so none are shown. Ordered newest year first.
  */
 export const EVENTS: SigEvent[] = [
+  {
+    id: 'genesis-2026',
+    index: '01',
+    title: 'Genesis',
+    year: '2026-27',
+    series: 'Genesis',
+    description:
+      'GENESIS, the official induction and felicitation event of DJS ACM SIGAI, was held on 25th August 2026 at DJ Sanghvi College of Engineering. The event celebrated the contributions of the outgoing core committee and faculty while welcoming the newly appointed core members. With inspiring addresses, experience-sharing, felicitation, and the unveiling of the new core, GENESIS marked the beginning of a new chapter for SIGAI',
+    image: '/events/genesis-2026/1G.jpeg',
+    gallery: [
+      '/events/genesis-2026/1G.jpeg',
+      '/events/genesis-2026/IMG_9526.jpeg',
+      '/events/genesis-2026/IMG_9582.jpeg',
+      '/events/genesis-2026/IMG_9585.jpeg',
+      '/events/genesis-2026/IMG_9589.jpeg',
+      '/events/genesis-2026/IMG_9597.jpeg',
+      '/events/genesis-2026/IMG_9617.jpeg',
+    ],
+  },
+  {
+    id: 'ipd-seminar',
+    index: '02',
+    title: 'IPD Seminar',
+    year: '2026-27',
+    series: 'Seminar',
+    description:
+      "A seminar on Innovative Project Development, conducted by DJS ACM SIGAI, was held at DJ Sanghvi College of Engineering and delivered by Prof. Talib Khan, Associate Professor at IIT Bombay. The session walked participants through the process of building a research-driven project, from identifying real-world problems to translating them into research papers. It marked a valuable step in students' innovation journey, reinforcing that good innovation begins with asking better questions",
+    image: '/events/ipd-seminar/1I.jpeg',
+    gallery: [
+      '/events/ipd-seminar/1I.jpeg',
+      '/events/ipd-seminar/IMG_1453.jpeg',
+      '/events/ipd-seminar/IMG_2839.jpeg',
+      '/events/ipd-seminar/IMG_2876.jpeg',
+      '/events/ipd-seminar/IMG_2890.jpeg',
+    ],
+  },
+  {
+    id: 'departmental-hackathon',
+    index: '03',
+    title: 'Departmental Hackathon',
+    year: '2026-27',
+    series: 'Hackathon',
+    description:
+      "A 6-hour Hackathon was organised by DJS ACM's SIGAI to introduce students, especially first-time participants, to the fundamentals of hackathons and hands-on project development. Throughout the event, students were guided by mentors, who supported them with ideation, problem-solving, development and project presentation. The event provided a valuable introduction to the hackathon experience, helping students build confidence while learning through teamwork and practical application.",
+    gallery: [],
+  },
   {
   id: 'clockout-3',
   index: '01',
@@ -122,14 +175,14 @@ export const EVENTS: SigEvent[] = [
   series: 'Genesis',
   description:
     'This is a strategic SIGAI orientation seminar featuring faculty mentors and senior leaders to roadmap AI/ML career success.',
-  image: '/events/Genesis3.0/ge_1.png',
+  image: '/events/genesis3.0/ge_1.png',
   gallery: [
-    '/events/Genesis3.0/ge_1.png',
-    '/events/Genesis3.0/ge_2.png',
-    '/events/Genesis3.0/ge_3.png',
-    '/events/Genesis3.0/ge_4.png',
-    '/events/Genesis3.0/ge_6.png',
-    '/events/Genesis3.0/ge_2.JPG.jpeg',
+    '/events/genesis3.0/ge_1.png',
+    '/events/genesis3.0/ge_2.png',
+    '/events/genesis3.0/ge_3.png',
+    '/events/genesis3.0/ge_4.png',
+    '/events/genesis3.0/ge_6.png',
+    '/events/genesis3.0/ge_2.JPG.jpeg',
   ],
 },
 
@@ -179,12 +232,7 @@ export const EVENTS: SigEvent[] = [
       'A seminar featuring industry experts and thought leaders.',
     image: '/events/genesis-1.jpg',
     gallery: [
-      '/events/genesis-1/1.jpg',
-      '/events/genesis-1/2.jpg',
-      '/events/genesis-1/3.jpg',
-      '/events/genesis-1/4.jpg',
-      '/events/genesis-1/5.jpg',
-      '/events/genesis-1/6.jpg',
+      '/events/genesis-1.jpg',
     ],
   },
 
@@ -233,7 +281,7 @@ export const EVENTS: SigEvent[] = [
 ];
 
 
-export const EVENT_YEARS = ['2025-26', '2024-25', '2023-24'] as const;
+export const EVENT_YEARS = ['2026-27', '2025-26', '2024-25', '2023-24'] as const;
 
 export interface Member {
   name: string;
@@ -449,7 +497,6 @@ export const SOCIALS = [
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/domains', label: 'AI' },
   { href: '/events', label: 'Events' },
   { href: '/team', label: 'Team' },
   { href: '/contact', label: 'Contact' },
@@ -471,7 +518,7 @@ export const PAGES = {
     lede: 'The ground the chapter covers, in its own terms — the fields named in its mission and vision, and the concepts its sessions keep returning to.',
   },
   events: {
-    eyebrow: 'Three years of events',
+    eyebrow: 'Four years of events',
     title: 'What SIGAI has run',
     lede: 'Seminars, orientations and campus-wide competitions, archived by academic year.',
   },
@@ -483,6 +530,6 @@ export const PAGES = {
   contact: {
     eyebrow: 'Reach the chapter',
     title: 'Get in touch',
-    lede: 'Email, phone, socials, and where to find SIGAI on campus.',
+    lede: 'Email, socials, and where to find SIGAI on campus.',
   },
 } as const;

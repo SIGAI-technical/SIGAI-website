@@ -59,14 +59,16 @@ export default function Reveal({
     return () => io.disconnect();
   }, [shown]);
 
+  const Component = Tag as React.ElementType;
+
   return (
-    <Tag
+    <Component
       ref={ref}
       id={id}
       className={`reveal${shown ? ' is-visible' : ''}${className ? ` ${className}` : ''}`}
       style={{ ['--reveal-delay' as string]: `${delay}ms`, ...style }}
     >
       {children}
-    </Tag>
+    </Component>
   );
 }
