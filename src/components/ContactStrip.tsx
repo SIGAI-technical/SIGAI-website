@@ -1,6 +1,5 @@
 import * as React from 'react';
-import Link from 'next/link';
-import { CONTACT, SOCIALS } from '@/lib/content';
+import { SOCIALS } from '@/lib/content';
 import { SocialIcon } from './ui';
 
 interface ContactRow {

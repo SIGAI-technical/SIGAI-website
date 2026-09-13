@@ -3,12 +3,38 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { EVENTS } from '@/lib/content';
 
+/**
+ * Force dark mode for the cinematic event detail experience.
+ * We stamp data-event-page on <html> so the CSS can hide the
+ * theme toggle, and we push data-theme="dark" so all tokens
+ * resolve to their dark values regardless of OS preference.
+ * Both are rolled back when the component unmounts (i.e. on
+ * client-side navigation away from this page).
+ */
+function useForceDark() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const prev = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', 'dark');
+    root.setAttribute('data-event-page', 'true');
+    return () => {
+      root.removeAttribute('data-event-page');
+      if (prev) {
+        root.setAttribute('data-theme', prev);
+      } else {
+        root.removeAttribute('data-theme');
+      }
+    };
+  }, []);
+}
+
 export default function EventDetailPage() {
   const params = useParams();
+  useForceDark();
 
   const id = params.id as string;
 
@@ -16,24 +42,41 @@ export default function EventDetailPage() {
 
   const [activeImage, setActiveImage] = useState(0);
 
+  const allImages = useMemo(() => {
+    if (!event) return [];
+    const list: string[] = [];
+    if (event.image) {
+      list.push(event.image);
+    }
+    if (event.gallery) {
+      for (const img of event.gallery) {
+        if (!list.includes(img)) {
+          list.push(img);
+        }
+      }
+    }
+    return list;
+  }, [event]);
+
   if (!event) {
     return (
-      <main
+      <div
         style={{
-          minHeight: '100vh',
+          minHeight: '80vh',
           display: 'grid',
           placeItems: 'center',
-          background: 'var(--ink)',
-          color: 'var(--cream)',
+          background: '#000',
+          color: '#fff',
         }}
       >
         <div style={{ textAlign: 'center' }}>
           <p
             style={{
-              color: 'var(--blue-soft)',
+              color: 'var(--h-blue)',
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               fontSize: 11,
+              fontWeight: 600,
             }}
           >
             Event not found
@@ -47,15 +90,9 @@ export default function EventDetailPage() {
             Back to events
           </Link>
         </div>
-      </main>
+      </div>
     );
   }
-
-  const gallery = event.gallery ?? [];
-
-  const allImages = event.image
-    ? [event.image, ...gallery]
-    : gallery;
 
   const nextImage = () => {
     setActiveImage((current) =>
@@ -70,7 +107,7 @@ export default function EventDetailPage() {
   };
 
   return (
-    <main className="event-detail">
+    <article className="event-detail">
 
       {/* HERO */}
       <section className="event-detail__hero">
@@ -118,10 +155,15 @@ export default function EventDetailPage() {
 
         {/* FULL DESCRIPTION */}
         <div className="event-detail__content">
+          <div className="event-detail__pills">
+            <span>SIGAI</span>
+            <span>{event.year}</span>
+            <span>Event {event.index}</span>
+          </div>
+
           <p className="event-detail__description">
             {event.description}
           </p>
-
         </div>
 
 
@@ -147,7 +189,7 @@ export default function EventDetailPage() {
 
               {allImages.map((src, index) => (
                 <button
-                  key={src}
+                  key={`${src}-${index}`}
                   type="button"
                   onClick={() => setActiveImage(index)}
                   className={
@@ -237,6 +279,6 @@ export default function EventDetailPage() {
 
       </section>
 
-    </main>
+    </article>
   );
 }

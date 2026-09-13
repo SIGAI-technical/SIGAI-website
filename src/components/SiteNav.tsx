@@ -115,13 +115,17 @@ export default function SiteNav() {
 
   useEffect(() => {
     const saved = localStorage.getItem('sigai-theme');
-    if (saved === 'dark' || saved === 'light') {
-      setTheme(saved);
-      document.documentElement.setAttribute('data-theme', saved);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-    }
+    const initial =
+      saved === 'dark' || saved === 'light'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+
+    document.documentElement.setAttribute('data-theme', initial);
+    requestAnimationFrame(() => {
+      setTheme(initial);
+    });
   }, []);
 
   const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -130,7 +134,11 @@ export default function SiteNav() {
     localStorage.setItem('sigai-theme', next);
 
     const btn = e.currentTarget;
-    if (!(document as any).startViewTransition) {
+    const doc = document as Document & {
+      startViewTransition?: (callback: () => void) => { ready?: Promise<void> };
+    };
+
+    if (!doc.startViewTransition) {
       document.documentElement.setAttribute('data-theme', next);
       return;
     }
@@ -143,7 +151,7 @@ export default function SiteNav() {
       Math.max(y, window.innerHeight - y)
     );
 
-    const vt = (document as any).startViewTransition(() => {
+    const vt = doc.startViewTransition(() => {
       document.documentElement.setAttribute('data-theme', next);
     });
     vt.ready

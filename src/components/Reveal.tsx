@@ -59,7 +59,7 @@ export default function Reveal({
     return () => io.disconnect();
   }, [shown]);
 
-  const Component = Tag as any;
+  const Component = Tag as React.ElementType;
 
   return (
     <Component

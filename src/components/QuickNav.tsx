@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
+import { EVENTS, EVENT_YEARS } from '@/lib/content';
 
 /**
  * QuickNav index component from index_8.html:
@@ -31,8 +32,7 @@ export default function QuickNav() {
             <span className="index__main">
               <span className="index__title">Everything we have run</span>
               <span className="index__desc">
-                Clockout, Genesis and Synergy — eight events across three academic years, from
-                orientation seminars through to a campus-wide hunt.
+                Clockout, Genesis, Synergy, seminars and hackathons — {EVENTS.length} events across {EVENT_YEARS.length} academic years.
               </span>
               <span className="index__cta">
                 Browse the archive{' '}
@@ -48,7 +48,7 @@ export default function QuickNav() {
               </span>
             </span>
             <span className="index__fig" aria-hidden="true">
-              <b data-count="8">8</b>
+              <b data-count={String(EVENTS.length)}>{EVENTS.length}</b>
               <span>Events</span>
             </span>
           </Link>

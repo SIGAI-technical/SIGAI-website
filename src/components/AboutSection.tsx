@@ -52,8 +52,8 @@ export default function AboutSection() {
               >
                 <div className="about__card-media">
                   <Image
-                    src="/events/seminar.png"
-                    alt="DJS ACM SIGAI Seminar &amp; Workshop"
+                    src="/images/ipd-seminar.jpeg"
+                    alt="DJS ACM SIGAI IPD Seminar - Applied Artificial Intelligence"
                     fill
                     sizes="(max-width: 960px) 100vw, 480px"
                     priority

@@ -3,12 +3,10 @@
 import { useEffect, useMemo, useRef } from 'react';
 import {
   buildCubies,
-  dotLayer,
   restTransform,
   rotatePos,
   CUBIE,
   HALF,
-  PALETTE,
   SEQUENCE,
   STAGE,
   type Face,

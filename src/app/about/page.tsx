@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import AboutSection from '@/components/AboutSection';
-import { PAGES } from '@/lib/content';
+
 
 export const metadata: Metadata = {
   title: 'About',

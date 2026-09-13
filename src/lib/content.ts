@@ -104,6 +104,52 @@ export interface SigEvent {
  */
 export const EVENTS: SigEvent[] = [
   {
+    id: 'genesis-2026',
+    index: '01',
+    title: 'Genesis',
+    year: '2026-27',
+    series: 'Genesis',
+    description:
+      'GENESIS, the official induction and felicitation event of DJS ACM SIGAI, was held on 25th August 2026 at DJ Sanghvi College of Engineering. The event celebrated the contributions of the outgoing core committee and faculty while welcoming the newly appointed core members. With inspiring addresses, experience-sharing, felicitation, and the unveiling of the new core, GENESIS marked the beginning of a new chapter for SIGAI',
+    image: '/events/genesis-2026/1G.jpeg',
+    gallery: [
+      '/events/genesis-2026/1G.jpeg',
+      '/events/genesis-2026/IMG_9526.jpeg',
+      '/events/genesis-2026/IMG_9582.jpeg',
+      '/events/genesis-2026/IMG_9585.jpeg',
+      '/events/genesis-2026/IMG_9589.jpeg',
+      '/events/genesis-2026/IMG_9597.jpeg',
+      '/events/genesis-2026/IMG_9617.jpeg',
+    ],
+  },
+  {
+    id: 'ipd-seminar',
+    index: '02',
+    title: 'IPD Seminar',
+    year: '2026-27',
+    series: 'Seminar',
+    description:
+      "A seminar on Innovative Project Development, conducted by DJS ACM SIGAI, was held at DJ Sanghvi College of Engineering and delivered by Prof. Talib Khan, Associate Professor at IIT Bombay. The session walked participants through the process of building a research-driven project, from identifying real-world problems to translating them into research papers. It marked a valuable step in students' innovation journey, reinforcing that good innovation begins with asking better questions",
+    image: '/events/ipd-seminar/1I.jpeg',
+    gallery: [
+      '/events/ipd-seminar/1I.jpeg',
+      '/events/ipd-seminar/IMG_1453.jpeg',
+      '/events/ipd-seminar/IMG_2839.jpeg',
+      '/events/ipd-seminar/IMG_2876.jpeg',
+      '/events/ipd-seminar/IMG_2890.jpeg',
+    ],
+  },
+  {
+    id: 'departmental-hackathon',
+    index: '03',
+    title: 'Departmental Hackathon',
+    year: '2026-27',
+    series: 'Hackathon',
+    description:
+      "A 6-hour Hackathon was organised by DJS ACM's SIGAI to introduce students, especially first-time participants, to the fundamentals of hackathons and hands-on project development. Throughout the event, students were guided by mentors, who supported them with ideation, problem-solving, development and project presentation. The event provided a valuable introduction to the hackathon experience, helping students build confidence while learning through teamwork and practical application.",
+    gallery: [],
+  },
+  {
   id: 'clockout-3',
   index: '01',
   title: 'Clockout 3.0',
@@ -235,7 +281,7 @@ export const EVENTS: SigEvent[] = [
 ];
 
 
-export const EVENT_YEARS = ['2025-26', '2024-25', '2023-24'] as const;
+export const EVENT_YEARS = ['2026-27', '2025-26', '2024-25', '2023-24'] as const;
 
 export interface Member {
   name: string;
@@ -472,7 +518,7 @@ export const PAGES = {
     lede: 'The ground the chapter covers, in its own terms — the fields named in its mission and vision, and the concepts its sessions keep returning to.',
   },
   events: {
-    eyebrow: 'Three years of events',
+    eyebrow: 'Four years of events',
     title: 'What SIGAI has run',
     lede: 'Seminars, orientations and campus-wide competitions, archived by academic year.',
   },
