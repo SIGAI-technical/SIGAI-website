@@ -41,37 +41,44 @@ export interface Area {
   term: string;
   notation: string;
   blurb: string;
+  tone?: 'blue' | 'amber' | 'teal';
 }
 
 export const AREAS: Area[] = [
   {
     term: 'Artificial Intelligence',
     notation: 'AI',
+    tone: 'blue',
     blurb: 'The field the chapter exists to promote — AI principles and techniques across the computing industry.',
   },
   {
     term: 'Machine Learning',
     notation: 'ML',
+    tone: 'amber',
     blurb: 'Named in the vision alongside AI and Deep Learning as a core strand of what SIGAI introduces students to.',
   },
   {
     term: 'Deep Learning',
     notation: 'DL',
+    tone: 'teal',
     blurb: 'The third strand of the chapter’s stated focus, explored through seminars and skill-building workshops.',
   },
   {
     term: 'Neural Networks',
     notation: 'NEURAL NET',
+    tone: 'blue',
     blurb: 'The architectures underneath modern AI, and a recurring theme across SIGAI’s technical material.',
   },
   {
     term: 'Transformers',
     notation: 'TRANSFORMER',
+    tone: 'amber',
     blurb: 'The architecture behind current language and vision models, surfaced as a SIGAI area of interest.',
   },
   {
     term: 'Backpropagation',
     notation: '∂L/∂W',
+    tone: 'teal',
     blurb: 'How networks actually learn — the gradient mechanics behind training, from first principles.',
   },
 ];
@@ -179,12 +186,7 @@ export const EVENTS: SigEvent[] = [
       'A seminar featuring industry experts and thought leaders.',
     image: '/events/genesis-1.jpg',
     gallery: [
-      '/events/genesis-1/1.jpg',
-      '/events/genesis-1/2.jpg',
-      '/events/genesis-1/3.jpg',
-      '/events/genesis-1/4.jpg',
-      '/events/genesis-1/5.jpg',
-      '/events/genesis-1/6.jpg',
+      '/events/genesis-1.jpg',
     ],
   },
 

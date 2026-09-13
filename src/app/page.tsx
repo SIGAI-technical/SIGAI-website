@@ -1,9 +1,10 @@
-import GetInvolved from '@/components/GetInvolved';
+import * as React from 'react';
+import AboutSection from '@/components/AboutSection';
 import Hero from '@/components/Hero';
 import QuickNav from '@/components/QuickNav';
 import StoryScroller from '@/components/StoryScroller';
 
-/** Navy SIGAI mark, dropped into the cream centre sticker of the cube's front face. */
+/** Navy SIGAI mark for the center sticker of the cube. */
 const LOGO_SRC = '/logo-mark-navy.png';
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
       <Hero logoSrc={LOGO_SRC} />
       <QuickNav />
       <StoryScroller />
-      <GetInvolved />
+      <AboutSection />
     </>
   );
 }

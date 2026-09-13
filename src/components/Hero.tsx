@@ -1,121 +1,159 @@
-import CubeStage from './CubeStage';
-import Reveal from './Reveal';
-import { Button } from './ui';
-import { ORG } from '@/lib/content';
+'use client';
 
+import * as React from 'react';
+import Link from 'next/link';
+import CubeStage from './CubeStage';
+
+/**
+ * Hero component directly matching index_8.html:
+ * Features the headline, lede, action buttons, animated count-up facts,
+ * and the interactive 3D Glitch Cube stage with drag hint.
+ */
 export default function Hero({ logoSrc }: { logoSrc: string }) {
   return (
-    <section id="home" style={{ position: 'relative' }}>
-      <div
-        className="shell"
-        style={{
-          display: 'grid',
-          // min() keeps the track from overflowing viewports narrower than 360px.
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))',
-          alignItems: 'center',
-          gap: 48,
-          paddingTop: 'clamp(44px, 6vw, 76px)',
-          paddingBottom: 'clamp(56px, 7vw, 92px)',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            gap: 26,
-          }}
-        >
-          <Reveal>
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 9,
-                fontSize: 11.5,
-                fontWeight: 600,
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase',
-                color: 'var(--muted)',
-              }}
-            >
-              <i
-                className="status-dot"
-                aria-hidden
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: 999,
-                  background: 'var(--gold)',
-                  flexShrink: 0,
-                }}
-              />
-              Student Chapter &nbsp;·&nbsp; ACM Affiliated
-            </span>
-          </Reveal>
-
-          <Reveal delay={60}>
-            <p className="hero-welcome">
-              Welcome to <span>DJS ACM SIGAI</span>
-            </p>
-          </Reveal>
-
-          <Reveal delay={80}>
-            <h1
-              style={{
-                margin: 0,
-                fontFamily: 'var(--display)',
-                fontSize: 'clamp(21px, 2.9vw, 40px)',
-                lineHeight: 1.55,
-                letterSpacing: '-0.5px',
-                color: 'var(--cream)',
-              }}
-            >
-              IF YOUR MIND
-              <br />
-              CAN THINK,
-              <br />
-              <span className="mark">SO CAN MINE!</span>
-            </h1>
-          </Reveal>
-
-          <Reveal delay={140}>
-            <div className="rule" aria-hidden />
-          </Reveal>
-
-          <Reveal delay={180}>
-            <p
-              style={{
-                maxWidth: 480,
-                margin: 0,
-                fontSize: 16,
-                lineHeight: 1.75,
-                color: 'var(--muted)',
-                textWrap: 'pretty',
-              }}
-            >
-              <span style={{ color: 'var(--cream)', fontWeight: 600 }}>{ORG.name}</span> — the{' '}
-              {ORG.expansion}, and the {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
-              {ORG.parentBody}.
-            </p>
-          </Reveal>
-
-          <Reveal delay={230}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14 }}>
-              <Button href="/events" variant="primary">
-                EXPLORE SIGAI
-              </Button>
-              <Button href="/about" variant="ghost">
-                ABOUT US
-              </Button>
+    <div className="band band--hero">
+      <section className="hero" id="home">
+        <div className="shell hero__grid">
+          <div className="hero__copy">
+            <div className="popup" style={{ ['--popup-angle' as string]: '12deg' }}>
+              <span className="hero-chip">
+                <i aria-hidden="true" />
+                Student chapter &nbsp;·&nbsp; ACM affiliated
+              </span>
             </div>
-          </Reveal>
-        </div>
 
-        <Reveal delay={120}>
-          <CubeStage logoSrc={logoSrc} />
-        </Reveal>
-      </div>
-    </section>
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '60ms',
+                ['--popup-angle' as string]: '12deg',
+              }}
+            >
+              <p className="hero-welcome">
+                Welcome to <span>DJS ACM SIGAI</span>
+              </p>
+            </div>
+
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '90ms',
+                ['--popup-angle' as string]: '18deg',
+              }}
+            >
+              <h1 className="hero-title">
+                If your mind can think,
+                <br />
+                <span className="mark">so can mine.</span>
+              </h1>
+            </div>
+
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '140ms',
+                ['--popup-angle' as string]: '10deg',
+              }}
+            >
+              <div className="rule" aria-hidden="true" />
+            </div>
+
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '170ms',
+                ['--popup-angle' as string]: '12deg',
+              }}
+            >
+              <p className="hero-lede">
+                <strong>DJS ACM SIGAI</strong> is the Special Interest Group on Artificial
+                Intelligence — the official student chapter of Dwarkadas J. Sanghvi College of
+                Engineering, affiliated with the Association for Computing Machinery (ACM). We run
+                seminars, workshops and events that take students from first principles through to
+                the work happening now.
+              </p>
+            </div>
+
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '210ms',
+                ['--popup-angle' as string]: '14deg',
+              }}
+            >
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+                <span className="magnetic">
+                  <Link className="btn btn--primary" href="/events">
+                    Explore our events
+                    <span className="btn__icon" aria-hidden="true">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.2 5.4 20 12l-6.8 6.6-1.4-1.44L16.2 13H4v-2h12.2l-4.4-4.16 1.4-1.44Z" />
+                      </svg>
+                    </span>
+                  </Link>
+                </span>
+                <span className="magnetic">
+                  <Link className="btn btn--ghost" href="/#about">
+                    About the chapter
+                    <span className="btn__icon" aria-hidden="true">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M13.2 5.4 20 12l-6.8 6.6-1.4-1.44L16.2 13H4v-2h12.2l-4.4-4.16 1.4-1.44Z" />
+                      </svg>
+                    </span>
+                  </Link>
+                </span>
+              </div>
+            </div>
+
+            <div
+              className="popup"
+              style={{
+                ['--popup-delay' as string]: '260ms',
+                ['--popup-angle' as string]: '16deg',
+                width: '100%',
+              }}
+            >
+              <ul className="hero-facts">
+                <li>
+                  <strong data-count="8">8</strong>
+                  <span>Events run</span>
+                </li>
+                <li>
+                  <strong data-count="3">3</strong>
+                  <span>Academic years</span>
+                </li>
+                <li>
+                  <strong data-count="6">6</strong>
+                  <span>Focus areas</span>
+                </li>
+                <li>
+                  <strong data-count="22">22</strong>
+                  <span>On the core</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            className="popup"
+            style={{
+              ['--popup-delay' as string]: '120ms',
+              ['--popup-angle' as string]: '20deg',
+              minWidth: 0,
+            }}
+          >
+            <div className="cube-pad">
+              <CubeStage logoSrc={logoSrc} />
+              <span className="cube-hint" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 3a1.5 1.5 0 0 1 3 0v6h.5V4.5a1.5 1.5 0 0 1 3 0V9h.5V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7v-2.5a1.5 1.5 0 0 1 3 0V13h.5V3Z" />
+                </svg>
+                Drag to spin it
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

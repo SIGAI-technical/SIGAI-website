@@ -123,27 +123,27 @@ export default function Team({ showHeading = true }: { showHeading?: boolean }) 
         <Reveal delay={80}>
           {/* Toggle buttons, not a tablist: there are no tabpanels to own. */}
           <div
-            role="group"
+            role="tablist"
+            className="tabs"
             aria-label="Select core committee year"
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: 26,
-              marginTop: 44,
-              borderBottom: '1px solid var(--line)',
-            }}
           >
-            {CORES.map((c) => (
-              <button
-                key={c.year}
-                type="button"
-                className="tab"
-                aria-pressed={c.year === year}
-                onClick={() => setYear(c.year)}
-              >
-                Core {c.year}
-              </button>
-            ))}
+            {CORES.map((c) => {
+              const active = c.year === year;
+              return (
+                <button
+                  key={c.year}
+                  type="button"
+                  role="tab"
+                  className="tab"
+                  data-active={active ? 'true' : 'false'}
+                  aria-selected={active}
+                  onClick={() => setYear(c.year)}
+                >
+                  <span className="tab__label">Core {c.year}</span>
+                  <span className="tab__count">{c.faculty.length + c.committee.length}</span>
+                </button>
+              );
+            })}
           </div>
         </Reveal>
 

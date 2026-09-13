@@ -89,13 +89,14 @@ export default function StoryScroller() {
   };
 
   return (
-    <section
-      ref={sectionRef}
-      className="story"
-      style={{ ['--slides' as string]: SLIDES.length }}
-      aria-label="What SIGAI is"
-    >
-      <div className="story__pin">
+    <div className="band band--story">
+      <section
+        ref={sectionRef}
+        className="story"
+        style={{ ['--slides' as string]: SLIDES.length }}
+        aria-label="What SIGAI is"
+      >
+        <div className="story__pin">
         <div className="shell story__grid">
           <div className="story__left">
             <div className="story__bars" role="group" aria-label="Jump to a chapter">
@@ -145,6 +146,7 @@ export default function StoryScroller() {
           </div>
         </div>
       </div>
-    </section>
+      </section>
+    </div>
   );
 }

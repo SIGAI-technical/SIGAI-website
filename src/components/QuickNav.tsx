@@ -1,84 +1,131 @@
-'use client';
-
+import * as React from 'react';
 import Link from 'next/link';
-import { useCallback } from 'react';
-import Reveal from './Reveal';
-import { Bezel, Icon, type IconName } from './ui';
-import { CORES, EVENTS, EVENT_YEARS } from '@/lib/content';
 
-interface Card {
-  href: string;
-  title: string;
-  body: string;
-  icon: IconName;
-  tone?: 'gold' | 'blue';
-  /** The lead card spans both columns on wide screens. */
-  wide?: boolean;
-  stat?: string;
-}
-
-const CARDS: Card[] = [
-  {
-    href: '/events',
-    title: 'The event archive',
-    body: `Clockout, Genesis and Synergy — ${EVENTS.length} events across ${EVENT_YEARS.length} academic years, from orientation seminars to a campus-wide hunt.`,
-    icon: 'calendar',
-    tone: 'gold',
-    wide: true,
-    stat: String(EVENTS.length).padStart(2, '0'),
-  },
-  {
-    href: '/team',
-    title: 'The people',
-    body: `Faculty coordinators and the student core, across ${CORES.length} published years.`,
-    icon: 'users',
-    tone: 'blue',
-    stat: String(CORES[0].committee.length + CORES[0].faculty.length),
-  },
-  {
-    href: '/domains',
-    title: 'What we explore',
-    body: 'AI, machine learning, deep learning — and the mechanics underneath.',
-    icon: 'arrow',
-  },
-];
-
+/**
+ * QuickNav index component from index_8.html:
+ * Numbered editorial rows with hairline rules, figures in the margin,
+ * and hover animations.
+ */
 export default function QuickNav() {
-  /** Cursor-tracked spotlight on the card border. */
-  const onMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
-    const el = e.currentTarget;
-    const r = el.getBoundingClientRect();
-    el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-    el.style.setProperty('--my', `${e.clientY - r.top}px`);
-  }, []);
-
   return (
-    <section aria-label="Explore SIGAI" className="quicknav">
-      <div className="shell quicknav__grid">
-        {CARDS.map((c, i) => (
-          <Reveal key={c.href} delay={i * 90} className={c.wide ? 'quicknav__wide' : undefined}>
-            <Link href={c.href} style={{ display: 'block', height: '100%' }}>
-              <Bezel className="spotlight" onMouseMove={onMove}>
-                <div className={`quicknav__card${c.wide ? ' quicknav__card--wide' : ''}`}>
-                  <span className={`tile${c.tone ? ` tile--${c.tone}` : ''}`} aria-hidden>
-                    <Icon name={c.icon} size={22} />
-                  </span>
+    <section className="quicknav" aria-label="Explore SIGAI">
+      <div className="shell">
+        <div className="index__head popup">
+          <span className="eyebrow">Index</span>
+          <p className="index__note">Three places to go from here.</p>
+        </div>
 
-                  <div style={{ flex: 1 }}>
-                    <h3 className="quicknav__title">{c.title}</h3>
-                    <p className="quicknav__body">{c.body}</p>
-                  </div>
+        <nav className="index" aria-label="Sections">
+          <Link
+            className="index__row popup"
+            href="/events"
+            data-tone="gold"
+            style={{
+              ['--popup-delay' as string]: '0ms',
+              ['--popup-angle' as string]: '14deg',
+            }}
+          >
+            <span className="index__no" aria-hidden="true">
+              01
+            </span>
+            <span className="index__main">
+              <span className="index__title">Everything we have run</span>
+              <span className="index__desc">
+                Clockout, Genesis and Synergy — eight events across three academic years, from
+                orientation seminars through to a campus-wide hunt.
+              </span>
+              <span className="index__cta">
+                Browse the archive{' '}
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M13.2 5.4 20 12l-6.8 6.6-1.4-1.44L16.2 13H4v-2h12.2l-4.4-4.16 1.4-1.44Z" />
+                </svg>
+              </span>
+            </span>
+            <span className="index__fig" aria-hidden="true">
+              <b data-count="8">8</b>
+              <span>Events</span>
+            </span>
+          </Link>
 
-                  {c.stat ? (
-                    <span className="quicknav__stat" aria-hidden>
-                      {c.stat}
-                    </span>
-                  ) : null}
-                </div>
-              </Bezel>
-            </Link>
-          </Reveal>
-        ))}
+          <Link
+            className="index__row popup"
+            href="/team"
+            data-tone="blue"
+            style={{
+              ['--popup-delay' as string]: '80ms',
+              ['--popup-angle' as string]: '14deg',
+            }}
+          >
+            <span className="index__no" aria-hidden="true">
+              02
+            </span>
+            <span className="index__main">
+              <span className="index__title">The people behind it</span>
+              <span className="index__desc">
+                Faculty coordinators and the student core, published year by year since 2023.
+              </span>
+              <span className="index__cta">
+                Meet the team{' '}
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M13.2 5.4 20 12l-6.8 6.6-1.4-1.44L16.2 13H4v-2h12.2l-4.4-4.16 1.4-1.44Z" />
+                </svg>
+              </span>
+            </span>
+            <span className="index__fig" aria-hidden="true">
+              <b data-count="22">22</b>
+              <span>On the core</span>
+            </span>
+          </Link>
+
+          <Link
+            className="index__row popup"
+            href="/domains"
+            data-tone="teal"
+            style={{
+              ['--popup-delay' as string]: '160ms',
+              ['--popup-angle' as string]: '14deg',
+            }}
+          >
+            <span className="index__no" aria-hidden="true">
+              03
+            </span>
+            <span className="index__main">
+              <span className="index__title">What we actually explore</span>
+              <span className="index__desc">
+                Artificial intelligence, machine learning and deep learning — and the mechanics
+                sitting underneath them.
+              </span>
+              <span className="index__cta">
+                See the fields{' '}
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M13.2 5.4 20 12l-6.8 6.6-1.4-1.44L16.2 13H4v-2h12.2l-4.4-4.16 1.4-1.44Z" />
+                </svg>
+              </span>
+            </span>
+            <span className="index__fig" aria-hidden="true">
+              <b data-count="6">6</b>
+              <span>Fields</span>
+            </span>
+          </Link>
+        </nav>
       </div>
     </section>
   );
