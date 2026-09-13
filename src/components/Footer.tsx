@@ -32,13 +32,6 @@ export default function Footer() {
         <div>
           <p className="footer__label">Contact</p>
           <ul className="footer__list">
-            {CONTACT.phones.map((p) => (
-              <li key={p}>
-                <a href={`tel:${p.replace(/\s+/g, '')}`} className="link-underline">
-                  {p}
-                </a>
-              </li>
-            ))}
             <li>
               <a href={`mailto:${CONTACT.email}`} className="link-underline" style={{ wordBreak: 'break-all' }}>
                 {CONTACT.email}

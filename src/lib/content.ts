@@ -484,6 +484,6 @@ export const PAGES = {
   contact: {
     eyebrow: 'Reach the chapter',
     title: 'Get in touch',
-    lede: 'Email, phone, socials, and where to find SIGAI on campus.',
+    lede: 'Email, socials, and where to find SIGAI on campus.',
   },
 } as const;

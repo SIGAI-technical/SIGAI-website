@@ -674,6 +674,16 @@ img { max-width: 100%; }
   transform: translateY(-1px) rotate(-4deg) scale(1.05);
 }
 .brand__plate img { height: 27px; width: auto; display: block; }
+.brand__logo-dark { display: none !important; }
+.brand__logo-light { display: block !important; }
+
+:root[data-theme="dark"] .brand__logo-light { display: none !important; }
+:root[data-theme="dark"] .brand__logo-dark { display: block !important; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .brand__logo-light { display: none !important; }
+  :root:not([data-theme="light"]) .brand__logo-dark { display: block !important; }
+}
 
 .brand__name {
   display: flex;

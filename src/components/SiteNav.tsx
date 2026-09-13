@@ -173,39 +173,28 @@ export default function SiteNav() {
         <Link href="/" className="brand" aria-label="SIGAI — home">
           <span className="brand__plate" aria-hidden>
             <Image
+              src="/logo-mark-navy.png"
+              alt=""
+              width={40}
+              height={52}
+              priority
+              className="brand__logo-light"
+              style={{ width: 'auto', height: 27 }}
+            />
+            <Image
               src="/logo-mark-cream.png"
               alt=""
               width={40}
               height={52}
               priority
-              style={{ width: 'auto', height: 27, display: 'block' }}
+              className="brand__logo-dark"
+              style={{ width: 'auto', height: 27 }}
             />
           </span>
 
-          <span style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            <span
-              style={{
-                fontFamily: 'var(--display)',
-                fontSize: 14,
-                letterSpacing: '0.5px',
-                lineHeight: 1,
-                color: 'var(--cream)',
-              }}
-            >
-              SIGAI
-            </span>
-            <span
-              style={{
-                fontSize: 8.5,
-                fontWeight: 500,
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: 'var(--dim)',
-                lineHeight: 1,
-              }}
-            >
-              DJS ACM
-            </span>
+          <span className="brand__name">
+            <b>SIGAI</b>
+            <span>DJS ACM</span>
           </span>
         </Link>
 

@@ -21,18 +21,18 @@ const CONTACT_ROWS: ContactRow[] = [
     tone: 'blue',
   },
   {
-    icon: 'phone',
-    label: 'Phone',
-    value: '+91 9545629801',
-    href: 'tel:+919545629801',
+    icon: 'instagram',
+    label: 'Instagram',
+    value: '@djs.sigai',
+    href: 'https://www.instagram.com/djs.sigai/?hl=en',
     tone: 'amber',
   },
   {
-    icon: 'phone',
-    label: 'Alternate',
-    value: '+91 9867720041',
-    href: 'tel:+919867720041',
-    tone: 'amber',
+    icon: 'linkedin',
+    label: 'LinkedIn',
+    value: 'DJS ACM SIGAI Student Chapter',
+    href: 'https://www.linkedin.com/company/djsce-acm-sigai-student-chapter/posts/?feedView=all',
+    tone: 'blue',
   },
   {
     icon: 'pin',
@@ -52,14 +52,6 @@ function MailIcon() {
   );
 }
 
-function PhoneIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2Z" />
-    </svg>
-  );
-}
-
 function PinIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -72,8 +64,10 @@ function renderIcon(iconName: string) {
   switch (iconName) {
     case 'mail':
       return <MailIcon />;
-    case 'phone':
-      return <PhoneIcon />;
+    case 'instagram':
+      return <SocialIcon name="instagram" size={20} />;
+    case 'linkedin':
+      return <SocialIcon name="linkedin" size={20} />;
     case 'pin':
       return <PinIcon />;
     default:

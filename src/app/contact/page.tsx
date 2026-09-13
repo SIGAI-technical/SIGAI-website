@@ -5,7 +5,7 @@ import { PAGES } from '@/lib/content';
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Reach DJS ACM SIGAI at Dwarkadas J. Sanghvi College of Engineering — email, phone and social channels.',
+    'Reach DJS ACM SIGAI at Dwarkadas J. Sanghvi College of Engineering — email, socials and campus location.',
   alternates: { canonical: '/contact' },
 };
 
