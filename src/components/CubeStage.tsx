@@ -39,7 +39,7 @@ export default function CubeStage({ logoSrc }: { logoSrc: string }) {
         maxWidth: STAGE,
         margin: '0 auto',
         height: Math.round(STAGE * scale),
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <div

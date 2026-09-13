@@ -789,114 +789,10 @@ img { max-width: 100%; }
 @keyframes sheet-in { to { opacity: 1; transform: none; } }
 
 /* ==========================================================================
-   6. INTRO CURTAIN
+   6. INTRO CURTAIN (REMOVED)
    ==========================================================================
-   Hidden by default. The inline script in <head> sets data-intro on <html>
-   before first paint, so the content underneath is always present and a
-   repeat visit never flashes a curtain. */
-
-.intro { display: none; }
-
-html[data-intro="1"] .intro {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: grid;
-  place-items: center;
-  background: var(--h-bg);
-  overflow: hidden;
-}
-
-/* The same wash the page uses, so the curtain lifts onto familiar ground. */
-html[data-intro="1"] .intro::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(ellipse 62% 52% at 22% 16%, rgba(47, 107, 255, .16), transparent 70%),
-    radial-gradient(ellipse 56% 56% at 80% 80%, rgba(245, 166, 35, .18), transparent 70%);
-}
-
-.intro[data-exit="1"] { animation: intro-out 780ms var(--ease-spring) forwards; }
-
-@keyframes intro-out {
-  to { opacity: 0; transform: translate3d(0, -4%, 0) scale(1.04); visibility: hidden; }
-}
-
-.intro__stage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
-}
-
-.intro__board {
-  display: grid;
-  grid-template-columns: repeat(3, 48px);
-  grid-template-rows: repeat(3, 62px);
-  perspective: 900px;
-}
-
-/* Each tile shows one ninth of the mark; together they rebuild it. */
-.intro__tile {
-  background-size: 300% 300%;
-  background-repeat: no-repeat;
-  opacity: 0;
-  transform: rotateX(-96deg) scale(.84);
-  transform-origin: center bottom;
-  backface-visibility: hidden;
-  animation: tile-in 720ms var(--ease-spring) forwards;
-}
-
-@keyframes tile-in {
-  /* A beat of brand colour as the cubie lands, echoing the cube stickers. */
-  60% { box-shadow: 0 0 0 1px rgba(47, 107, 255, .55); }
-  to  { opacity: 1; transform: none; box-shadow: 0 0 0 0 rgba(47, 107, 255, 0); }
-}
-
-.intro__word {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 13px;
-  opacity: 0;
-  transform: translate3d(0, 14px, 0);
-  animation: word-in 680ms var(--ease-out-expo) 940ms forwards;
-}
-@keyframes word-in { to { opacity: 1; transform: none; } }
-
-.intro__name {
-  font-family: var(--h-display);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: var(--h-ink);
-}
-
-.intro__rule {
-  width: 0; height: 2px;
-  background: linear-gradient(90deg, var(--h-blue), var(--h-amber));
-  animation: rule-draw 820ms var(--ease-out-expo) 1080ms forwards;
-}
-@keyframes rule-draw { to { width: 132px; } }
-
-.intro__sub {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: .34em;
-  text-transform: uppercase;
-  color: var(--h-dim);
-}
-
-.intro__meter {
-  position: absolute;
-  left: 0; bottom: 0;
-  height: 2px; width: 0;
-  background: linear-gradient(90deg, var(--h-blue), var(--h-amber));
-  animation: meter 2100ms var(--ease-out-expo) forwards;
-}
-@keyframes meter { to { width: 100%; } }
+   Intro curtain overlay is removed to ensure the page renders immediately
+   with zero render-blocking overlays on fresh visits and new tabs. */
 
 /* ==========================================================================
    7. TYPOGRAPHY
@@ -1085,9 +981,9 @@ p { margin: 0; text-wrap: pretty; }
    shears instead of folding. */
 
 .popup {
-  opacity: 0;
+  opacity: 1;
+  transform: none;
   transform-style: preserve-3d;
-  transform: perspective(1300px) rotateX(var(--popup-angle, 16deg)) translate3d(0, 34px, -60px);
   transform-origin: center bottom;
   transition:
     opacity 720ms var(--ease-out-expo),
@@ -1098,7 +994,7 @@ p { margin: 0; text-wrap: pretty; }
 
 .popup.is-open {
   opacity: 1;
-  transform: perspective(1300px) rotateX(0deg) translate3d(0, 0, 0);
+  transform: none;
   /* Drop the 3D context once settled. Leaving preserve-3d and a perspective
      in place keeps every finished section on its own compositor layer, and
      text inside a 3D context stays rasterised at the transform's scale and
@@ -1267,32 +1163,6 @@ p { margin: 0; text-wrap: pretty; }
 .cube-pad {
   position: relative;
   transform-style: preserve-3d;
-}
-
-/* A colour wash behind the cube, so it has somewhere to sit on a light
-   ground instead of floating in space. */
-.cube-pad::before {
-  content: "";
-  position: absolute;
-  inset: 4% -2% 6%;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse 54% 54% at 46% 42%, rgba(47, 107, 255, .26), transparent 66%),
-    radial-gradient(ellipse 58% 54% at 66% 66%, rgba(245, 166, 35, .22), transparent 68%);
-  filter: blur(26px);
-  pointer-events: none;
-}
-
-/* Contact shadow on the ground beneath it. */
-.cube-pad::after {
-  content: "";
-  position: absolute;
-  left: 16%; right: 16%; bottom: 4%;
-  height: 42px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(22, 33, 62, .16), transparent 70%);
-  filter: blur(10px);
-  pointer-events: none;
 }
 
 .cube-pad > * { position: relative; z-index: 1; }
@@ -2156,15 +2026,10 @@ a:hover .tile { transform: translateY(-2px); }
   .shape__box,
   .cube-drift,
   .cube-tumble,
-  .intro__tile,
-  .intro__word,
-  .intro__rule,
-  .intro__meter,
   .sheet a { animation: none !important; }
 
   .cube-tumble { transform: rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg); }
-  .intro__tile, .intro__word, .sheet a { opacity: 1; transform: none; }
-  .intro__rule { width: 132px; }
+  .sheet a { opacity: 1; transform: none; }
 
   .shape { transform: scale(calc(.7 + (var(--d) * .45))) !important; }
 
@@ -2531,7 +2396,7 @@ a:hover .tile { transform: translateY(-2px); }
    of the layout entirely, or the document keeps its height and the scrollbar
    still describes six pages' worth of content. */
 
-.page { display: none; }
+.page { display: block; }
 .page.is-current { display: block; }
 
 /* Each page announces itself with a short rise. Deliberately quick — this is

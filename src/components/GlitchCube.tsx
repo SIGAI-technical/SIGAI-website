@@ -45,10 +45,6 @@ export default function GlitchCube({
   solving = true,
 }: GlitchCubeProps) {
   const cubies = useMemo(() => buildCubies(logoSrc), [logoSrc]);
-  const dots = useMemo(
-    () => ({ back: dotLayer(2024, 5, 26, 3.5), front: dotLayer(8891, 3, 14, 4.5) }),
-    [],
-  );
 
   const nodes = useRef<(HTMLDivElement | null)[]>([]);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -174,15 +170,13 @@ export default function GlitchCube({
         width: size,
         height: size,
         maxWidth: '100%',
-        background: PALETTE.ink,
-        overflow: 'hidden',
+        background: 'transparent',
+        overflow: 'visible',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <div style={{ position: 'absolute', inset: 0, background: dots.back, opacity: 0.95 }} />
-
       <div
         className="cube-drift"
         style={{ position: 'relative', width: STAGE, height: STAGE, perspective: 1800 }}
@@ -240,10 +234,6 @@ export default function GlitchCube({
           </div>
         </div>
       </div>
-
-      <div
-        style={{ position: 'absolute', inset: 0, background: dots.front, pointerEvents: 'none' }}
-      />
     </div>
   );
 }

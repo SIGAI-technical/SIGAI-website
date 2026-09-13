@@ -87,13 +87,6 @@ const EARLY_BOOTSTRAP = `(function(){try{
   if (saved === 'dark' || saved === 'light') {
     document.documentElement.setAttribute('data-theme', saved);
   }
-  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var seen = false;
-  try { seen = sessionStorage.getItem('sigai-intro') === '1'; } catch (e) {}
-  if (!calm && !seen) {
-    document.documentElement.dataset.intro = '1';
-    try { sessionStorage.setItem('sigai-intro', '1'); } catch (e) {}
-  }
 }catch(e){}})();`;
 
 export default function RootLayout({
@@ -108,7 +101,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${inter.variable} ${spaceGrotesk.variable} ${pressStart.variable}`}
       >
         <noscript>
-          <style>{`.popup{opacity:1!important;transform:none!important}.intro{display:none!important}`}</style>
+          <style>{`.popup{opacity:1!important;transform:none!important}`}</style>
         </noscript>
 
         <Backdrop />

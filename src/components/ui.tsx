@@ -151,6 +151,14 @@ export function Icon({ name, size = 15 }: { name: IconName; size?: number }) {
   );
 }
 
+export function SocialIcon({ name, size = 16 }: { name: string; size?: number }) {
+  const key = name.toLowerCase();
+  if (key === 'linkedin') return <Icon name="linkedin" size={size} />;
+  if (key === 'instagram') return <Icon name="instagram" size={size} />;
+  if (key === 'x' || key === 'twitter') return <Icon name="x" size={size} />;
+  return <span>{name}</span>;
+}
+
 /** Pill button with the trailing icon nested in its own circle. */
 export function Button({
   href,

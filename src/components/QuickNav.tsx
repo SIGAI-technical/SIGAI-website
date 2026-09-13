@@ -91,7 +91,7 @@ export default function QuickNav() {
 
           <Link
             className="index__row popup"
-            href="/domains"
+            href="/about"
             data-tone="teal"
             style={{
               ['--popup-delay' as string]: '160ms',
@@ -102,13 +102,13 @@ export default function QuickNav() {
               03
             </span>
             <span className="index__main">
-              <span className="index__title">What we actually explore</span>
+              <span className="index__title">Who we are</span>
               <span className="index__desc">
-                Artificial intelligence, machine learning and deep learning — and the mechanics
-                sitting underneath them.
+                Founded by DJSCE students — explore our story, vision, and how we foster community
+                around artificial intelligence.
               </span>
               <span className="index__cta">
-                See the fields{' '}
+                Read our story{' '}
                 <svg
                   width="15"
                   height="15"
@@ -121,8 +121,8 @@ export default function QuickNav() {
               </span>
             </span>
             <span className="index__fig" aria-hidden="true">
-              <b data-count="6">6</b>
-              <span>Fields</span>
+              <b data-count="2023">2023</b>
+              <span>Founded</span>
             </span>
           </Link>
         </nav>

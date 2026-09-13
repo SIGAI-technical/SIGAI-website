@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { CONTACT, SOCIALS } from '@/lib/content';
+import { SocialIcon } from './ui';
 
 interface ContactRow {
   icon: string;
@@ -139,7 +140,7 @@ export default function ContactStrip() {
                     rel="noopener noreferrer"
                     aria-label={`SIGAI on ${s.label}`}
                   >
-                    <span>{s.label}</span>
+                    <SocialIcon name={s.label} size={16} />
                   </a>
                 ))}
               </div>

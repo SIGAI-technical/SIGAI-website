@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { CONTACT, NAV_LINKS, ORG, SOCIALS } from '@/lib/content';
+import { SocialIcon } from './ui';
 
 /**
  * Footer component directly matching index_8.html:
@@ -9,11 +10,6 @@ import { CONTACT, NAV_LINKS, ORG, SOCIALS } from '@/lib/content';
 export default function Footer() {
   return (
     <footer className="site-footer">
-      <div className="shell footer__mark">
-        <span aria-hidden="true">SIGAI</span>
-        <p>{ORG.tagline}</p>
-      </div>
-
       <div className="shell footer__grid">
         <p className="footer__blurb">
           {ORG.expansion}. The {ORG.chapterDescriptor} of {ORG.college}, affiliated with the{' '}
@@ -63,7 +59,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label={`SIGAI on ${s.label}`}
               >
-                <span>{s.label}</span>
+                <SocialIcon name={s.label} size={16} />
               </a>
             ))}
           </div>

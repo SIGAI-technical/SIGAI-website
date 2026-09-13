@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { SOCIALS } from '@/lib/content';
+import { SocialIcon } from './ui';
 
 /**
  * AboutSection component matching index_8.html:
@@ -178,7 +179,7 @@ export default function AboutSection() {
                           rel="noopener noreferrer"
                           aria-label={`SIGAI on ${s.label}`}
                         >
-                          <span>{s.label}</span>
+                          <SocialIcon name={s.label} size={16} />
                         </a>
                       ))}
                     </div>

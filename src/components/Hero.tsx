@@ -15,12 +15,6 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
       <section className="hero" id="home">
         <div className="shell hero__grid">
           <div className="hero__copy">
-            <div className="popup" style={{ ['--popup-angle' as string]: '12deg' }}>
-              <span className="hero-chip">
-                <i aria-hidden="true" />
-                Student chapter &nbsp;·&nbsp; ACM affiliated
-              </span>
-            </div>
 
             <div
               className="popup"
@@ -93,7 +87,7 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
                   </Link>
                 </span>
                 <span className="magnetic">
-                  <Link className="btn btn--ghost" href="/#about">
+                  <Link className="btn btn--ghost" href="/about">
                     About the chapter
                     <span className="btn__icon" aria-hidden="true">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
@@ -105,33 +99,7 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
               </div>
             </div>
 
-            <div
-              className="popup"
-              style={{
-                ['--popup-delay' as string]: '260ms',
-                ['--popup-angle' as string]: '16deg',
-                width: '100%',
-              }}
-            >
-              <ul className="hero-facts">
-                <li>
-                  <strong data-count="8">8</strong>
-                  <span>Events run</span>
-                </li>
-                <li>
-                  <strong data-count="3">3</strong>
-                  <span>Academic years</span>
-                </li>
-                <li>
-                  <strong data-count="6">6</strong>
-                  <span>Focus areas</span>
-                </li>
-                <li>
-                  <strong data-count="22">22</strong>
-                  <span>On the core</span>
-                </li>
-              </ul>
-            </div>
+
           </div>
 
           <div

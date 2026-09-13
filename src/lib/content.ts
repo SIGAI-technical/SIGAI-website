@@ -451,7 +451,6 @@ export const SOCIALS = [
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/domains', label: 'AI' },
   { href: '/events', label: 'Events' },
   { href: '/team', label: 'Team' },
   { href: '/contact', label: 'Contact' },

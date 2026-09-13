@@ -16,24 +16,9 @@ export default function MotionEffects() {
     const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const touch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // 1. Pop-Up Reveals
+    // 1. Pop-Up Reveals: Mark elements as open immediately to guarantee zero blank renders
     const popups = document.querySelectorAll<HTMLElement>('.popup');
-    if (calm || typeof IntersectionObserver === 'undefined') {
-      popups.forEach((el) => el.classList.add('is-open'));
-    } else {
-      const ioPop = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-open');
-              ioPop.unobserve(entry.target);
-            }
-          });
-        },
-        { rootMargin: '0px 0px -6% 0px', threshold: 0 }
-      );
-      popups.forEach((el) => ioPop.observe(el));
-    }
+    popups.forEach((el) => el.classList.add('is-open'));
 
     // 2. Count-Up
     const counts = document.querySelectorAll<HTMLElement>('[data-count]');
