@@ -116,21 +116,8 @@ export default function EventDetailPage() {
 
         <div className="event-detail__timeline" />
 
-        {/* TAGS */}
+        {/* FULL DESCRIPTION */}
         <div className="event-detail__content">
-
-          <div className="event-detail__pills">
-
-            <span>SIGAI</span>
-
-            <span>{event.year}</span>
-
-            <span>Event #{event.index}</span>
-
-          </div>
-
-
-          {/* FULL DESCRIPTION */}
           <p className="event-detail__description">
             {event.description}
           </p>
