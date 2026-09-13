@@ -1891,6 +1891,150 @@ a:hover .tile { transform: translateY(-2px); }
 }
 .link-underline:hover::after { transform: scaleX(1); transform-origin: left; }
 
+/* ================================================================ intro */
+  
+.intro {
+  display: none;
+}
+
+html[data-intro="1"] .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: var(--h-bg);
+  overflow: hidden;
+}
+
+html[data-intro="1"] .intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 62% 52% at 22% 16%, rgba(47, 107, 255, 0.12), transparent 70%),
+    radial-gradient(ellipse 56% 56% at 80% 80%, rgba(245, 166, 35, 0.08), transparent 70%);
+}
+
+.intro[data-exit="1"] {
+  animation: intro-out 780ms var(--ease-spring) forwards;
+}
+
+@keyframes intro-out {
+  to {
+    opacity: 0;
+    transform: translate3d(0, -4%, 0) scale(1.04);
+    visibility: hidden;
+  }
+}
+
+.intro__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.intro__board {
+  display: grid;
+  grid-template-columns: repeat(3, 48px);
+  grid-template-rows: repeat(3, 62px);
+  perspective: 900px;
+}
+
+.intro__tile {
+  background-image: url("/logo-mark-navy.png");
+  background-size: 300% 300%;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transform: rotateX(-96deg) scale(0.84);
+  transform-origin: center bottom;
+  backface-visibility: hidden;
+  animation: tile-in 720ms var(--ease-spring) forwards;
+}
+
+@keyframes tile-in {
+  60% {
+    box-shadow: 0 0 0 1px rgba(47, 107, 255, 0.35);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    box-shadow: 0 0 0 0 rgba(47, 107, 255, 0);
+  }
+}
+
+.intro__word {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  animation: word-in 680ms var(--ease-out-expo) 940ms forwards;
+}
+
+@keyframes word-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.intro__name {
+  font-family: var(--font-outfit);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 3.5px;
+  color: var(--h-ink);
+}
+
+.intro__rule {
+  width: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--h-blue), var(--h-amber));
+  animation: rule-draw 820ms var(--ease-out-expo) 1080ms forwards;
+}
+
+@keyframes rule-draw {
+  to {
+    width: 132px;
+  }
+}
+
+.intro__sub {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--h-dim);
+}
+
+.intro__meter {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, var(--h-blue), var(--h-amber));
+  animation: meter 2100ms var(--ease-out-expo) forwards;
+}
+
+@keyframes meter {
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-intro="1"] .intro {
+    display: none;
+  }
+}
+
+
 /* ==========================================================================
    18. RESPONSIVE
    ========================================================================== */

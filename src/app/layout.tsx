@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Outfit, Press_Start_2P, Space_Grotesk } from 'next/font/google';
 import Backdrop from '@/components/Backdrop';
 import Footer from '@/components/Footer';
+import Intro from '@/components/Intro';
 import MotionEffects from '@/components/MotionEffects';
 import SiteNav from '@/components/SiteNav';
 import { IS_PRODUCTION, SITE_URL } from '@/lib/site';
@@ -87,6 +88,10 @@ const EARLY_BOOTSTRAP = `(function(){try{
   if (saved === 'dark' || saved === 'light') {
     document.documentElement.setAttribute('data-theme', saved);
   }
+  var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!calm) {
+    document.documentElement.dataset.intro = '1';
+  }
 }catch(e){}})();`;
 
 export default function RootLayout({
@@ -101,9 +106,10 @@ export default function RootLayout({
         className={`${outfit.variable} ${inter.variable} ${spaceGrotesk.variable} ${pressStart.variable}`}
       >
         <noscript>
-          <style>{`.popup{opacity:1!important;transform:none!important}`}</style>
+          <style>{`.popup{opacity:1!important;transform:none!important}.intro{display:none!important}`}</style>
         </noscript>
 
+        <Intro />
         <Backdrop />
         <MotionEffects />
 
