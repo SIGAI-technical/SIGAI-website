@@ -17,7 +17,7 @@ const SLIDES: Slide[] = [
   {
     title: 'Core Committee',
     body: 'The executive student leadership team driving DJS ACM SIGAI — spearheading AI research culture, flagship hackathons, and technical initiatives across DJSCE.',
-    image: '/images/core.jpeg',
+    image: '/images/CORE.jpeg',
     alt: 'DJS ACM SIGAI Core Committee',
     badge: 'Core Committee',
   },
