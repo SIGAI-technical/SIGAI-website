@@ -175,14 +175,14 @@ export const EVENTS: SigEvent[] = [
   series: 'Genesis',
   description:
     'This is a strategic SIGAI orientation seminar featuring faculty mentors and senior leaders to roadmap AI/ML career success.',
-  image: '/events/Genesis3.0/ge_1.png',
+  image: '/events/genesis3.0/ge_1.png',
   gallery: [
-    '/events/Genesis3.0/ge_1.png',
-    '/events/Genesis3.0/ge_2.png',
-    '/events/Genesis3.0/ge_3.png',
-    '/events/Genesis3.0/ge_4.png',
-    '/events/Genesis3.0/ge_6.png',
-    '/events/Genesis3.0/ge_2.JPG.jpeg',
+    '/events/genesis3.0/ge_1.png',
+    '/events/genesis3.0/ge_2.png',
+    '/events/genesis3.0/ge_3.png',
+    '/events/genesis3.0/ge_4.png',
+    '/events/genesis3.0/ge_6.png',
+    '/events/genesis3.0/ge_2.JPG.jpeg',
   ],
 },
 
