@@ -9,7 +9,7 @@ export const ORG = {
   name: 'DJS ACM SIGAI',
   shortName: 'SIGAI',
   expansion: 'Special Interest Group on Artificial Intelligence',
-  tagline: 'IF YOUR MIND CAN THINK, SO CAN MINE!',
+  tagline: 'INNOVATION BEGINS WITH COLLABORATION',
   chapterLine: "DJSCE's Official Student Chapter",
   /** Lowercase form, for use mid-sentence. */
   chapterDescriptor: 'official student chapter',

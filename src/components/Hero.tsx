@@ -36,9 +36,9 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
               }}
             >
               <h1 className="hero-title">
-                If your mind can think,
+                Innovation begins with
                 <br />
-                <span className="mark">so can mine.</span>
+                <span className="mark">Collaboration.</span>
               </h1>
             </div>
 
@@ -112,12 +112,6 @@ export default function Hero({ logoSrc }: { logoSrc: string }) {
           >
             <div className="cube-pad">
               <CubeStage logoSrc={logoSrc} />
-              <span className="cube-hint" aria-hidden="true">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 3a1.5 1.5 0 0 1 3 0v6h.5V4.5a1.5 1.5 0 0 1 3 0V9h.5V6.5a1.5 1.5 0 0 1 3 0V14a7 7 0 0 1-7 7h-1a7 7 0 0 1-7-7v-2.5a1.5 1.5 0 0 1 3 0V13h.5V3Z" />
-                </svg>
-                Drag to spin it
-              </span>
             </div>
           </div>
         </div>

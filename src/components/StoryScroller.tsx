@@ -1,151 +1,163 @@
 'use client';
 
 import * as React from 'react';
-import { Button, Placeholder } from './ui';
-
-/**
- * Scroll-driven story panel.
- *
- * Adapted from the `interactive-scrolling-story-component` block. Changes:
- *  - The original scrolls an inner `overflow-y-auto` container, which traps the
- *    page scroll and breaks anchor links and keyboard paging. This tracks the
- *    *page* scroll against a tall section instead, so the page scrolls normally.
- *  - Untyped `useRef(null)` and `e.target.src` don't compile under TS; both are
- *    properly typed here.
- *  - Palette follows the site rather than the block's hardcoded yellow-on-black.
- *  - Pagination bars are real buttons with labels; the slide region announces
- *    changes politely.
- */
+import Image from 'next/image';
+import { Button } from './ui';
 
 interface Slide {
-  eyebrow: string;
   title: string;
   body: string;
+  image: string;
+  alt: string;
+  badge: string;
 }
 
-/** Every line here comes from the chapter's own About and Vision copy. */
+/** Authentic chapter story slides with official committee and event photos */
 const SLIDES: Slide[] = [
   {
-    eyebrow: 'The chapter',
-    title: 'A student chapter for AI',
-    body: 'DJS ACM SIGAI was founded by Dwarkadas J. Sanghvi College of Engineering students in the AI & ML department, affiliated with the Association for Computing Machinery.',
+    title: 'Core Committee',
+    body: 'The executive student leadership team driving DJS ACM SIGAI — spearheading AI research culture, flagship hackathons, and technical initiatives across DJSCE.',
+    image: '/images/core.jpeg',
+    alt: 'DJS ACM SIGAI Core Committee',
+    badge: 'Core Committee',
   },
   {
-    eyebrow: 'The field',
-    title: 'AI, ML and Deep Learning',
-    body: 'The chapter introduces students to a rapidly expanding and increasingly interdisciplinary field — from neural networks and backpropagation through to transformers.',
+    title: 'Chapter Committee',
+    body: 'Passionate student teams across technical, design, marketing, and logistics working collaboratively to create impactful hands-on learning experiences.',
+    image: '/images/chapter-committee.jpeg',
+    alt: 'DJS ACM SIGAI Chapter Committee',
+    badge: 'Chapter Committee',
   },
   {
-    eyebrow: 'The work',
-    title: 'Seminars and workshops',
-    body: 'Knowledge and skills are built through a series of seminars, skill-building workshops and other events spread across the academic year.',
+    title: 'Applied Intelligence',
+    body: 'Introducing students to rapidly advancing domains — computer vision, natural language processing, IPD seminars, and state-of-the-art neural architectures.',
+    image: '/images/ipd-seminar.jpeg',
+    alt: 'IPD Seminar - Applied Artificial Intelligence',
+    badge: 'IPD Seminar',
   },
   {
-    eyebrow: 'The invitation',
-    title: 'Develop as a community',
-    body: 'SIGAI exists to promote and support the development and application of AI principles and techniques — and to grow a community of students around them.',
+    title: 'Seminars & Workshops',
+    body: 'Knowledge and skills are built through intensive code-alongs, skill-building workshops, and speaker series breaking down ML engineering from first principles.',
+    image: '/events/seminar.png',
+    alt: 'First-Principles Technical Seminars & Workshops',
+    badge: 'Seminars & Workshops',
+  },
+  {
+    title: 'Develop as a Community',
+    body: 'SIGAI exists to promote and support the development and application of AI principles — growing a vibrant community of curious builders and researchers.',
+    image: '/events/Clockout3.0/clockout3_cover.jpg',
+    alt: 'Campus Hackathons and Flagship Quests',
+    badge: 'Campus Hackathons',
   },
 ];
 
 export default function StoryScroller() {
-  const sectionRef = React.useRef<HTMLElement>(null);
   const [active, setActive] = React.useState(0);
 
+  // Auto-advance slides unconditionally every 4 seconds
   React.useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    let frame = 0;
-    const onScroll = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        const rect = section.getBoundingClientRect();
-        // How far through the tall track the sticky panel currently sits.
-        const travelled = -rect.top;
-        const total = section.offsetHeight - window.innerHeight;
-        if (total <= 0) return;
-        const p = Math.min(0.999, Math.max(0, travelled / total));
-        setActive(Math.floor(p * SLIDES.length));
-      });
-    };
-
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    return () => {
-      if (frame) cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
+    const timer = setInterval(() => {
+      setActive((prev) => (prev + 1) % SLIDES.length);
+    }, 4000);
+    return () => clearInterval(timer);
   }, []);
 
-  const goTo = (i: number) => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const total = section.offsetHeight - window.innerHeight;
-    const top = section.offsetTop + (total * (i + 0.5)) / SLIDES.length;
-    window.scrollTo({ top, behavior: 'smooth' });
+  const nextSlide = () => {
+    setActive((prev) => (prev + 1) % SLIDES.length);
+  };
+
+  const prevSlide = () => {
+    setActive((prev) => (prev === 0 ? SLIDES.length - 1 : prev - 1));
   };
 
   return (
     <div className="band band--story">
-      <section
-        ref={sectionRef}
-        className="story"
-        style={{ ['--slides' as string]: SLIDES.length }}
-        aria-label="What SIGAI is"
-      >
-        <div className="story__pin">
+      <section className="story-section" aria-label="What SIGAI is">
         <div className="shell story__grid">
+          {/* Narrative Column */}
           <div className="story__left">
-            <div className="story__bars" role="group" aria-label="Jump to a chapter">
-              {SLIDES.map((s, i) => (
-                <button
-                  key={s.title}
-                  type="button"
-                  className="story__bar"
-                  data-on={i === active}
-                  aria-label={`Go to: ${s.title}`}
-                  aria-current={i === active ? 'true' : undefined}
-                  onClick={() => goTo(i)}
-                />
-              ))}
-            </div>
-
             <div className="story__stage">
               {SLIDES.map((s, i) => (
-                <article key={s.title} className="story__slide" data-on={i === active}>
-                  <span className="eyebrow">{s.eyebrow}</span>
+                <article key={s.badge} className="story__slide" data-on={i === active}>
                   <h2 className="story__title">{s.title}</h2>
                   <p className="story__body">{s.body}</p>
                 </article>
               ))}
             </div>
 
-            <div className="story__cta">
+            {/* Controls & CTA */}
+            <div className="story__actions">
               <Button href="/about" variant="gold">
                 MORE ABOUT SIGAI
               </Button>
-            </div>
-          </div>
 
-          <div className="story__right" aria-hidden>
-            <div className="story__frame">
-              <div
-                className="story__reel"
-                style={{ transform: `translate3d(0, -${active * 100}%, 0)` }}
-              >
-                {SLIDES.map((s) => (
-                  <div key={s.title} className="story__cell">
-                    <Placeholder label={`${s.eyebrow} — image to be added`} height="100%" radius={0} />
-                  </div>
-                ))}
+              <div className="story__nav-controls">
+                <div className="story__dots" role="tablist" aria-label="Story slides">
+                  {SLIDES.map((s, i) => (
+                    <button
+                      key={s.badge}
+                      type="button"
+                      className={`story__dot ${i === active ? 'is-active' : ''}`}
+                      onClick={() => setActive(i)}
+                      aria-label={`Slide ${i + 1}: ${s.title}`}
+                      role="tab"
+                      aria-selected={i === active}
+                    />
+                  ))}
+                </div>
+
+                <div className="story__arrows">
+                  <button
+                    type="button"
+                    className="story__arrow-btn"
+                    onClick={prevSlide}
+                    aria-label="Previous slide"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    className="story__arrow-btn"
+                    onClick={nextSlide}
+                    aria-label="Next slide"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Right Visual Frame: Pure images with defined border */}
+          <div className="story__right" aria-hidden="true">
+            <div className="story__frame">
+              {SLIDES.map((s, i) => (
+                <div
+                  key={s.badge}
+                  className={`story__slide-visual ${i === active ? 'is-active' : ''}`}
+                >
+                  <div className="story__image-wrap">
+                    <Image
+                      src={s.image}
+                      alt={s.alt}
+                      fill
+                      sizes="(max-width: 900px) 100vw, 560px"
+                      priority={i <= 1}
+                      style={{ objectFit: 'cover' }}
+                    />
+                    <div className="story__badge">
+                      <span>{s.badge}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
       </section>
     </div>
   );
