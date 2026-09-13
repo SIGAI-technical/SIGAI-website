@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Events from '@/components/Events';
+
 import { PageHeader } from '@/components/ui';
 import { PAGES } from '@/lib/content';
 
@@ -18,6 +19,9 @@ export default function EventsPage() {
         title={PAGES.events.title}
         lede={PAGES.events.lede}
       />
+
+      
+
       <Events showHeading={false} />
     </div>
   );

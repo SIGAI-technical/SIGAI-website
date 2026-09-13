@@ -1,31 +1,35 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import ArrangingGrid from './ArrangingGrid';
+import { useMemo } from 'react';
 import Reveal from './Reveal';
-import { Bezel, Icon, Placeholder, SectionHeading } from './ui';
-import { EVENTS, EVENT_YEARS } from '@/lib/content';
-
-type Filter = 'all' | (typeof EVENT_YEARS)[number];
-
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'All' },
-  ...EVENT_YEARS.map((y) => ({ id: y as Filter, label: y })),
-];
+import { Bezel, Placeholder, SectionHeading } from './ui';
+import { EVENTS, EVENT_YEARS, type SigEvent } from '@/lib/content';
 
 export default function Events({ showHeading = true }: { showHeading?: boolean }) {
-  const [filter, setFilter] = useState<Filter>('all');
+  const groups = useMemo(() => {
+    const byYear = new Map<string, SigEvent[]>();
 
-  const shown = useMemo(
-    () => (filter === 'all' ? EVENTS : EVENTS.filter((e) => e.year === filter)),
-    [filter],
-  );
+    for (const event of EVENTS) {
+      const list = byYear.get(event.year) ?? [];
+      list.push(event);
+      byYear.set(event.year, list);
+    }
+
+    return EVENT_YEARS
+      .map((year) => ({
+        year,
+        events: byYear.get(year) ?? [],
+      }))
+      .filter((group) => group.events.length > 0);
+  }, []);
 
   return (
     <section id="events" className="section">
       <div className="shell">
-        {showHeading ? (
+
+        {showHeading && (
           <SectionHeading
             eyebrow="Three years of events"
             title={
@@ -37,10 +41,9 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
             }
             lede={`${EVENTS.length} events across ${EVENT_YEARS.length} academic years — seminars, orientations and campus-wide competitions.`}
           />
-        ) : null}
+        )}
 
-        {/* No upcoming events are listed on the source site, so this stays an
-            explicit empty slot rather than an invented entry. */}
+        {/* Upcoming */}
         <Reveal delay={80}>
           <div style={{ marginTop: showHeading ? 48 : 8 }}>
             <Bezel>
@@ -66,6 +69,7 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
                       flexShrink: 0,
                     }}
                   />
+
                   <div>
                     <p
                       style={{
@@ -79,12 +83,24 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
                     >
                       Upcoming
                     </p>
-                    <p style={{ margin: '6px 0 0', fontSize: 15, color: 'var(--cream)' }}>
+
+                    <p
+                      style={{
+                        margin: '6px 0 0',
+                        fontSize: 15,
+                        color: 'var(--cream)',
+                      }}
+                    >
                       No upcoming events announced yet.
                     </p>
                   </div>
                 </div>
-                <Link href="/contact" className="link-underline" style={{ fontSize: 14 }}>
+
+                <Link
+                  href="/contact"
+                  className="link-underline"
+                  style={{ fontSize: 14 }}
+                >
                   Follow SIGAI for announcements
                 </Link>
               </div>
@@ -92,121 +108,118 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <div className="events__bar">
-            {/* Toggle buttons, not a tablist: there are no tabpanels to own. */}
-            <div
-              role="group"
-              aria-label="Filter events by academic year"
-              className="events__filters"
-            >
-              {FILTERS.map((f) => (
-                <button
-                  key={f.id}
-                  type="button"
-                  className="tab"
-                  aria-pressed={filter === f.id}
-                  onClick={() => setFilter(f.id)}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
+        {/* EVENT ARCHIVE */}
+        {groups.map((group, groupIndex) => (
+          <Reveal
+            key={group.year}
+            delay={120 + groupIndex * 40}
+          >
+            <div className="events__year">
 
-            <p className="events__count" aria-live="polite">
-              {shown.length} {shown.length === 1 ? 'event' : 'events'}
-            </p>
-          </div>
-        </Reveal>
-
-        {/*
-          The cards start gathered in a fanned stack and arrange themselves
-          into this grid as the section scrolls into view.
-        */}
-        <ArrangingGrid className="events__grid" resetKey={filter}>
-          {shown.map((e) => (
-            <Bezel key={e.id}>
-              <article style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <Placeholder label={`${e.title} — image to be added`} ratio="16 / 10" radius={0} />
+              {/* YEAR HEADER */}
+              <div className="events__year-head">
+                <h3 className="events__year-title">
+                  {group.year}
+                </h3>
 
                 <div
-                  style={{
-                    padding: '24px 24px 26px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 12,
-                    flex: 1,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      gap: 10,
-                      fontSize: 10.5,
-                      fontWeight: 600,
-                      letterSpacing: '0.14em',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    <span style={{ color: 'var(--cream)' }}>{e.year}</span>
-                    <span style={{ color: 'var(--dim)' }} aria-hidden>
-                      /
-                    </span>
-                    <span style={{ color: 'var(--muted)' }}>{e.series}</span>
-                    <span className="events__n" aria-hidden>
-                      {e.index}
-                    </span>
-                  </div>
+                  className="events__year-rule"
+                  aria-hidden
+                />
 
-                  <h3
-                    style={{
-                      margin: 0,
-                      fontFamily: 'var(--display)',
-                      fontSize: 14,
-                      lineHeight: 1.5,
-                      color: 'var(--cream)',
-                    }}
-                  >
-                    {e.title}
-                  </h3>
+                <span className="events__count">
+                  {group.events.length}{' '}
+                  {group.events.length === 1 ? 'event' : 'events'}
+                </span>
+              </div>
 
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: 14.5,
-                      lineHeight: 1.7,
-                      color: 'var(--muted)',
-                      textWrap: 'pretty',
-                      flex: 1,
-                    }}
-                  >
-                    {e.description}
-                  </p>
+              {/* ONE CARD PER ROW */}
+              <div className="events__archive-list">
 
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      marginTop: 4,
-                      fontSize: 10,
-                      fontWeight: 600,
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: 'var(--dim)',
-                    }}
+                {group.events.map((event, index) => (
+                  <Reveal
+                    key={event.id}
+                    delay={index * 70}
                   >
-                    {/* No dates are published for these events. */}
-                    Academic year {e.year}
-                    <Icon name="arrow" size={12} />
-                  </span>
-                </div>
-              </article>
-            </Bezel>
-          ))}
-        </ArrangingGrid>
+                    <Link
+                      href={`/events/${event.id}`}
+                      className="events__archive-link"
+                    >
+                      <Bezel>
+                        <article className="events__archive-card">
+
+                          {/* IMAGE */}
+                          <div className="events__archive-media">
+
+                            {event.image ? (
+                              <Image
+                                src={event.image}
+                                alt={event.title}
+                                fill
+                                sizes="(max-width: 700px) 100vw, 1100px"
+                                style={{
+                                  objectFit: 'cover',
+                                }}
+                              />
+                            ) : (
+                              <Placeholder
+                                label={`${event.title} — image to be added`}
+                                ratio="16 / 9"
+                                radius={0}
+                              />
+                            )}
+
+                            <div className="events__archive-overlay" />
+
+                            <span className="events__card-year">
+                              {event.year}
+                            </span>
+
+                            <span className="events__card-index">
+                              {event.index}
+                            </span>
+                          </div>
+
+                          {/* CONTENT */}
+                          <div className="events__archive-content">
+
+                            <div>
+                              <span className="events__archive-series">
+                                {event.series}
+                              </span>
+
+                              <h3 className="events__archive-title">
+                                {event.title}
+                              </h3>
+
+                              <p className="events__archive-description">
+                                {event.description}
+                              </p>
+                            </div>
+
+                            <div className="events__archive-footer">
+                              <span>
+                                {event.year}
+                              </span>
+
+                              <span className="events__explore">
+                                EXPLORE
+                                <span aria-hidden> →</span>
+                              </span>
+                            </div>
+
+                          </div>
+
+                        </article>
+                      </Bezel>
+                    </Link>
+                  </Reveal>
+                ))}
+
+              </div>
+            </div>
+          </Reveal>
+        ))}
       </div>
     </section>
   );

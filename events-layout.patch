@@ -1,0 +1,482 @@
+diff --git a/src/app/globals.css b/src/app/globals.css
+index 6f07957..5180744 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -1465,22 +1465,6 @@ html[data-intro="1"] .intro::before {
+ 
+ /* =============================================================== events */
+ 
+-.events__bar {
+-  display: flex;
+-  flex-wrap: wrap;
+-  align-items: center;
+-  justify-content: space-between;
+-  gap: 14px;
+-  margin-top: 44px;
+-}
+-
+-.events__filters {
+-  display: flex;
+-  flex-wrap: wrap;
+-  gap: 22px;
+-  border-bottom: 1px solid var(--line);
+-}
+-
+ .events__count {
+   margin: 0;
+   font-size: 10px;
+@@ -1491,27 +1475,80 @@ html[data-intro="1"] .intro::before {
+   color: var(--dim);
+ }
+ 
+-.events__n {
+-  margin-left: auto;
++/* One block per academic year: heading + divider + a two-up card grid. */
++.events__year {
++  margin-top: 56px;
++}
++
++.events__year-head {
++  display: flex;
++  align-items: center;
++  gap: 16px;
++  margin-bottom: 24px;
++}
++
++.events__year-title {
++  margin: 0;
+   font-family: var(--display);
+-  font-size: 11px;
+-  font-variant-numeric: tabular-nums;
+-  color: rgba(237, 230, 214, 0.16);
++  font-size: 12px;
++  letter-spacing: 0.3em;
++  text-transform: uppercase;
++  color: var(--gold);
++  flex-shrink: 0;
+ }
+ 
+-/*
+- * Resting layout for the cards. They are transformed into a gathered stack
+- * and released into these positions on scroll; see ArrangingGrid.
+- */
+-.events__grid {
+-  /* relative + perspective: children measure against this box, and the
+-     gathered deck gets real Z depth rather than a flat pile. */
+-  position: relative;
+-  perspective: 1400px;
++.events__year-rule {
++  flex: 1;
++  height: 1px;
++  background: linear-gradient(90deg, var(--line-soft), transparent);
++}
++
++.events__year-grid {
+   display: grid;
+-  grid-template-columns: repeat(auto-fit, minmax(min(310px, 100%), 1fr));
++  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+   gap: 20px;
+-  margin-top: 30px;
++}
++
++/* Card photo/placeholder slot, with the year + index badges old-site style. */
++.events__card-media {
++  position: relative;
++  aspect-ratio: 16 / 10;
++  overflow: hidden;
++}
++
++.events__card-media::after {
++  content: "";
++  position: absolute;
++  inset: 0;
++  background: linear-gradient(to top, rgba(5, 6, 11, 0.75) 0%, rgba(5, 6, 11, 0.05) 55%, transparent 100%);
++  pointer-events: none;
++}
++
++.events__card-year {
++  position: absolute;
++  top: 10px;
++  left: 10px;
++  z-index: 1;
++  font-family: var(--display);
++  font-size: 9px;
++  letter-spacing: 0.12em;
++  text-transform: uppercase;
++  color: var(--gold);
++  background: rgba(5, 6, 11, 0.6);
++  border: 1px solid rgba(245, 197, 24, 0.35);
++  border-radius: 999px;
++  padding: 3px 9px;
++}
++
++.events__card-index {
++  position: absolute;
++  top: 10px;
++  right: 10px;
++  z-index: 1;
++  font-family: var(--display);
++  font-size: 10px;
++  font-variant-numeric: tabular-nums;
++  color: rgba(237, 230, 214, 0.45);
+ }
+ 
+ /* ================================================================ story */
+@@ -1912,7 +1949,7 @@ html[data-intro="1"] .intro::before {
+ 
+   /* Cards get their padding back from the shell, not from themselves. */
+   .quicknav__card,
+-  .events__grid .bezel__core > article > div {
++  .events__year-grid .bezel__core > article > div {
+     padding-inline: 20px;
+   }
+ 
+diff --git a/src/components/Events.tsx b/src/components/Events.tsx
+index 60429ce..7222b6f 100644
+--- a/src/components/Events.tsx
++++ b/src/components/Events.tsx
+@@ -1,26 +1,25 @@
+ 'use client';
+ 
+-import Link from 'next/link';
+-import { useMemo, useState } from 'react';
+-import ArrangingGrid from './ArrangingGrid';
++import Image from 'next/image';
++import { useMemo } from 'react';
+ import Reveal from './Reveal';
+ import { Bezel, Icon, Placeholder, SectionHeading } from './ui';
+-import { EVENTS, EVENT_YEARS } from '@/lib/content';
+-
+-type Filter = 'all' | (typeof EVENT_YEARS)[number];
+-
+-const FILTERS: { id: Filter; label: string }[] = [
+-  { id: 'all', label: 'All' },
+-  ...EVENT_YEARS.map((y) => ({ id: y as Filter, label: y })),
+-];
++import { EVENTS, EVENT_YEARS, type SigEvent } from '@/lib/content';
++import Link from 'next/link';
+ 
+ export default function Events({ showHeading = true }: { showHeading?: boolean }) {
+-  const [filter, setFilter] = useState<Filter>('all');
+-
+-  const shown = useMemo(
+-    () => (filter === 'all' ? EVENTS : EVENTS.filter((e) => e.year === filter)),
+-    [filter],
+-  );
++  // Grouped newest year first, matching the source site's archive order.
++  const groups = useMemo(() => {
++    const byYear = new Map<string, SigEvent[]>();
++    for (const e of EVENTS) {
++      const list = byYear.get(e.year) ?? [];
++      list.push(e);
++      byYear.set(e.year, list);
++    }
++    return EVENT_YEARS.map((year) => ({ year, events: byYear.get(year) ?? [] })).filter(
++      (g) => g.events.length > 0,
++    );
++  }, []);
+ 
+   return (
+     <section id="events" className="section">
+@@ -92,121 +91,123 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
+           </div>
+         </Reveal>
+ 
+-        <Reveal delay={120}>
+-          <div className="events__bar">
+-            {/* Toggle buttons, not a tablist: there are no tabpanels to own. */}
+-            <div
+-              role="group"
+-              aria-label="Filter events by academic year"
+-              className="events__filters"
+-            >
+-              {FILTERS.map((f) => (
+-                <button
+-                  key={f.id}
+-                  type="button"
+-                  className="tab"
+-                  aria-pressed={filter === f.id}
+-                  onClick={() => setFilter(f.id)}
+-                >
+-                  {f.label}
+-                </button>
+-              ))}
+-            </div>
+-
+-            <p className="events__count" aria-live="polite">
+-              {shown.length} {shown.length === 1 ? 'event' : 'events'}
+-            </p>
+-          </div>
+-        </Reveal>
+-
+         {/*
+-          The cards start gathered in a fanned stack and arrange themselves
+-          into this grid as the section scrolls into view.
++          Grouped by academic year, most recent first — each year gets its own
++          heading + divider and a two-up grid of cards, mirroring the archive
++          page on the original site rather than a single filterable grid.
+         */}
+-        <ArrangingGrid className="events__grid" resetKey={filter}>
+-          {shown.map((e) => (
+-            <Bezel key={e.id}>
+-              <article style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+-                <Placeholder label={`${e.title} — image to be added`} ratio="16 / 10" radius={0} />
++        {groups.map((group, gi) => (
++          <Reveal key={group.year} delay={120 + gi * 40}>
++            <div className="events__year">
++              <div className="events__year-head">
++                <h3 className="events__year-title">{group.year}</h3>
++                <div className="events__year-rule" aria-hidden />
++                <span className="events__count">
++                  {group.events.length} {group.events.length === 1 ? 'event' : 'events'}
++                </span>
++              </div>
+ 
+-                <div
+-                  style={{
+-                    padding: '24px 24px 26px',
+-                    display: 'flex',
+-                    flexDirection: 'column',
+-                    gap: 12,
+-                    flex: 1,
+-                  }}
+-                >
+-                  <div
+-                    style={{
+-                      display: 'flex',
+-                      flexWrap: 'wrap',
+-                      alignItems: 'center',
+-                      gap: 10,
+-                      fontSize: 10.5,
+-                      fontWeight: 600,
+-                      letterSpacing: '0.14em',
+-                      textTransform: 'uppercase',
+-                    }}
+-                  >
+-                    <span style={{ color: 'var(--cream)' }}>{e.year}</span>
+-                    <span style={{ color: 'var(--dim)' }} aria-hidden>
+-                      /
+-                    </span>
+-                    <span style={{ color: 'var(--muted)' }}>{e.series}</span>
+-                    <span className="events__n" aria-hidden>
+-                      {e.index}
+-                    </span>
+-                  </div>
++              <div className="events__year-grid">
++                {group.events.map((e, i) => (
++                  <Reveal key={e.id} delay={(i % 2) * 60}>
++                    <Bezel>
++                      <article style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
++                        <div className="events__card-media">
++                          {e.image ? (
++                            <Image
++                              src={e.image}
++                              alt={e.title}
++                              fill
++                              sizes="(max-width: 700px) 100vw, 50vw"
++                              style={{ objectFit: 'cover' }}
++                            />
++                          ) : (
++                            <Placeholder
++                              label={`${e.title} — image to be added`}
++                              ratio="16 / 10"
++                              radius={0}
++                            />
++                          )}
++                          <span className="events__card-year">{e.year}</span>
++                          <span className="events__card-index">{e.index}</span>
++                        </div>
+ 
+-                  <h3
+-                    style={{
+-                      margin: 0,
+-                      fontFamily: 'var(--display)',
+-                      fontSize: 14,
+-                      lineHeight: 1.5,
+-                      color: 'var(--cream)',
+-                    }}
+-                  >
+-                    {e.title}
+-                  </h3>
++                        <div
++                          style={{
++                            padding: '24px 24px 26px',
++                            display: 'flex',
++                            flexDirection: 'column',
++                            gap: 12,
++                            flex: 1,
++                          }}
++                        >
++                          <span
++                            style={{
++                              fontSize: 10.5,
++                              fontWeight: 600,
++                              letterSpacing: '0.14em',
++                              textTransform: 'uppercase',
++                              color: 'var(--muted)',
++                            }}
++                          >
++                            {e.series}
++                          </span>
+ 
+-                  <p
+-                    style={{
+-                      margin: 0,
+-                      fontSize: 14.5,
+-                      lineHeight: 1.7,
+-                      color: 'var(--muted)',
+-                      textWrap: 'pretty',
+-                      flex: 1,
+-                    }}
+-                  >
+-                    {e.description}
+-                  </p>
++                          <h3
++                            style={{
++                              margin: 0,
++                              fontFamily: 'var(--display)',
++                              fontSize: 14,
++                              lineHeight: 1.5,
++                              color: 'var(--cream)',
++                            }}
++                          >
++                            {e.title}
++                          </h3>
+ 
+-                  <span
+-                    style={{
+-                      display: 'inline-flex',
+-                      alignItems: 'center',
+-                      gap: 8,
+-                      marginTop: 4,
+-                      fontSize: 10,
+-                      fontWeight: 600,
+-                      letterSpacing: '0.18em',
+-                      textTransform: 'uppercase',
+-                      color: 'var(--dim)',
+-                    }}
+-                  >
+-                    {/* No dates are published for these events. */}
+-                    Academic year {e.year}
+-                    <Icon name="arrow" size={12} />
+-                  </span>
+-                </div>
+-              </article>
+-            </Bezel>
+-          ))}
+-        </ArrangingGrid>
++                          <p
++                            style={{
++                              margin: 0,
++                              fontSize: 14.5,
++                              lineHeight: 1.7,
++                              color: 'var(--muted)',
++                              textWrap: 'pretty',
++                              flex: 1,
++                              display: '-webkit-box',
++                              WebkitBoxOrient: 'vertical',
++                              WebkitLineClamp: 3,
++                              overflow: 'hidden',
++                            }}
++                          >
++                            {e.description}
++                          </p>
++
++                          <span
++                            style={{
++                              display: 'inline-flex',
++                              alignItems: 'center',
++                              gap: 8,
++                              marginTop: 4,
++                              fontSize: 10,
++                              fontWeight: 600,
++                              letterSpacing: '0.18em',
++                              textTransform: 'uppercase',
++                              color: 'var(--dim)',
++                            }}
++                          >
++                            {/* No dates are published for these events. */}
++                            Academic year {e.year}
++                            <Icon name="arrow" size={12} />
++                          </span>
++                        </div>
++                      </article>
++                    </Bezel>
++                  </Reveal>
++                ))}
++              </div>
++            </div>
++          </Reveal>
++        ))}
+       </div>
+     </section>
+   );
+diff --git a/src/lib/content.ts b/src/lib/content.ts
+index 9e335c3..1064aad 100644
+--- a/src/lib/content.ts
++++ b/src/lib/content.ts
+@@ -83,6 +83,8 @@ export interface SigEvent {
+   year: string;
+   series: string;
+   description: string;
++  /** Archive photo, where one survives from the source site. */
++  image?: string;
+ }
+ 
+ /**
+@@ -98,6 +100,7 @@ export const EVENTS: SigEvent[] = [
+     series: 'Clockout',
+     description:
+       'Shadows of Bhangarh: an immersive, story-driven event combining mystery, teamwork, and problem-solving. Featuring three dynamic rounds — The Initiation, The Investigation, and The Hunt — participants collaborated across years in AI-themed factions to solve puzzles, analyze clues, and compete in a campus-wide treasure hunt.',
++    image: '/events/clockout-3.jpg',
+   },
+   {
+     id: 'genesis-3',
+@@ -115,6 +118,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2024-25',
+     series: 'Clockout',
+     description: 'A major event focusing on innovation and technology.',
++    image: '/events/clockout-2.jpg',
+   },
+   {
+     id: 'synergy-2',
+@@ -123,6 +127,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2024-25',
+     series: 'Synergy',
+     description: 'An event that brings together diverse minds for collaboration.',
++    image: '/events/synergy-2.jpg',
+   },
+   {
+     id: 'genesis-1',
+@@ -131,6 +136,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2024-25',
+     series: 'Genesis',
+     description: 'A seminar featuring industry experts and thought leaders.',
++    image: '/events/genesis-1.jpg',
+   },
+   {
+     id: 'clockout-1',
+@@ -139,6 +145,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2023-24',
+     series: 'Clockout',
+     description: 'The inaugural event focusing on emerging technologies.',
++    image: '/events/clockout-1.png',
+   },
+   {
+     id: 'synergy-1',
+@@ -147,6 +154,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2023-24',
+     series: 'Synergy',
+     description: 'The first synergy event aimed at fostering collaboration.',
++    image: '/events/synergy-1.png',
+   },
+   {
+     id: 'seminar',
+@@ -155,6 +163,7 @@ export const EVENTS: SigEvent[] = [
+     year: '2023-24',
+     series: 'Seminar',
+     description: 'A seminar that discusses the latest trends in the industry.',
++    image: '/events/seminar.png',
+   },
+ ];
+ 
