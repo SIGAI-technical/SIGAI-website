@@ -175,10 +175,15 @@ export default function AboutSection({ showHeading = true }: { showHeading?: boo
             {/* Asymmetric editorial layout for vision cards */}
             <div className="vision-asym popup" style={{ ['--popup-delay' as string]: '90ms', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
               {/* LEARN – largest element */}
-              <div className="vision-card" style={{ fontSize: '1.8rem' }}>
-                <span className="vision-card__num">01 / LEARN</span>
+              <div className="vision-item" style={{ fontSize: '1.8rem' }}>
+                <div className="vision-header">
+                  <span className="vision-number">01</span>
+                  <span className="vision-concept">LEARN</span>
+                </div>
                 <h3 className="vision-card__title">First-Principles Seminars</h3>
                 <p className="vision-card__desc">Technical sessions that break down AI and machine learning concepts from the fundamentals, helping students build understanding rather than simply use tools.</p>
+                <hr className="vision-divider" />
+                <span className="vision-arrow">→</span>
               </div>
 
               {/* EXPLORE – offset right */}
