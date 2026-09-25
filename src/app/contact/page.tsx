@@ -63,7 +63,7 @@ export default function ContactPage() {
               <div className="map-slot" style={{ marginTop: 24 }}>
                 <iframe
                   title="DJSCE Campus Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.0125866162137!2d72.83546747514652!3d19.107647882104576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9b888ae67fd%3A0xe0b9538d623ac5d2!2sDwarkadas%20J.%20Sanghvi%20College%20of%20Engineering!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.0028276923995!2d72.8350796750406!3d19.1075318821035!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c9c65184a307%3A0x66af50c5443b4371!2s4R5Q%2B235%20Dwarkadas%20Jivanlal%20Sanghvi%20College%20Of%20Engineering%2C%20Navpada%2C%20Suvarna%20Nagar%2C%20Juhu%2C%20Mumbai%2C%20Maharashtra%20400056!5e0!3m2!1sen!2sin!4v1790322849049!5m2!1sen!2sin"
                   width="100%"
                   height="360"
                   style={{ border: 0, borderRadius: 6 }}

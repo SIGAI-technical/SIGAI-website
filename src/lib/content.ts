@@ -139,9 +139,9 @@ export const EVENTS: SigEvent[] = [
     ],
   },
   {
-    id: 'departmental-hackathon',
+    id: 'P2P',
     index: '03',
-    title: 'Departmental Hackathon',
+    title: 'Prompt to Prototype',
     year: '2026-27',
     series: 'Hackathon',
     description:
@@ -928,7 +928,7 @@ export const SOCIALS = [
 ] as const;
 
 export const NAV_LINKS = [
-  { href: '/', label: 'Home' },
+  // { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/events', label: 'Events' },
   { href: '/team', label: 'Team' },
