@@ -1,3 +1,4 @@
+"use client";
 import * as React from 'react';
 import Image from 'next/image';
 import { AREAS } from '@/lib/content';
@@ -7,21 +8,23 @@ import { AREAS } from '@/lib/content';
  * Balanced, elegant presentation of DJS ACM SIGAI's identity, credentials,
  * four vision pillars, core focus domains, and chapter navigation.
  */
-export default function AboutSection() {
+export default function AboutSection({ showHeading = true }: { showHeading?: boolean }) {
   return (
     <>
       <div id="about" className="anchor-target" />
 
       {/* WHO WE ARE */}
-      <div className="band band--about">
+      <div className="band band--about" style={!showHeading ? { paddingTop: 0 } : undefined}>
         <div className="section">
           <div className="shell">
-            <div className="popup">
-              <h2 className="section-title">
-                Who we <span className="mark">are</span>
-              </h2>
-              <span className="rule rule--draw" aria-hidden="true" />
-            </div>
+            {showHeading && (
+              <div className="popup">
+                <h2 className="section-title">
+                  Who we <span className="mark">are</span>
+                </h2>
+                <span className="rule rule--draw" aria-hidden="true" />
+              </div>
+            )}
 
             {/* Rebalanced 2-column layout: Narrative on left, balanced showcase card on right */}
             <div className="about__grid">
@@ -31,15 +34,13 @@ export default function AboutSection() {
                   Machine Learning at SVKM&apos;s Dwarkadas J. Sanghvi College of Engineering.
                 </p>
                 <p className="about__body-text">
-                  Affiliated with the Association for Computing Machinery (ACM), our chapter is
-                  dedicated to advancing education, research, and practical innovation in computing.
-                  We bring students together across disciplines to explore the theoretical principles
-                  and transformative applications of AI.
+                  Affiliated with the Association for Computing Machinery (ACM), SIGAI brings
+                  students together to learn, explore, and engage with artificial intelligence
+                  beyond the classroom. We organize seminars, workshops, hackathons, and other
+                  technical events that connect foundational concepts with current developments in AI.
                 </p>
                 <p className="about__body-text">
-                  From mathematical foundations and loss landscapes to modern neural architectures
-                  and generative models, we empower students to move beyond surface-level tooling and
-                  engineer solutions from first principles.
+                  Our activities range from mathematical foundations and machine learning fundamentals to neural architectures and generative AI, helping students understand both the foundations and the latest developments in the field.
                 </p>
               </div>
 
@@ -167,48 +168,51 @@ export default function AboutSection() {
                 Knowledge, skills, and a <span className="mark">community</span>
               </h2>
               <p className="section-lede" style={{ maxWidth: '68ch' }}>
-                We cultivate an environment where students gain deep conceptual intuition,
-                practical engineering skills, and collaborative bonds across four core pillars.
+                We organize seminars, workshops, challenges, and conversations that help students learn AI beyond the classroom and connect with their peers.
               </p>
             </div>
 
-            {/* Balanced 2x2 Vision Pillars */}
-            <div className="vision-grid popup" style={{ ['--popup-delay' as string]: '90ms' }}>
-              <div className="vision-card">
-                <span className="vision-card__num">01 / FOUNDATION</span>
+            {/* Asymmetric editorial layout for vision cards */}
+            <div className="vision-asym popup" style={{ ['--popup-delay' as string]: '90ms', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+              {/* LEARN – largest element */}
+              <div className="vision-item" style={{ fontSize: '1.8rem' }}>
+                <div className="vision-header">
+                  <span className="vision-number">01</span>
+                  <span className="vision-concept">LEARN</span>
+                </div>
                 <h3 className="vision-card__title">First-Principles Seminars</h3>
-                <p className="vision-card__desc">
-                  Rigorous academic sessions deconstructing foundational mathematics, loss functions,
-                  and deep learning theory from the ground up, giving members an enduring conceptual foundation.
-                </p>
+                <p className="vision-card__desc">Technical sessions that break down AI and machine learning concepts from the fundamentals, helping students build understanding rather than simply use tools.</p>
+                <hr className="vision-divider" />
+                <span className="vision-arrow">→</span>
               </div>
 
-              <div className="vision-card">
-                <span className="vision-card__num">02 / GUIDANCE</span>
-                <h3 className="vision-card__title">Future Pathways &amp; Seminars</h3>
-                <p className="vision-card__desc">
-                  Engaging seminars and expert conversations focused on student futures, including navigating a master's degree abroad, career guidance, and academic progression.
-                </p>
+              {/* EXPLORE – offset right */}
+              <div className="vision-card" style={{ marginLeft: '4rem' }}>
+                <span className="vision-card__num">02 / EXPLORE</span>
+                <h3 className="vision-card__title">Research & Emerging AI</h3>
+                <p className="vision-card__desc">Sessions and discussions that introduce students to research papers, emerging architectures, generative AI, and ideas shaping the field.</p>
               </div>
 
-              <div className="vision-card">
-                <span className="vision-card__num">03 / APPLICATION</span>
-                <h3 className="vision-card__title">Flagship Events &amp; Quests</h3>
-                <p className="vision-card__desc">
-                  Competitive hackathons, inter-collegiate challenges, and signature campus-wide events
-                  like Clockout and Synergy that put analytical thinking and teamwork into fast-paced practice.
-                </p>
+              {/* COMPETE – medium size */}
+              <div className="vision-card" style={{ marginTop: '-1rem' }}>
+                <span className="vision-card__num">03 / COMPETE</span>
+                <h3 className="vision-card__title">Hackathons & Challenges</h3>
+                <p className="vision-card__desc">Hackathons, technical challenges, and campus events that give students opportunities to apply their knowledge, solve problems, and collaborate under real constraints.</p>
               </div>
 
-              <div className="vision-card">
-                <span className="vision-card__num">04 / ECOSYSTEM</span>
-                <h3 className="vision-card__title">An Inclusive Peer Community</h3>
-                <p className="vision-card__desc">
-                  A thriving student collective connecting curious beginners with senior researchers,
-                  alumni engineers, and peer mentors to build, publish, and grow together.
-                </p>
+              {/* CONNECT – smaller, aligned right */}
+              <div className="vision-card" style={{ alignSelf: 'flex-end' }}>
+                <span className="vision-card__num">04 / CONNECT</span>
+                <h3 className="vision-card__title">A Student Community</h3>
+                <p className="vision-card__desc">A space where students can meet peers, speakers, mentors, and fellow learners, exchange ideas, discover opportunities, and grow together.</p>
               </div>
             </div>
+            <style jsx>{`
+              .vision-asym .vision-card__num {
+                font-weight: 600;
+                color: var(--color-accent-blue);
+              }
+            `}</style>
 
             {/* FOCUS DOMAINS */}
             <div className="popup" style={{ ['--popup-delay' as string]: '140ms', marginTop: 'clamp(48px, 6vw, 72px)' }}>

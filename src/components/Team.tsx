@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useState } from 'react';
 import Reveal from './Reveal';
 import { Bezel, Icon, SectionHeading } from './ui';
@@ -28,11 +29,29 @@ function MemberCard({ member }: { member: Member }) {
       <article
         style={{ height: '100%', padding: 20, display: 'flex', flexDirection: 'column', gap: 15 }}
       >
-        {/* Portrait placeholder — real photography to be dropped in later. */}
-        <div className="ph" aria-hidden style={{ aspectRatio: '1 / 1', borderRadius: 6 }}>
-          <span style={{ fontFamily: 'var(--display)', fontSize: 15, color: 'var(--muted)' }}>
-            {initials(member.name)}
-          </span>
+        <div
+          className="ph"
+          style={{
+            aspectRatio: '1 / 1',
+            borderRadius: 6,
+            overflow: 'hidden',
+            position: 'relative',
+            background: 'var(--surface, #0d1b2a)',
+          }}
+        >
+          {member.image ? (
+            <Image
+              src={member.image}
+              alt={member.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 220px"
+              style={{ objectFit: 'cover' }}
+            />
+          ) : (
+            <span style={{ fontFamily: 'var(--display)', fontSize: 15, color: 'var(--muted)' }}>
+              {initials(member.name)}
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
@@ -67,7 +86,7 @@ function MemberCard({ member }: { member: Member }) {
               <a
                 key={l.name}
                 href={l.href}
-                className="icon-link"
+                className={`icon-link icon-link--${l.name}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${member.name} on ${l.label}`}
