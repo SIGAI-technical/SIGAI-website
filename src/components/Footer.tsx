@@ -47,7 +47,7 @@ export default function Footer() {
               <a
                 key={s.label}
                 href={s.href}
-                className="icon-link"
+                className={`icon-link icon-link--${s.label.toLowerCase()}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`SIGAI on ${s.label}`}

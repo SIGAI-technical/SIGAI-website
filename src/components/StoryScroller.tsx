@@ -15,44 +15,40 @@ interface Slide {
 /** Authentic chapter story slides with official committee and event photos */
 const SLIDES: Slide[] = [
   {
-    title: 'Core Committee',
-    body: 'The executive student leadership team driving DJS ACM SIGAI — spearheading AI research culture, flagship hackathons, and technical initiatives across DJSCE.',
-    image: '/images/CORE.jpeg',
-    alt: 'DJS ACM SIGAI Core Committee',
-    badge: 'Core Committee',
-  },
-  {
-    title: 'Chapter Committee',
-    body: 'Passionate student teams across technical, design, marketing, and logistics working collaboratively to create impactful hands-on learning experiences.',
-    image: '/images/chapter-committee.jpeg',
-    alt: 'DJS ACM SIGAI Chapter Committee',
-    badge: 'Chapter Committee',
-  },
-  {
-    title: 'Applied Intelligence',
-    body: 'Introducing students to rapidly advancing domains — computer vision, natural language processing, IPD seminars, and state-of-the-art neural architectures.',
-    image: '/images/ipd-seminar.jpeg',
-    alt: 'IPD Seminar - Applied Artificial Intelligence',
-    badge: 'IPD Seminar',
-  },
-  {
-    title: 'Seminars & Workshops',
-    body: 'Knowledge and skills are built through intensive code-alongs, skill-building workshops, and speaker series breaking down ML engineering from first principles.',
+    title: 'Start With the Fundamentals',
+    body: 'SIGAI creates spaces for students to understand the ideas behind artificial intelligence — from mathematical foundations and core ML concepts to the architectures shaping modern AI.',
     image: '/events/seminar.png',
-    alt: 'First-Principles Technical Seminars & Workshops',
-    badge: 'Seminars & Workshops',
+    alt: 'First Principles - Fundamentals Workshop',
+    badge: 'FIRST PRINCIPLES',
   },
   {
-    title: 'Develop as a Community',
-    body: 'SIGAI exists to promote and support the development and application of AI principles — growing a vibrant community of curious builders and researchers.',
+    title: 'Explore — Research & Emerging AI',
+    body: 'Creating opportunities to explore research papers, emerging architectures, generative AI, and ideas that extend beyond the classroom.',
+    image: '/images/ipd-seminar.jpeg',
+    alt: 'Research and Emerging AI',
+    badge: 'RESEARCH & EMERGING AI',
+  },
+  {
+    title: 'Learn by Doing',
+    body: 'Workshops and technical sessions turn concepts into practical experience — giving students the opportunity to experiment with tools, techniques, and approaches used in modern AI.',
+    image: '/events/ipd-seminar/IMG_1442.jpg',
+    alt: 'Hands-on Learning Workshop',
+    badge: 'WORKSHOPS',
+  },
+  {
+    title: 'Compete. Collaborate. Solve.',
+    body: 'Hackathons and technical challenges bring students together to tackle problems under real constraints, collaborate across disciplines, and put their knowledge to the test.',
     image: '/events/Clockout3.0/clockout3_cover.jpg',
-    alt: 'Campus Hackathons and Flagship Quests',
-    badge: 'Campus Hackathons',
+    alt: 'Hackathons and Technical Challenges',
+    badge: 'HACKATHONS',
   },
 ];
 
 export default function StoryScroller() {
   const [active, setActive] = React.useState(0);
+
+  // Clamp active index safely within bounds
+  const slideIndex = active >= SLIDES.length ? 0 : active;
 
   // Auto-advance slides unconditionally every 4 seconds
   React.useEffect(() => {
@@ -78,7 +74,7 @@ export default function StoryScroller() {
           <div className="story__left">
             <div className="story__stage">
               {SLIDES.map((s, i) => (
-                <article key={s.badge} className="story__slide" data-on={i === active}>
+                <article key={s.badge} className="story__slide" data-on={i === slideIndex}>
                   <h2 className="story__title">{s.title}</h2>
                   <p className="story__body">{s.body}</p>
                 </article>
@@ -97,11 +93,11 @@ export default function StoryScroller() {
                     <button
                       key={s.badge}
                       type="button"
-                      className={`story__dot ${i === active ? 'is-active' : ''}`}
+                      className={`story__dot ${i === slideIndex ? 'is-active' : ''}`}
                       onClick={() => setActive(i)}
                       aria-label={`Slide ${i + 1}: ${s.title}`}
                       role="tab"
-                      aria-selected={i === active}
+                      aria-selected={i === slideIndex}
                     />
                   ))}
                 </div>
@@ -138,7 +134,7 @@ export default function StoryScroller() {
               {SLIDES.map((s, i) => (
                 <div
                   key={s.badge}
-                  className={`story__slide-visual ${i === active ? 'is-active' : ''}`}
+                  className={`story__slide-visual ${i === slideIndex ? 'is-active' : ''}`}
                 >
                   <div className="story__image-wrap">
                     <Image

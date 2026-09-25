@@ -1007,6 +1007,20 @@ p { margin: 0; text-wrap: pretty; }
   box-shadow: var(--h-lift-1);
   transform: translateY(-2px);
 }
+.icon-link--instagram:hover {
+  color: #e1306c;
+  border-color: rgba(225, 48, 108, 0.5);
+  background: linear-gradient(135deg, rgba(131, 58, 180, 0.25) 0%, rgba(225, 48, 108, 0.25) 50%, rgba(253, 29, 29, 0.18) 100%);
+  box-shadow: 0 4px 20px rgba(225, 48, 108, 0.35), 0 0 12px rgba(131, 58, 180, 0.25);
+  transform: translateY(-2px);
+}
+.icon-link--linkedin:hover {
+  color: #0077b5;
+  border-color: rgba(0, 119, 181, 0.5);
+  background: rgba(0, 119, 181, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 119, 181, 0.35);
+  transform: translateY(-2px);
+}
 
 /* ==========================================================================
    9. MOTION PRIMITIVES
@@ -3177,7 +3191,7 @@ html[data-event-page] .theme-toggle {
 
 .story__title {
   margin: 0;
-  max-width: 16ch;
+  max-width: 28ch;
   font-family: var(--display);
   font-size: clamp(24px, 3.2vw, 38px);
   line-height: 1.3;
