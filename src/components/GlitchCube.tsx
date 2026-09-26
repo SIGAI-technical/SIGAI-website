@@ -12,7 +12,6 @@ import {
   type Face,
 } from '@/lib/cube';
 
-/** Where each face sits on a cubie, pushed out to the cubie's surface. */
 const FACE_TRANSFORM: Record<Face, string> = {
   up: `rotateX(90deg) translateZ(${HALF}px)`,
   down: `rotateX(-90deg) translateZ(${HALF}px)`,
@@ -25,12 +24,9 @@ const FACE_TRANSFORM: Record<Face, string> = {
 const FACES = Object.keys(FACE_TRANSFORM) as Face[];
 
 interface GlitchCubeProps {
-  /** Edge of the square frame. The stage itself is fixed; the hero scales it. */
   size?: number;
   logoSrc: string;
-  /** One full tumble of the whole cube. */
   tumbleSeconds?: number;
-  /** Duration of a single layer turn. */
   moveMs?: number;
   solving?: boolean;
 }
@@ -38,7 +34,6 @@ interface GlitchCubeProps {
 export default function GlitchCube({
   size = STAGE,
   logoSrc,
-  tumbleSeconds = 34,
   moveMs = 620,
   solving = true,
 }: GlitchCubeProps) {
@@ -46,12 +41,12 @@ export default function GlitchCube({
 
   const nodes = useRef<(HTMLDivElement | null)[]>([]);
   const frameRef = useRef<HTMLDivElement>(null);
+  const tumbleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!solving) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    // The cubies are mutated in place across turns; start from solved every mount.
     cubies.forEach((c, i) => {
       c.pos = [...c.pos] as [number, number, number];
       c.base = c.tf = restTransform(c.pos);
@@ -67,23 +62,14 @@ export default function GlitchCube({
     const dur = Math.max(180, moveMs);
 
     const tick = (now: number) => {
-      // Bail without re-arming, so the loop genuinely stops off-screen.
-      if (!visible || document.hidden) {
-        raf = 0;
-        return;
-      }
+      if (!visible || document.hidden) { raf = 0; return; }
       raf = requestAnimationFrame(tick);
       const t = now - phaseStart;
 
       if (!turning) {
-        // Longer pauses at the start and at the halfway point, where the cube
-        // sits scrambled, so both resting states get a beat to be seen.
         const wait =
           index === 0 ? holdMs * 2 : index === SEQUENCE.length / 2 ? holdMs : 120;
-        if (t >= wait) {
-          turning = true;
-          phaseStart = now;
-        }
+        if (t >= wait) { turning = true; phaseStart = now; }
         return;
       }
 
@@ -100,7 +86,6 @@ export default function GlitchCube({
       });
 
       if (p >= 1) {
-        // Bake the finished quarter turn into the cubie's resting transform.
         cubies.forEach((c) => {
           if (c.pos[m.ax] !== m.layer) return;
           c.pos = rotatePos(c.pos, m.axis, 90 * m.dir);
@@ -111,8 +96,6 @@ export default function GlitchCube({
         phaseStart = now;
         index = (index + 1) % SEQUENCE.length;
 
-        // Back at solved: collapse the accumulated rotate chain so the
-        // transform strings don't grow without bound.
         if (index === 0) {
           cubies.forEach((c, i) => {
             c.base = c.tf = restTransform(c.pos);
@@ -123,32 +106,21 @@ export default function GlitchCube({
       }
     };
 
-    // Only run the solve loop while the cube is actually on screen: it drives
-    // 26 cubies (156 faces) of 3D transforms and is wasted work off-screen,
-    // which matters most on phones.
     let visible = true;
-    const start = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
-    const stop = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = 0;
-    };
+    const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
 
     const io = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting;
-        if (visible && !document.hidden) start();
-        else stop();
+        if (visible && !document.hidden) start(); else stop();
       },
       { rootMargin: '120px' },
     );
     if (frameRef.current) io.observe(frameRef.current);
 
-    // Background tabs shouldn't animate either.
     const onVisibility = () => {
-      if (!document.hidden && visible) start();
-      else stop();
+      if (!document.hidden && visible) start(); else stop();
     };
     document.addEventListener('visibilitychange', onVisibility);
 
@@ -159,6 +131,148 @@ export default function GlitchCube({
       document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [cubies, moveMs, solving]);
+
+  // ─── JS-driven orbit rotation (replaces CSS tumble) ────────────────────────
+  useEffect(() => {
+    const el = tumbleRef.current;
+    if (!el) return;
+    const node = el;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Static pose for reduced-motion users.
+      node.style.transform = 'rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg)';
+      return;
+    }
+
+    // Remove the CSS animation entirely — JS owns the transform from here.
+    node.style.animation = 'none';
+
+    // ── Shared mutable state (no React state = no re-renders) ─────────────
+    let rotX = -16;   // current X rotation (deg)
+    let rotY = -26;   // current Y rotation (deg)
+    let velX = 0;     // angular velocity from drag
+    let velY = 0;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+    let raf = 0;
+
+    // Auto-drift parameters — mimic the original tumble keyframes as a slow
+    // oscillation so the cube still feels alive when not being dragged.
+    let autoT = 0; // time accumulator (seconds)
+    const AUTO_SPEED = 1 / 34; // one full oscillation cycle per 34 s
+
+    function autoRotation(t: number) {
+      // Smooth figure-eight oscillation matching the original keyframe intent.
+      const tX = -16 + 14 * Math.sin(t * Math.PI * 2);           // ±14° in X
+      const tY = -26 + 30 * Math.sin(t * Math.PI * 2 * 0.75);    // ±30° in Y
+      const tZ = -2 + 4 * Math.sin(t * Math.PI * 2 * 1.25);    // ±4° in Z
+      return { tX, tY, tZ };
+    }
+
+    let lastTimestamp = 0;
+
+    function tick(timestamp: number) {
+      raf = requestAnimationFrame(tick);
+      const dt = lastTimestamp ? (timestamp - lastTimestamp) / 1000 : 0;
+      lastTimestamp = timestamp;
+
+      if (dragging) {
+        // While dragging: apply accumulated velocity directly, no auto-drift.
+        rotX += velX;
+        rotY += velY;
+        rotX = Math.max(-85, Math.min(85, rotX));
+        // Damp velocity each frame so micro-jitter doesn't stack.
+        velX *= 0.6;
+        velY *= 0.6;
+        node.style.transform =
+          `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(-2deg)`;
+        return;
+      }
+
+      // Not dragging: decelerate and blend toward auto-drift.
+      const speed = Math.abs(velX) + Math.abs(velY);
+
+      if (speed > 0.02) {
+        // ── Inertia phase: decelerate with smooth friction ──────────────────
+        velX *= 0.88;
+        velY *= 0.88;
+        rotX += velX;
+        rotY += velY;
+        rotX = Math.max(-85, Math.min(85, rotX));
+        // Sync the auto-drift phase so it picks up from the current angle
+        // when inertia ends — prevents a snap.
+        const { tX, tY } = autoRotation(autoT);
+        const dX = rotX - tX;
+        const dY = rotY - tY;
+        // Nudge autoT toward where we are (gradient descent on phase).
+        autoT -= (dX * 0.0002 + dY * 0.0001);
+        autoT += AUTO_SPEED * dt;
+        node.style.transform =
+          `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(-2deg)`;
+      } else {
+        // ── Auto-drift phase: smooth oscillation, lerp toward it ──────────
+        autoT += AUTO_SPEED * dt;
+        const { tX, tY, tZ } = autoRotation(autoT);
+        // Lerp the current rotation toward the target auto pose.
+        const lerpFactor = 1 - Math.pow(0.02, dt); // frame-rate independent
+        rotX += (tX - rotX) * lerpFactor;
+        rotY += (tY - rotY) * lerpFactor;
+        node.style.transform =
+          `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(${tZ.toFixed(3)}deg)`;
+        velX = 0;
+        velY = 0;
+      }
+    }
+
+    raf = requestAnimationFrame(tick);
+
+    // ── Pointer handlers ────────────────────────────────────────────────────
+    function onPointerDown(e: PointerEvent) {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      velX = 0;
+      velY = 0;
+      node.setPointerCapture(e.pointerId);
+      node.style.cursor = 'grabbing';
+    }
+
+    function onPointerMove(e: PointerEvent) {
+      if (!dragging) return;
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      // Inverted velocity so drag direction pulls the cube opposite to pointer motion (sensitivity ~0.18 deg/px).
+      velY -= dx * 0.18;
+      velX -= dy * 0.18;
+    }
+
+    function onPointerUp(e: PointerEvent) {
+      if (!dragging) return;
+      dragging = false;
+      node.releasePointerCapture(e.pointerId);
+      node.style.cursor = 'grab';
+    }
+
+    node.style.cursor = 'grab';
+    node.style.touchAction = 'none';
+    node.style.userSelect = 'none';
+
+    node.addEventListener('pointerdown', onPointerDown);
+    node.addEventListener('pointermove', onPointerMove);
+    node.addEventListener('pointerup', onPointerUp);
+    node.addEventListener('pointercancel', onPointerUp);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      node.removeEventListener('pointerdown', onPointerDown);
+      node.removeEventListener('pointermove', onPointerMove);
+      node.removeEventListener('pointerup', onPointerUp);
+      node.removeEventListener('pointercancel', onPointerUp);
+    };
+  }, []);
 
   return (
     <div
@@ -180,12 +294,13 @@ export default function GlitchCube({
         style={{ position: 'relative', width: STAGE, height: STAGE, perspective: 1800 }}
       >
         <div
+          ref={tumbleRef}
           className="cube-tumble"
           style={{
             position: 'absolute',
             inset: 0,
             transformStyle: 'preserve-3d',
-            animationDuration: `${tumbleSeconds}s`,
+            willChange: 'transform',
           }}
         >
           <div
@@ -201,9 +316,7 @@ export default function GlitchCube({
             {cubies.map((c, i) => (
               <div
                 key={i}
-                ref={(el) => {
-                  nodes.current[i] = el;
-                }}
+                ref={(el) => { nodes.current[i] = el; }}
                 style={{
                   position: 'absolute',
                   left: -HALF,

@@ -1545,6 +1545,11 @@ p {
 
 .cube-tumble {
   animation: tumble 34s ease-in-out infinite;
+  /* Orbit controls: prevent page scroll hijack on touch and hint GPU layer. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
 }
 
 @keyframes tumble {
