@@ -244,8 +244,8 @@ export default function GlitchCube({
       const dy = e.clientY - lastY;
       lastX = e.clientX;
       lastY = e.clientY;
-      // Inverted velocity so drag direction pulls the cube opposite to pointer motion (sensitivity ~0.18 deg/px).
-      velY -= dx * 0.18;
+      // Horizontal: pointer left/right turns cube left/right (+dx). Vertical: inverted drag (-dy).
+      velY += dx * 0.18;
       velX -= dy * 0.18;
     }
 
