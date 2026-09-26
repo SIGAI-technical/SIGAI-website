@@ -13,12 +13,6 @@ const TILES = Array.from({ length: 9 }, (_, i) => ({
 const HOLD_MS = 2250;
 const EXIT_MS = 780;
 
-/**
- * First-load intro. The overlay is server-rendered but stays `display:none`
- * until the inline script in <head> sets `data-intro` — so the page content is
- * always in the DOM for crawlers, repeat visits never flash, and users who
- * prefer reduced motion never see it at all.
- */
 export default function Intro() {
   const [exiting, setExiting] = useState(false);
 

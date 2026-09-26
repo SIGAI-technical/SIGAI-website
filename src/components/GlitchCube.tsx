@@ -12,7 +12,6 @@ import {
   type Face,
 } from '@/lib/cube';
 
-/** Where each face sits on a cubie, pushed out to the cubie's surface. */
 const FACE_TRANSFORM: Record<Face, string> = {
   up: `rotateX(90deg) translateZ(${HALF}px)`,
   down: `rotateX(-90deg) translateZ(${HALF}px)`,
@@ -44,7 +43,6 @@ export default function GlitchCube({
   const frameRef = useRef<HTMLDivElement>(null);
   const tumbleRef = useRef<HTMLDivElement>(null);
 
-  // ─── Solve-loop (layer turns) ──────────────────────────────────────────────
   useEffect(() => {
     if (!solving) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -110,7 +108,7 @@ export default function GlitchCube({
 
     let visible = true;
     const start = () => { if (!raf) raf = requestAnimationFrame(tick); };
-    const stop  = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -167,7 +165,7 @@ export default function GlitchCube({
       // Smooth figure-eight oscillation matching the original keyframe intent.
       const tX = -16 + 14 * Math.sin(t * Math.PI * 2);           // ±14° in X
       const tY = -26 + 30 * Math.sin(t * Math.PI * 2 * 0.75);    // ±30° in Y
-      const tZ = -2  +  4 * Math.sin(t * Math.PI * 2 * 1.25);    // ±4° in Z
+      const tZ = -2 + 4 * Math.sin(t * Math.PI * 2 * 1.25);    // ±4° in Z
       return { tX, tY, tZ };
     }
 
