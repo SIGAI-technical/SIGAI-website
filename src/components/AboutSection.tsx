@@ -172,47 +172,36 @@ export default function AboutSection({ showHeading = true }: { showHeading?: boo
               </p>
             </div>
 
-            {/* Asymmetric editorial layout for vision cards */}
-            <div className="vision-asym popup" style={{ ['--popup-delay' as string]: '90ms', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              {/* LEARN – largest element */}
-              <div className="vision-item" style={{ fontSize: '1.8rem' }}>
-                <div className="vision-header">
-                  <span className="vision-number">01</span>
-                  <span className="vision-concept">LEARN</span>
-                </div>
+            {/* Staggered alternating layout for vision cards */}
+            <div className="vision-asym popup" style={{ ['--popup-delay' as string]: '90ms', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {/* 01 / LEARN – Left aligned */}
+              <div className="vision-card">
+                <span className="vision-card__num">01 / LEARN</span>
                 <h3 className="vision-card__title">First-Principles Seminars</h3>
                 <p className="vision-card__desc">Technical sessions that break down AI and machine learning concepts from the fundamentals, helping students build understanding rather than simply use tools.</p>
-                <hr className="vision-divider" />
-                <span className="vision-arrow">→</span>
               </div>
 
-              {/* EXPLORE – offset right */}
-              <div className="vision-card" style={{ marginLeft: '4rem' }}>
+              {/* 02 / EXPLORE – Offset right */}
+              <div className="vision-card" style={{ marginLeft: 'clamp(1.5rem, 6vw, 4.5rem)' }}>
                 <span className="vision-card__num">02 / EXPLORE</span>
                 <h3 className="vision-card__title">Research & Emerging AI</h3>
                 <p className="vision-card__desc">Sessions and discussions that introduce students to research papers, emerging architectures, generative AI, and ideas shaping the field.</p>
               </div>
 
-              {/* COMPETE – medium size */}
-              <div className="vision-card" style={{ marginTop: '-1rem' }}>
+              {/* 03 / COMPETE – Left aligned (same as 01) */}
+              <div className="vision-card">
                 <span className="vision-card__num">03 / COMPETE</span>
                 <h3 className="vision-card__title">Hackathons & Challenges</h3>
                 <p className="vision-card__desc">Hackathons, technical challenges, and campus events that give students opportunities to apply their knowledge, solve problems, and collaborate under real constraints.</p>
               </div>
 
-              {/* CONNECT – smaller, aligned right */}
-              <div className="vision-card" style={{ alignSelf: 'flex-end' }}>
+              {/* 04 / CONNECT – Offset right (same as 02) */}
+              <div className="vision-card" style={{ marginLeft: 'clamp(1.5rem, 6vw, 4.5rem)' }}>
                 <span className="vision-card__num">04 / CONNECT</span>
                 <h3 className="vision-card__title">A Student Community</h3>
                 <p className="vision-card__desc">A space where students can meet peers, speakers, mentors, and fellow learners, exchange ideas, discover opportunities, and grow together.</p>
               </div>
             </div>
-            <style jsx>{`
-              .vision-asym .vision-card__num {
-                font-weight: 600;
-                color: var(--color-accent-blue);
-              }
-            `}</style>
 
             {/* FOCUS DOMAINS */}
             <div className="popup" style={{ ['--popup-delay' as string]: '140ms', marginTop: 'clamp(48px, 6vw, 72px)' }}>
