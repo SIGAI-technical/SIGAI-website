@@ -136,15 +136,16 @@ export default function GlitchCube({
   useEffect(() => {
     const el = tumbleRef.current;
     if (!el) return;
+    const node = el;
 
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       // Static pose for reduced-motion users.
-      el.style.transform = 'rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg)';
+      node.style.transform = 'rotateX(-16deg) rotateY(-26deg) rotateZ(-2deg)';
       return;
     }
 
     // Remove the CSS animation entirely — JS owns the transform from here.
-    el.style.animation = 'none';
+    node.style.animation = 'none';
 
     // ── Shared mutable state (no React state = no re-renders) ─────────────
     let rotX = -16;   // current X rotation (deg)
@@ -184,7 +185,7 @@ export default function GlitchCube({
         // Damp velocity each frame so micro-jitter doesn't stack.
         velX *= 0.6;
         velY *= 0.6;
-        el.style.transform =
+        node.style.transform =
           `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(-2deg)`;
         return;
       }
@@ -207,7 +208,7 @@ export default function GlitchCube({
         // Nudge autoT toward where we are (gradient descent on phase).
         autoT -= (dX * 0.0002 + dY * 0.0001);
         autoT += AUTO_SPEED * dt;
-        el.style.transform =
+        node.style.transform =
           `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(-2deg)`;
       } else {
         // ── Auto-drift phase: smooth oscillation, lerp toward it ──────────
@@ -217,7 +218,7 @@ export default function GlitchCube({
         const lerpFactor = 1 - Math.pow(0.02, dt); // frame-rate independent
         rotX += (tX - rotX) * lerpFactor;
         rotY += (tY - rotY) * lerpFactor;
-        el.style.transform =
+        node.style.transform =
           `rotateX(${rotX.toFixed(3)}deg) rotateY(${rotY.toFixed(3)}deg) rotateZ(${tZ.toFixed(3)}deg)`;
         velX = 0;
         velY = 0;
@@ -233,8 +234,8 @@ export default function GlitchCube({
       lastY = e.clientY;
       velX = 0;
       velY = 0;
-      el.setPointerCapture(e.pointerId);
-      el.style.cursor = 'grabbing';
+      node.setPointerCapture(e.pointerId);
+      node.style.cursor = 'grabbing';
     }
 
     function onPointerMove(e: PointerEvent) {
@@ -251,25 +252,25 @@ export default function GlitchCube({
     function onPointerUp(e: PointerEvent) {
       if (!dragging) return;
       dragging = false;
-      el.releasePointerCapture(e.pointerId);
-      el.style.cursor = 'grab';
+      node.releasePointerCapture(e.pointerId);
+      node.style.cursor = 'grab';
     }
 
-    el.style.cursor = 'grab';
-    el.style.touchAction = 'none';
-    el.style.userSelect = 'none';
+    node.style.cursor = 'grab';
+    node.style.touchAction = 'none';
+    node.style.userSelect = 'none';
 
-    el.addEventListener('pointerdown', onPointerDown);
-    el.addEventListener('pointermove', onPointerMove);
-    el.addEventListener('pointerup', onPointerUp);
-    el.addEventListener('pointercancel', onPointerUp);
+    node.addEventListener('pointerdown', onPointerDown);
+    node.addEventListener('pointermove', onPointerMove);
+    node.addEventListener('pointerup', onPointerUp);
+    node.addEventListener('pointercancel', onPointerUp);
 
     return () => {
       cancelAnimationFrame(raf);
-      el.removeEventListener('pointerdown', onPointerDown);
-      el.removeEventListener('pointermove', onPointerMove);
-      el.removeEventListener('pointerup', onPointerUp);
-      el.removeEventListener('pointercancel', onPointerUp);
+      node.removeEventListener('pointerdown', onPointerDown);
+      node.removeEventListener('pointermove', onPointerMove);
+      node.removeEventListener('pointerup', onPointerUp);
+      node.removeEventListener('pointercancel', onPointerUp);
     };
   }, []);
 
