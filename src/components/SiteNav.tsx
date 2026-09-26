@@ -42,6 +42,12 @@ export default function SiteNav() {
     rail.style.setProperty('--w', `${el.offsetWidth}px`);
     rail.style.setProperty('--sx', '1');
     rail.style.setProperty('--o', '1');
+
+    if (!rail.dataset.ready) {
+      requestAnimationFrame(() => {
+        if (railRef.current) railRef.current.dataset.ready = 'true';
+      });
+    }
   }, [isActive]);
 
   useEffect(() => {
@@ -72,7 +78,8 @@ export default function SiteNav() {
       frame = requestAnimationFrame(() => {
         frame = 0;
         const y = window.scrollY;
-        setScrolled(y > 12);
+        // Hysteresis threshold (activate > 45px, deactivate < 15px) prevents rapid toggle jitter
+        setScrolled((prev) => (prev ? y > 15 : y > 45));
         const max = document.documentElement.scrollHeight - window.innerHeight;
         const p = max > 0 ? Math.min(1, y / max) : 0;
         progressRef.current?.style.setProperty('--p', String(p));

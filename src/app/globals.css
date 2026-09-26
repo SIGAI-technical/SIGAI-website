@@ -364,6 +364,7 @@ html {
      `light` at this level would keep the scrollbar and every native control
      light on a fully dark page. */
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
   /* The header is sticky and ~66px tall; anchors must clear it. */
   scroll-padding-top: 96px;
   /* The ground lives on the canvas, not on <body>. A z-index:-1 layer paints
@@ -794,12 +795,12 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 28px;
-  padding-block: 18px;
-  transition: padding-block 520ms var(--ease-out-expo);
+  padding-block: 16px;
+  transition: padding-block 260ms ease;
 }
 
 .site-header[data-scrolled="true"] .site-header__inner {
-  padding-block: 11px;
+  padding-block: 12px;
 }
 
 .brand {
@@ -904,6 +905,10 @@ img {
     transform 620ms var(--ease-spring),
     width 620ms var(--ease-spring),
     opacity 320ms var(--ease-out-expo);
+}
+
+.nav-rail:not([data-ready="true"]) .nav-rail__indicator {
+  transition: none !important;
 }
 
 .nav-link {
