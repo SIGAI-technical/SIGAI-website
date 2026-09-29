@@ -125,90 +125,99 @@ export default function SiteNav() {
 
 
 
+  const MOBILE_NAV_LINKS = [
+    { href: '/', label: 'Home' },
+    ...NAV_LINKS,
+  ];
+
   return (
-    <header className="site-header" data-scrolled={scrolled}>
-      <span className="site-header__progress" ref={progressRef} aria-hidden />
+    <>
+      <header className="site-header" data-scrolled={scrolled} data-open={open}>
+        <span className="site-header__progress" ref={progressRef} aria-hidden />
 
-      <div className="shell site-header__inner">
-        <Link href="/" className="brand" aria-label="SIGAI — home">
-          <span className="brand__plate" aria-hidden>
-            <Image
-              src="/logo-mark-navy.png"
-              alt=""
-              width={40}
-              height={52}
-              priority
-              className="brand__logo-light"
-              style={{ width: 'auto', height: 27 }}
-            />
-            <Image
-              src="/logo-mark-cream.png"
-              alt=""
-              width={40}
-              height={52}
-              priority
-              className="brand__logo-dark"
-              style={{ width: 'auto', height: 27 }}
-            />
-          </span>
+        <div className="shell site-header__inner">
+          <button
+            type="button"
+            className="burger"
+            aria-expanded={open}
+            aria-controls="mobile-sheet"
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
 
-          <span className="brand__name">
-            <b>SIGAI</b>
-            <span>DJS ACM</span>
-          </span>
-        </Link>
+          <Link href="/" className="brand" aria-label="SIGAI — home" onClick={() => setOpen(false)}>
+            <span className="brand__plate" aria-hidden>
+              <Image
+                src="/logo-mark-navy.png"
+                alt=""
+                width={40}
+                height={52}
+                priority
+                className="brand__logo-light"
+                style={{ width: 'auto', height: 27 }}
+              />
+              <Image
+                src="/logo-mark-cream.png"
+                alt=""
+                width={40}
+                height={52}
+                priority
+                className="brand__logo-dark"
+                style={{ width: 'auto', height: 27 }}
+              />
+            </span>
 
-        <nav className="nav-desktop" aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-          <div className="nav-rail" ref={railRef}>
-            {NAV_LINKS.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                ref={(el) => {
-                  linkRefs.current[href] = el;
-                }}
-                className="nav-link"
-                data-active={isActive(href)}
-                aria-current={isActive(href) ? 'page' : undefined}
-              >
-                {label}
-              </Link>
-            ))}
-            <span className="nav-rail__indicator" aria-hidden />
-          </div>
-        </nav>
+            <span className="brand__name">
+              <b>SIGAI</b>
+              <span>DJS ACM</span>
+            </span>
+          </Link>
 
-
-
-        <button
-          type="button"
-          className="burger"
-          aria-expanded={open}
-          aria-controls="mobile-sheet"
-          aria-label={open ? 'Close menu' : 'Open menu'}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span />
-          <span />
-          <span />
-        </button>
-      </div>
+          <nav className="nav-desktop" aria-label="Primary" style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+            <div className="nav-rail" ref={railRef}>
+              {NAV_LINKS.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  ref={(el) => {
+                    linkRefs.current[href] = el;
+                  }}
+                  className="nav-link"
+                  data-active={isActive(href)}
+                  aria-current={isActive(href) ? 'page' : undefined}
+                >
+                  {label}
+                </Link>
+              ))}
+              <span className="nav-rail__indicator" aria-hidden />
+            </div>
+          </nav>
+        </div>
+      </header>
 
       {open ? (
         <div className="sheet" id="mobile-sheet">
-          {NAV_LINKS.map(({ href, label }, i) => (
-            <Link
-              key={href}
-              href={href}
-              style={{ ['--i' as string]: `${60 + i * 55}ms` }}
-              aria-current={isActive(href) ? 'page' : undefined}
-              onClick={() => setOpen(false)}
-            >
-              {label}
-            </Link>
-          ))}
+          <div className="sheet__inner">
+            {MOBILE_NAV_LINKS.map(({ href, label }, i) => (
+              <Link
+                key={href}
+                href={href}
+                className="sheet__link"
+                style={{ ['--i' as string]: `${40 + i * 40}ms` }}
+                aria-current={isActive(href) ? 'page' : undefined}
+                onClick={() => setOpen(false)}
+              >
+                <span>{label}</span>
+                <span className="sheet__arrow" aria-hidden="true">→</span>
+              </Link>
+            ))}
+          </div>
         </div>
       ) : null}
-    </header>
+    </>
   );
 }
