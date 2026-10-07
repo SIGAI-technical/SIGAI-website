@@ -279,6 +279,24 @@ export const EVENTS: SigEvent[] = [
   },
 ];
 
+export interface EditorialPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  author: string;
+  category: string;
+  publishedAt: string;
+  readingTime: string;
+  href: string;
+}
+
+/** Published editorial entries. Keep this empty until the first article is ready. */
+export const EDITORIALS: EditorialPost[] = [];
+
+/** Editorial filter options can be prepared before article records are published. */
+export const EDITORIAL_AUTHORS = ['Kavya', 'Atharva Deo'] as const;
+export const EDITORIAL_CATEGORIES = ['umm1', 'dumm2', 'dummy3', 'dummy4', 'dummy5'] as const;
+
 
 export const EVENT_YEARS = ['2026-27', '2025-26', '2024-25', '2023-24'] as const;
 
@@ -931,6 +949,7 @@ export const NAV_LINKS = [
   // { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/events', label: 'Events' },
+  { href: '/editorial', label: 'Editorial' },
   { href: '/team', label: 'Team' },
   { href: '/contact', label: 'Contact' },
 ] as const;
@@ -954,6 +973,11 @@ export const PAGES = {
     eyebrow: 'Four years of events',
     title: 'What SIGAI has run',
     lede: 'Seminars, orientations and campus-wide competitions, archived by academic year.',
+  },
+  editorial: {
+    eyebrow: 'Ideas and perspectives',
+    title: 'Editorial',
+    lede: 'Writing from the DJS ACM SIGAI community.',
   },
   team: {
     eyebrow: 'Faculty and student core',
