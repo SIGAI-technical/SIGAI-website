@@ -120,6 +120,11 @@ export default function EventDetailPage() {
             priority
             sizes="100vw"
             className="event-detail__hero-image"
+            style={
+              event.imagePositions?.[event.image]
+                ? { objectPosition: event.imagePositions[event.image] }
+                : undefined
+            }
           />
         )}
 
@@ -203,6 +208,11 @@ export default function EventDetailPage() {
                     alt={`${event.title} image ${index + 1}`}
                     fill
                     sizes="220px"
+                    style={
+                      event.imagePositions?.[src]
+                        ? { objectPosition: event.imagePositions[src] }
+                        : undefined
+                    }
                   />
 
                   <span>
@@ -223,6 +233,11 @@ export default function EventDetailPage() {
                 fill
                 sizes="(max-width: 900px) 100vw, 1000px"
                 className="event-detail__viewer-image"
+                style={
+                  event.imagePositions?.[allImages[activeImage]]
+                    ? { objectPosition: event.imagePositions[allImages[activeImage]] }
+                    : undefined
+                }
               />
 
               {/* Corner brackets */}

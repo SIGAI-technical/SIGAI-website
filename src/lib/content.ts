@@ -95,6 +95,9 @@ export interface SigEvent {
 
   // Gallery images
   gallery?: string[];
+
+  // Optional custom object-position overrides for specific images
+  imagePositions?: Record<string, string>;
 }
 
 /**
@@ -103,8 +106,30 @@ export interface SigEvent {
  */
 export const EVENTS: SigEvent[] = [
   {
-    id: 'genesis-2026',
+    id: 'clockout-4',
     index: '01',
+    title: 'Clockout 4.0',
+    year: '2026-27',
+    series: 'Clockout',
+    description:
+      'Clockout 4.0: a Marvel Doomsday-themed, high-stakes event where only the sharpest minds survive. Teams were pushed through three escalating rounds: a Preliminary Challenge of math grids, cracked codes, memory tests, and word puzzles, an Advanced Challenge of smart stock trading and guessing the prompts behind AI-generated images, and a campus-wide Grand Treasure Hunt where clues, teamwork, and nerve decided who would claim the final victory.',
+    image: '/events/Clockout4.0/Inaugration.JPG',
+    gallery: [
+      '/events/Clockout4.0/Inaugration.JPG',
+      '/events/Clockout4.0/1stPrize.jpg',
+      '/events/Clockout4.0/2ndPrize.jpg',
+      '/events/Clockout4.0/3rdPrize.jpg',
+      '/events/Clockout4.0/photobooth.png',
+      '/events/Clockout4.0/special.jpg',
+    ],
+    imagePositions: {
+      '/events/Clockout4.0/Inaugration.JPG': 'center 65%',
+      '/events/Clockout4.0/special.jpg': 'center top',
+    },
+  },
+  {
+    id: 'genesis-2026',
+    index: '02',
     title: 'Genesis',
     year: '2026-27',
     series: 'Genesis',
@@ -123,7 +148,7 @@ export const EVENTS: SigEvent[] = [
   },
   {
     id: 'ipd-seminar',
-    index: '02',
+    index: '03',
     title: 'IPD Seminar',
     year: '2026-27',
     series: 'Seminar',
@@ -140,7 +165,7 @@ export const EVENTS: SigEvent[] = [
   },
   {
     id: 'P2P',
-    index: '03',
+    index: '04',
     title: 'Prompt to Prototype',
     year: '2026-27',
     series: 'Hackathon',
