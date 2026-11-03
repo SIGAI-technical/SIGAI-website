@@ -101,6 +101,9 @@ export default function Events({ showHeading = true }: { showHeading?: boolean }
                                 sizes="(max-width: 700px) 100vw, 1100px"
                                 style={{
                                   objectFit: 'cover',
+                                  ...(event.imagePositions?.[event.image]
+                                    ? { objectPosition: event.imagePositions[event.image] }
+                                    : {}),
                                 }}
                               />
                             ) : (
