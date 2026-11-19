@@ -30,6 +30,17 @@ export const HOME_ARTICLE: FeatureArticle = {
     </> },
     { id: 'cloud', title: 'The cloud changes the bargain', content: <>
       <p>For iRobot Imprint Smart Maps, the company says maps are stored in its cloud rather than only in the phone app. Deleting the app does not erase them. The company also says turning off Mapping Features stops spatial data from being sent to its cloud. The price of that choice is functional: directed room cleaning, targeted zones, keep out zones, and some schedules or favorites stop working. Re-enabling the feature requires creating a new map.</p>
+      <figure className="reading-figure" aria-label="Map data flow from robot to iRobot cloud and app features">
+        <p className="reading-figure__title">Where an Imprint Smart Map goes</p>
+        <div className="reading-figure__flow">
+          <div className="reading-figure__step"><strong>Robot</strong>Builds spatial data while cleaning</div>
+          <span className="reading-figure__arrow" aria-hidden="true">→</span>
+          <div className="reading-figure__step"><strong>iRobot Cloud</strong>Processes and stores the map</div>
+          <span className="reading-figure__arrow" aria-hidden="true">→</span>
+          <div className="reading-figure__step"><strong>App features</strong>Room targeting, zones and schedules</div>
+        </div>
+        <figcaption>Based on iRobot’s Imprint Smart Maps guidance. Turning off Mapping Features stops new spatial data being sent to the cloud and removes some mapped controls; existing maps require separate deletion. See iRobot guidance in References.</figcaption>
+      </figure>
       <p>That trade-off is understandable from a product standpoint. Persistent maps make the service convenient across sessions and permit richer controls. The same design creates an account linked asset that has to be stored, secured, retained, and deleted. Encryption and access controls reduce risk; they do not make data disappear. The security of the account and the company’s cloud operations become part of the security of the home map.</p>
       <p>Deleting a map is a separate action from uninstalling an app or disconnecting a robot. iRobot publishes a map deletion procedure. A resident should be able to find it without reading a legal policy. A well designed interface would show where maps live, whether a new map has been created, what happens to old versions, and how deletion affects cleaning features. The need for this clarity follows directly from the product architecture.</p>
     </> },

@@ -25,6 +25,15 @@ export const ENERGY_ARTICLE: FeatureArticle = {
   sections: [
     { id: 'scale', title: 'The scale, with the right denominator', content: <>
       <p>The International Energy Agency estimated that all data centres consumed about 415 terawatt hours in 2024, roughly 1.5% of global electricity use. Its 2025 base case put the 2030 total near 945 terawatt hours. A 2026 update estimated about 485 terawatt hours in 2025 and projected about 950 in 2030. These are totals for data centres, not measurements of AI alone. The comparison shows the pace of infrastructure growth and the limits of a popular shortcut that assigns every server’s electricity to AI.</p>
+      <figure className="reading-figure" aria-label="Global data centre electricity consumption: 415 terawatt hours estimated for 2024 and 945 terawatt hours projected for 2030">
+        <p className="reading-figure__title">Global data centre electricity use</p>
+        <div className="reading-figure__bars">
+          <div className="reading-figure__bar"><span>2024 estimate</span><span className="reading-figure__track"><span className="reading-figure__fill" style={{ '--figure-width': '41.5%' } as React.CSSProperties} /></span><strong>415 TWh</strong></div>
+          <div className="reading-figure__bar"><span>2030 base case</span><span className="reading-figure__track"><span className="reading-figure__fill" style={{ '--figure-width': '94.5%' } as React.CSSProperties} /></span><strong>945 TWh</strong></div>
+        </div>
+        <div className="reading-figure__scale" aria-hidden="true"><span>0</span><span>1,000 TWh</span></div>
+        <figcaption>IEA Energy and AI (2025). The 2030 value is a projection. Both values cover all data centres, not AI alone. The IEA report is linked in References.</figcaption>
+      </figure>
       <p>AI is nevertheless a major driver of new demand. The IEA’s 2026 update estimated that electricity use from AI focused data centres rose about 50% in 2025, while data centre electricity overall rose 17%. At the same time, energy per simple AI task has fallen rapidly as software and chips have improved. These facts can both be true: a unit becomes cheaper while the total grows because more people use it, more tasks are automated, and some new tasks consume far more power than short text queries.</p>
       <p>Video generation, lengthy reasoning, and agents that run many tool calls should not be priced or assessed as if they were one short response. Training demand and inference demand also have different timing. Training is concentrated; a popular deployed service repeats inference millions of times. Any meaningful comparison needs the task type, model, output length, hardware, utilisation, and date of measurement.</p>
     </> },

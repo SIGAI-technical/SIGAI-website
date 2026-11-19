@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ArticleTools from '@/components/ArticleTools';
 import RelatedEditorials from '@/components/RelatedEditorials';
+import ReadingThemeToggle from '@/components/ReadingThemeToggle';
 import { EDITORIALS, type EditorialPost } from '@/lib/content';
 
 export interface ArticleSectionLink {
@@ -46,13 +47,14 @@ export default function EditorialArticle({
   const related = EDITORIALS.filter((item) => item.slug !== post.slug).map(({ href, title, category, image, excerpt }) => ({ href, title, category, image, excerpt }));
 
   return (
-    <article className="reading-page">
+    <article className="reading-page" data-reading-theme="dark">
       <div className="reading-shell">
         <nav className="reading-top-nav" aria-label="Article navigation">
           <Link href="/editorial">Editorial</Link>
           <a href="#summary">Summary</a>
           <a href="#contents">Contents</a>
           <a href="#references">References</a>
+          <ReadingThemeToggle />
         </nav>
 
         <header className="reading-header">
