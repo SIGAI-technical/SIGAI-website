@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function EditorialPage() {
   return (
-    <div className="page-lead">
+    <div className="page-lead editorial-index">
       <PageHeader
         eyebrow={PAGES.editorial.eyebrow}
         title={PAGES.editorial.title}

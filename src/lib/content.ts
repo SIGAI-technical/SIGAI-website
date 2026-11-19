@@ -1,8 +1,10 @@
+import { FEATURE_ARTICLES } from './editorial-features';
+
 /**
- * Every fact on this site comes from https://www.djscesigai.tech/ — the About
- * and Vision copy is reproduced verbatim. Nothing here is invented: where the
- * source has no data (event dates, some member links), the field is simply
- * absent and the UI renders an honest empty state instead.
+ * Institutional About and Vision copy comes from https://www.djscesigai.tech/.
+ * Editorial articles use their own cited primary sources. Where source data
+ * is unavailable (event dates, some member links), the field is absent and
+ * the UI renders an honest empty state instead.
  */
 
 export const ORG = {
@@ -308,19 +310,47 @@ export interface EditorialPost {
   slug: string;
   title: string;
   excerpt: string;
-  author: string;
+  authors: string[];
   category: string;
+  topics: string[];
   publishedAt: string;
   readingTime: string;
   href: string;
+  image?: string;
+  searchTerms?: string;
 }
 
-/** Published editorial entries. Keep this empty until the first article is ready. */
-export const EDITORIALS: EditorialPost[] = [];
+export const EDITORIALS: EditorialPost[] = [
+  {
+    slug: 'the-trust-gap',
+    title: 'The AI Trust Gap',
+    excerpt: 'The next leap in AI will depend on whether people can tell when a system deserves their confidence. A practical look at capability, evidence, and calibrated reliance.',
+    authors: ['Jeet', 'Shloka', 'Mitali'],
+    category: 'AI',
+    topics: ['Artificial intelligence', 'Trust', 'Model evaluation', 'Human oversight', 'AI agents', 'Data governance'],
+    publishedAt: '5 Oct 2026',
+    readingTime: '6 min read',
+    href: '/editorial/the-trust-gap',
+    image: '/editorial/trust-gap-cover-2026.png',
+    searchTerms: 'calibrated trust trustworthiness trustworthy AI agents safety reliability transparency explainability NIST',
+  },
+  ...FEATURE_ARTICLES.map((article) => ({
+    slug: article.slug,
+    title: article.title,
+    excerpt: article.excerpt,
+    authors: article.authors,
+    category: article.category,
+    topics: article.topics,
+    publishedAt: article.date,
+    readingTime: article.readingTime,
+    href: `/editorial/${article.slug}`,
+    image: article.image,
+    searchTerms: article.searchTerms,
+  })),
+];
 
-/** Editorial filter options can be prepared before article records are published. */
-export const EDITORIAL_AUTHORS = ['Kavya', 'Atharva Deo'] as const;
-export const EDITORIAL_CATEGORIES = ['umm1', 'dumm2', 'dummy3', 'dummy4', 'dummy5'] as const;
+export const EDITORIAL_AUTHORS = ['Atharva Deo', 'Kavya Chauhan', 'Jeet', 'Shloka', 'Mitali', 'Arya', 'Aanchal'] as const;
+export const EDITORIAL_CATEGORIES = ['AI', 'Privacy', 'Environment'] as const;
 
 
 export const EVENT_YEARS = ['2026-27', '2025-26', '2024-25', '2023-24'] as const;
