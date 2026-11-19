@@ -2,11 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState, type WheelEvent } from 'react';
 import { EDITORIALS, EDITORIAL_AUTHORS, EDITORIAL_CATEGORIES } from '@/lib/content';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function EditorialArchive() {
   const [filterBy, setFilterBy] = useState<'categories' | 'authors'>('categories');
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [query, setQuery] = useState('');
+  const [topic, setTopic] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
@@ -17,10 +20,17 @@ export default function EditorialArchive() {
     [],
   );
   const authors = useMemo(
-    () => [...new Set([...EDITORIAL_AUTHORS, ...EDITORIALS.map((post) => post.author)].filter(Boolean))],
+    () => [...new Set([...EDITORIAL_AUTHORS, ...EDITORIALS.flatMap((post) => post.authors)].filter(Boolean))],
     [],
   );
   const choices = filterBy === 'categories' ? categories : authors;
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      setTopic(new URLSearchParams(window.location.search).get('topic') ?? '');
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     if (searchOpen) searchInputRef.current?.focus();
@@ -43,16 +53,17 @@ export default function EditorialArchive() {
     const normalizedQuery = query.trim().toLocaleLowerCase();
 
     return EDITORIALS.filter((post) => {
-      const searchable = `${post.title} ${post.excerpt} ${post.author} ${post.category}`.toLocaleLowerCase();
+      const searchable = `${post.title} ${post.excerpt} ${post.authors.join(' ')} ${post.category} ${post.topics.join(' ')} ${post.searchTerms ?? ''}`.toLocaleLowerCase();
       const matchesQuery = !normalizedQuery || searchable.includes(normalizedQuery);
+      const matchesTopic = !topic || post.topics.includes(topic);
       const matchesSelection = selectedValues.length === 0 || selectedValues.some((value) =>
-        filterBy === 'categories' ? post.category === value : post.author === value,
+        filterBy === 'categories' ? post.category === value : post.authors.includes(value),
       );
-      return matchesQuery && matchesSelection;
-    });
-  }, [query, selectedValues, filterBy]);
+      return matchesQuery && matchesTopic && matchesSelection;
+    }).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+  }, [query, topic, selectedValues, filterBy]);
 
-  const hasFilters = Boolean(query || selectedValues.length);
+  const hasFilters = Boolean(query || topic || selectedValues.length);
   const toggleValue = (value: string) => {
     setSelectedValues((current) =>
       current.includes(value) ? current.filter((item) => item !== value) : [...current, value],
@@ -66,7 +77,11 @@ export default function EditorialArchive() {
 
   const clearFilters = () => {
     setQuery('');
+    setTopic('');
     setSelectedValues([]);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('topic');
+    window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
   };
 
   const scrollChoices = (event: WheelEvent<HTMLDivElement>) => {
@@ -133,7 +148,7 @@ export default function EditorialArchive() {
           </div>
 
           <div className="editorial-search" data-open={searchOpen} ref={searchRef}>
-              <input
+            <input
               ref={searchInputRef}
               type="search"
               value={query}
@@ -146,7 +161,7 @@ export default function EditorialArchive() {
               }}
               placeholder="Search editorials"
               aria-label="Search editorials"
-                tabIndex={0}
+              tabIndex={searchOpen ? 0 : -1}
             />
             <button
               ref={searchButtonRef}
@@ -163,11 +178,12 @@ export default function EditorialArchive() {
           </div>
         </div>
 
-        <div className="editorial-results" aria-live="polite" aria-relevant="additions text">
+        <div className="editorial-results" id="articles" aria-live="polite" aria-relevant="additions text">
           {posts.length > 0 ? (
             <>
               <div className="editorial-results__heading">
                 <span className="eyebrow">From the community</span>
+                {topic && <span className="editorial-results__topic">Topic: {topic}</span>}
                 <span className="editorial-results__count">{posts.length} {posts.length === 1 ? 'article' : 'articles'}</span>
                 {hasFilters && (
                   <button type="button" className="editorial-filterbar__clear" onClick={clearFilters}>
@@ -178,23 +194,19 @@ export default function EditorialArchive() {
               <div className="editorial-posts">
                 {posts.map((post) => (
                   <article className="editorial-post" key={post.slug}>
-                    <div className="editorial-post__meta">
-                      <span>{post.category}</span>
-                      <span>{post.publishedAt}</span>
-                    </div>
-                    <a
-                      className="editorial-post__title-link"
-                      href={post.href}
-                      target={post.href.startsWith('http') ? '_blank' : undefined}
-                      rel={post.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                    >
+                    <Link className="editorial-post__link" href={post.href} aria-label={`Read ${post.title}`}>
+                      {post.image && <span className="editorial-post__image"><Image src={post.image} alt="" width={1200} height={630} /></span>}
+                      <div className="editorial-post__meta">
+                        <span>{post.category}</span>
+                        <span>{post.publishedAt}</span>
+                      </div>
                       <h2 className="editorial-post__title">{post.title}</h2>
-                    </a>
-                    <p className="editorial-post__excerpt">{post.excerpt}</p>
-                    <div className="editorial-post__byline">
-                      <span>By {post.author}</span>
-                      <span>{post.readingTime}</span>
-                    </div>
+                      <p className="editorial-post__excerpt">{post.excerpt}</p>
+                      <div className="editorial-post__byline">
+                        <span>By {post.authors.map((author, index) => <span key={author}><strong>{author}</strong>{index < post.authors.length - 1 ? (index === post.authors.length - 2 ? ' and ' : ', ') : ''}</span>)}</span>
+                        <span>{post.readingTime}</span>
+                      </div>
+                    </Link>
                   </article>
                 ))}
               </div>
