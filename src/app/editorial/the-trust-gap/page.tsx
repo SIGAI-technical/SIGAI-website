@@ -82,6 +82,17 @@ export default function TrustGapArticle() {
             <section id="calibration">
               <h2>What calibration means</h2>
               <p>The goal is proportional reliance. Use the system where its performance has been demonstrated, add checks where uncertainty is meaningful, and retain a clear route to challenge or override its output.</p>
+              <figure className="reading-figure" aria-label="Context, evidence and oversight shape appropriate reliance on an AI system">
+                <p className="reading-figure__title">From capability to justified reliance</p>
+                <div className="reading-figure__flow">
+                  <div className="reading-figure__step"><strong>Map the task</strong>Define users, setting and consequences</div>
+                  <span className="reading-figure__arrow" aria-hidden="true">→</span>
+                  <div className="reading-figure__step"><strong>Measure</strong>Test performance and failure in context</div>
+                  <span className="reading-figure__arrow" aria-hidden="true">→</span>
+                  <div className="reading-figure__step"><strong>Manage</strong>Set review, limits and response to errors</div>
+                </div>
+                <figcaption>Editorial adaptation of the NIST AI Risk Management Framework’s Map, Measure and Manage functions. Governance runs through each step; this is a decision framework, not a measured result. See NIST AI RMF Core in References.</figcaption>
+              </figure>
               <p>Overreliance makes a fluent answer feel like a verified one. Underreliance leaves useful tools idle even when testing supports their use. Both are costly. The right level of trust can change with the task, the available evidence, and the consequences of an error.</p>
               <p>A system deserves confidence only to the extent that its performance has been verified for the job in front of it.</p>
               <p>A 2024 behavioural experiment gives the abstraction a concrete cost. Its final sample was 319 UK participants in an incentivised trust game. Participants received advice labelled as AI, advice labelled as an expert, or no advice. In the AI advice conditions, average payoffs were 22% lower than in the control condition, and participants sometimes followed recommendations that conflicted with available context. The advice was deliberately unreliable in this experiment. The result is evidence about reliance under that design, not a forecast for every AI product or population.</p>

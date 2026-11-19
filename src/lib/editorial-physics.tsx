@@ -30,6 +30,15 @@ export const PHYSICS_ARTICLE: FeatureArticle = {
     </> },
     { id: 'evidence', title: 'What benchmark numbers can and cannot say', content: <>
       <p>PhysBench assembled 10,002 mixed image, video, and text entries and evaluated 75 vision language models across object properties, relationships, scene understanding, and dynamics. Its authors reported stronger performance on common sense questions than on physical understanding tasks. PHYBench collected 500 original physics problems. On that set, the top model in its 2025 evaluation scored 36.9% while human experts scored 61.9%. These numbers describe that benchmark at that time, not the limits of every future model.</p>
+      <figure className="reading-figure" aria-label="PHYBench accuracy: Gemini 2.5 Pro 36.9 percent, human expert baseline 61.9 percent">
+        <p className="reading-figure__title">PHYBench accuracy, 2025 evaluation</p>
+        <div className="reading-figure__bars">
+          <div className="reading-figure__bar"><span>Gemini 2.5 Pro</span><span className="reading-figure__track"><span className="reading-figure__fill" style={{ '--figure-width': '36.9%' } as React.CSSProperties} /></span><strong>36.9%</strong></div>
+          <div className="reading-figure__bar"><span>Human expert baseline</span><span className="reading-figure__track"><span className="reading-figure__fill" style={{ '--figure-width': '61.9%' } as React.CSSProperties} /></span><strong>61.9%</strong></div>
+        </div>
+        <div className="reading-figure__scale" aria-hidden="true"><span>0%</span><span>100%</span></div>
+        <figcaption>Accuracy reported by the PHYBench authors for their original physics problem set. The comparison describes this evaluation, not physical control or later models. Source: PHYBench, listed in References.</figcaption>
+      </figure>
       <p>Benchmark design can also make a capable system look worse than it is. A September 2026 expert audit of six physics benchmarks found that many responses marked incorrect were affected by grading mistakes, wrong reference answers, or ambiguous questions. The audit focused on text problems with checkable final answers, so it should not be extended to robot control or video simulation. It does change the interpretation of a low headline score: before claiming a model lacks physics, inspect the question, the reference solution, and the grader.</p>
       <p>The reverse error is just as serious. School problems circulate widely online, so a correct answer may reflect familiar training patterns. A benchmark can reward the final number while missing a broken derivation. It can also supply all the facts that a real system would have to measure. Strong evaluation uses new setups, independently checked ground truth, and separate scores for perception, prediction, calculation, and action. Results should include failure distributions, not only an average.</p>
     </> },
