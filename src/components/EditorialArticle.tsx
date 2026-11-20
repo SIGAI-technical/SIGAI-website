@@ -62,7 +62,7 @@ export default function EditorialArticle({
           <h1>{post.title}</h1>
           {post.image && (
             <figure className="reading-hero">
-              <Image src={post.image} alt={imageAlt} width={imageWidth} height={imageHeight} priority />
+              <Image src={post.image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes="(max-width: 800px) 100vw, 760px" preload />
             </figure>
           )}
           <p className="reading-deck">{deck}</p>
