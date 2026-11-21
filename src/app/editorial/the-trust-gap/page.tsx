@@ -96,6 +96,14 @@ export default function TrustGapArticle() {
               <p>Overreliance makes a fluent answer feel like a verified one. Underreliance leaves useful tools idle even when testing supports their use. Both are costly. The right level of trust can change with the task, the available evidence, and the consequences of an error.</p>
               <p>A system deserves confidence only to the extent that its performance has been verified for the job in front of it.</p>
               <p>A 2024 behavioural experiment gives the abstraction a concrete cost. Its final sample was 319 UK participants in an incentivised trust game. Participants received advice labelled as AI, advice labelled as an expert, or no advice. In the AI advice conditions, average payoffs were 22% lower than in the control condition, and participants sometimes followed recommendations that conflicted with available context. The advice was deliberately unreliable in this experiment. The result is evidence about reliance under that design, not a forecast for every AI product or population.</p>
+              <figure className="reading-figure" aria-label="In a 319-person UK trust-game experiment, pooled AI-advice groups earned 22 percent less payoff than the no-advice control group">
+                <p className="reading-figure__title">The cost of following advice in one experiment</p>
+                <div className="reading-figure__study"><strong>−22%</strong><span>average payoff in the pooled AI-advice conditions versus no advice</span></div>
+                <div className="reading-figure__divider" />
+                <p className="reading-figure__subhead">How 319 participants were assigned</p>
+                <div className="reading-figure__arms"><span>AI + <strong>69</strong></span><span>AI − <strong>66</strong></span><span>Expert + <strong>58</strong></span><span>Expert − <strong>61</strong></span><span>No advice <strong>65</strong></span></div>
+                <figcaption>2024 incentivised trust-game study. + and − reproduce the study’s two advice-condition labels. The 22% is a comparison of average payoffs, not a 22-point accuracy difference or a population estimate. The expert-advice difference from control was not statistically significant (p = 0.0548). See behavioural experiment in References.</figcaption>
+              </figure>
               <p>The study also measured expressed trust and actual reliance separately. A person can say a system is fallible yet still click “accept” under time pressure. That is why a product team needs behavioural measures: how often suggestions are checked, how often errors survive review, and whether a warning changes the final decision. A satisfaction survey alone can miss the failure that matters.</p>
             </section>
 

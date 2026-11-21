@@ -20,12 +20,25 @@ const securityHeaders = [
   },
 ];
 
+const articlePaths = [
+  '/editorial/the-trust-gap',
+  '/editorial/ais-physics-problem',
+  '/editorial/the-map-in-the-machine',
+  '/editorial/ais-energy-ledger',
+];
+
 const nextConfig: NextConfig = {
   allowedDevOrigins: ['192.168.0.104', 'localhost:3000'],
   reactStrictMode: true,
   poweredByHeader: false,
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
+    return [
+      { source: '/:path*', headers: securityHeaders },
+      ...articlePaths.map((source) => ({
+        source,
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400' }],
+      })),
+    ];
   },
   async redirects() {
     return [

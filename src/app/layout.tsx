@@ -89,7 +89,7 @@ const EARLY_BOOTSTRAP = `(function(){try{
     document.documentElement.setAttribute('data-theme', saved);
   }
   var calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!calm) {
+  if (!calm && location.pathname === '/') {
     document.documentElement.dataset.intro = '1';
   }
 }catch(e){}})();`;

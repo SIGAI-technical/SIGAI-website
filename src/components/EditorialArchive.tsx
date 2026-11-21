@@ -195,7 +195,7 @@ export default function EditorialArchive() {
                 {posts.map((post) => (
                   <article className="editorial-post" key={post.slug}>
                     <Link className="editorial-post__link" href={post.href} aria-label={`Read ${post.title}`}>
-                      {post.image && <span className="editorial-post__image"><Image src={post.image} alt="" width={1200} height={630} /></span>}
+                      {post.image && <span className="editorial-post__image"><Image src={post.image} alt="" width={1672} height={941} sizes="(max-width: 700px) 100vw, (max-width: 1200px) 50vw, 540px" /></span>}
                       <div className="editorial-post__meta">
                         <span>{post.category}</span>
                         <span>{post.publishedAt}</span>

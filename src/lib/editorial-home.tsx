@@ -21,6 +21,17 @@ export const HOME_ARTICLE: FeatureArticle = {
   opening: <>
     <p className="reading-opening">At seven in the morning, a robot vacuum crosses a kitchen, avoids a chair, and cleans around a table. To repeat that route efficiently, it needs a memory of space. The app may turn that memory into named rooms, schedules, keep out zones, and a history of cleaning jobs. The convenience is real. So is the fact that a private floor plan has become product data.</p>
     <p>This is no longer an edge case. In a February 2026 Pew Research Center survey, 13% of US adults reported having a robot vacuum with AI features, compared with 18% for smart doorbells and 35% for smart speakers. The survey does not tell us which brands they use or whether every device uploads a map. It does show that domestic sensing is moving from specialist gadget to ordinary household product. The engineering question is not whether every vacuum is secretly recording a home. It is which data each feature requires, where that data goes, and which choices remain available when a person declines to share it.</p>
+    <figure className="reading-figure" aria-label="Pew 2026 survey: 35 percent of US adults report an AI smart speaker, 18 percent an AI smart doorbell, 13 percent an AI robot vacuum, and 11 percent an AI smart thermostat">
+      <p className="reading-figure__title">US adults reporting devices with AI features</p>
+      <div className="reading-figure__survey">
+        <div><span>Smart speaker</span><strong>35%</strong><span className="reading-figure__survey-track"><i style={{ width: '70%' }} /></span></div>
+        <div><span>Smart doorbell</span><strong>18%</strong><span className="reading-figure__survey-track"><i style={{ width: '36%' }} /></span></div>
+        <div><span>Robot vacuum</span><strong>13%</strong><span className="reading-figure__survey-track"><i style={{ width: '26%' }} /></span></div>
+        <div><span>Smart thermostat</span><strong>11%</strong><span className="reading-figure__survey-track"><i style={{ width: '22%' }} /></span></div>
+      </div>
+      <div className="reading-figure__survey-scale" aria-hidden="true"><span>0%</span><span>50% of US adults</span></div>
+      <figcaption>Pew Research Center survey of US adults, 17–23 February 2026. Respondents reported devices they have that use AI; this is not a measure of iRobot ownership, cloud mapping, or the share of households. See Pew in References.</figcaption>
+    </figure>
   </>,
   sections: [
     { id: 'measurement', title: 'How a cleaning route becomes a record', content: <>
@@ -46,7 +57,7 @@ export const HOME_ARTICLE: FeatureArticle = {
     </> },
     { id: 'camera', title: 'A camera is several different data flows', content: <>
       <p>The presence of a lens is not enough to describe the privacy risk. A localisation camera can process visual information for navigation without saving a picture. An obstacle review feature can capture an image for the account holder to inspect. A product improvement program can invite a person to contribute an image to a training database. Each path has a different purpose, recipient, and retention question.</p>
-      <p>iRobot says its iAdapt localisation camera does not record or share video or images. Its broader privacy policy separately discusses optional image collection from certain older connected robots with camera based navigation. Its obstacle review support material says captured review images are encrypted and visible through the customer account, and that iRobot cannot view them unless they are contributed to its image database. Those statements describe different features. Combining them into the blanket claim “the robot uploads camera footage” would be inaccurate.</p>
+      <p>iRobot says its iAdapt localisation camera does not record or share video or images. Its broader privacy policy separately discusses optional image collection from certain older connected robots with camera based navigation. Its obstacle review support material says captured review images are encrypted and visible through the customer account, and that iRobot cannot view them unless they are contributed to its image database. If they are not contributed, iRobot says the encrypted images are automatically deleted from its servers after 30 days. Those statements describe different features. Combining them into the blanket claim “the robot uploads camera footage” would be inaccurate.</p>
       <p>The useful audit is specific: does the device capture an image, keep it on the robot, upload it to an account, display it in the app, or share it for improvement? Can another person with account access see it? Does switching off image sharing leave obstacle avoidance intact? The answers should be visible at the point of consent and revisited after software updates.</p>
     </> },
     { id: 'inference', title: 'Why a map matters even without a photograph', content: <>
